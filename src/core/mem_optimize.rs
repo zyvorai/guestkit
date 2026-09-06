@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Memory optimization utilities for guestkit
 //!
 //! This module provides optimized memory allocation patterns to improve

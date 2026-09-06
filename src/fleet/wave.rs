@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Dependency-aware migration wave ordering.
 //!
 //! `analyze_fleet` (see `analyzer.rs`) scores and clusters VMs independently

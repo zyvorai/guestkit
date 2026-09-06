@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Offline KubeVirt VM boot inspection via GuestKit assurance APIs (stopped VMs).
 
 use axum::extract::{Path, State};

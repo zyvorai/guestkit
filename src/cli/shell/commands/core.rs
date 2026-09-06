@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Basic shell commands: ls, cat, cd, pwd, find, grep, info, mounts, help, tree
 
 use anyhow::Result;

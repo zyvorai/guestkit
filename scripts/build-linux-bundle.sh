@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
 # Build the GuestKit Linux in-guest agent and assemble a self-contained
 # bundle tarball — the Linux counterpart of scripts/build-windows-bundle.sh.

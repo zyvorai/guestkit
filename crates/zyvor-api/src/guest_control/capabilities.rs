@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Guest capability contract and control states.
 
 use guestkit_agent_protocol::capabilities::PROTOCOL_VERSION;

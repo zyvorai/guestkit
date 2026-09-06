@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! guestkitctl — local troubleshooting CLI for the GuestKit agent.
 //!
 //! Talks to the agent's local socket (`/run/guestkit/agent.sock`, legacy

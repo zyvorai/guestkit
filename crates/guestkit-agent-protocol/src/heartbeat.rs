@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Rich heartbeat wire types (protocol 1.3).
 //!
 //! The heartbeat is a lean, cheap-to-build snapshot of agent and guest

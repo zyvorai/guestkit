@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Minimal QEMU Machine Protocol (QMP) client for runtime control.
 
 use serde_json::{json, Value};

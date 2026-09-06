@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Remote Desktop enable/disable from inside the guest.
 
 #[cfg(target_os = "windows")]

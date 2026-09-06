@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Lightweight tamper / integrity monitoring (spec §19).
 //!
 //! Baseline-and-diff, not a full EDR (per the spec: "provide high-value VM

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
 # Live e2e for the in-guest agent (protocol 1.3) — runs guestkitd on the
 # current Linux host with a private local socket and drives it over

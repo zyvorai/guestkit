@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Shared mutable agent runtime state.
 //!
 //! One [`AgentRuntime`] exists per daemon process. It is threaded through

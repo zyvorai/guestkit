@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Cluster GuestActionPolicy enforcement for Zeus remediation APIs.
 
 use kube::api::{Api, ApiResource};

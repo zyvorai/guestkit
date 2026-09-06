@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Pure Rust disk image handling
 //!
 //! This module provides pure Rust implementations for reading disk images,

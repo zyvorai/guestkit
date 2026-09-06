@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! File operations: cat, hash, search, list, extract, grep, copy, find_duplicates
 #![allow(clippy::too_many_arguments)]
 

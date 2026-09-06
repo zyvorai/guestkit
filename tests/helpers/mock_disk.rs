@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Mock VM disk generator for performance testing
 //!
 //! This module provides utilities to generate mock disk images with various

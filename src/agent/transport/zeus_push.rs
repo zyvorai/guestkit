@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Outbound mTLS push to Zeus control plane.
 
 use anyhow::{Context, Result};

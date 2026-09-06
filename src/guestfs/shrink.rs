@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Shrink an oversized-but-mostly-empty guest disk to its real footprint.
 //!
 //! Motivation: a guest's *virtual* (declared) disk size is often much

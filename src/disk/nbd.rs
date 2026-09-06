@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! NBD (Network Block Device) support using qemu-nbd
 //!
 //! This module provides NBD device management for mounting disk images

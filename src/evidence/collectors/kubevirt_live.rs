@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! KubeVirt / virtio identity signals from a live Linux guest.
 
 use crate::evidence::snapshot::{KubevirtEvidence, VirtioDiskEntry};

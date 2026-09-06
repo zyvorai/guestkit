@@ -1,3 +1,5 @@
+# Copyright 2026 Zyvor AI Labs · https://zyvor.dev
+# SPDX-License-Identifier: Apache-2.0
 # Multi-stage build for guestkit worker
 FROM rust:slim-bookworm AS builder
 

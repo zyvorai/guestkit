@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Extract disk image paths from libvirt domain XML or KubeVirt VM/VMI YAML.
 //!
 //! Replaces `virsh dumpxml | grep source file=` without talking to libvirt.

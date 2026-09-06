@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Profiles view - Security, Migration, Performance, Compliance, and Hardening profile results
 
 use crate::cli::profiles::{FindingStatus, ProfileReport, RiskLevel};

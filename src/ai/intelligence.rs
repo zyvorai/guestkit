@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Bundled intelligence output for doctor / migrate-plan / export.
 
 use crate::ai::platform::build_machina_export;

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Library-level migration assurance APIs (doctor, migrate-plan, repair).
 //!
 //! Used by CLI, worker handlers, and zyvor-api. Does not write to stdout.

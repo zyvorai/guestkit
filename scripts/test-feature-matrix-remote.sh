@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
 # ─────────────────────────────────────────────────────────────────────────────
 # test-feature-matrix-remote.sh — run scripts/test-feature-matrix.sh on a remote

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! AI-powered VM diagnostics and assistance
 //!
 //! This module is only available when the 'ai' feature is enabled.

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Combined cutover gate: passport + optional SBOM + BitLocker + score.
 
 use anyhow::{Context, Result};

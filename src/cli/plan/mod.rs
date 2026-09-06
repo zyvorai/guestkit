@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Fix plan generation and application module
 //!
 //! This module provides offline patch & fix preview capabilities:

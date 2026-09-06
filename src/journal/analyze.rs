@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Journal log pattern analysis.
 
 use guestkit_agent_protocol::{JournalEntrySummary, JournalSlice};

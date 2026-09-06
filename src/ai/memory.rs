@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Cross-run memory for the AI copilot — lets repeated `doctor --ai` /
 //! `migrate-plan --ai` runs against the *same* VM see a summary of what
 //! was found last time, instead of every invocation starting from zero.

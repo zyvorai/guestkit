@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Passport → hyper2kvm / h2kvmctl job document.
 //!
 //! GuestKit certifies. h2kvmctl converts. This file is the contract between

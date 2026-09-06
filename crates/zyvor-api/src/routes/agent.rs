@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Live guest-agent routes (online VM inspection via agent-proxy).
 
 use axum::extract::{Path, Query, State};

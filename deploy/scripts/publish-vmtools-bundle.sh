@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
 # Build Zeus VM Tools artifacts and publish to MinIO (or any S3-compatible store).
 set -euo pipefail

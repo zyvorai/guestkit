@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
 # Build zyvor-vm-tools release artifacts (tar.gz, deb, rpm, iso).
 set -euo pipefail

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! QEMU guest-agent commands via virt-launcher (KubeVirt has no guest-exec subresource).
 //!
 //! Transport talks the QGA unix socket inside the virt-launcher pod. It does

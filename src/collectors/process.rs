@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Process and cgroup intelligence from /proc.
 
 use crate::evidence::snapshot::{ListeningPort, ProcessEvidence, ProcessSummary};

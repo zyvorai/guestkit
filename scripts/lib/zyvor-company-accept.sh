@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
 # Require acceptance of ZYVOR-COMPANY-TERMS.md (GuestKit — does not replace Apache LICENSE).
 # shellcheck shell=bash

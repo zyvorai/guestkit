@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Cutover Passport — versioned, CI-gateable migration assurance artifact.
 //!
 //! GuestKit certifies cutover readiness; HyperSDK / hyper2kvm handle export

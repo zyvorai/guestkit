@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! RBAC helpers for guest remediation enqueue routes.
 
 use crate::auth::rbac::can_request_guest_remediation;

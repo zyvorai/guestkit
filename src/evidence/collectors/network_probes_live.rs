@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! DNS and reachability probes for KubeVirt / VMRogue bootstrap validation.
 
 use crate::evidence::snapshot::NetworkProbeEvidence;

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Phase 2 — multi-step agent loop over evidence snapshot tools.
 
 use crate::ai::prompts::{self, tool_loop_instructions};

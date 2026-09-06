@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Browse server-side disk storage and register images without re-upload.
 
 use axum::extract::{Query, State};

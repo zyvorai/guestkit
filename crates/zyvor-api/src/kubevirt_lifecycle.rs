@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! KubeVirt VM lifecycle subresources (start / stop / restart).
 
 use axum::extract::{Path, State};

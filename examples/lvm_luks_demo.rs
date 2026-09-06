@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Example: Work with LVM and LUKS encrypted volumes
 //!
 //! This demonstrates LVM detection and LUKS encryption support.

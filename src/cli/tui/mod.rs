@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! TUI (Terminal User Interface) module for interactive VM inspection
 
 pub mod app;

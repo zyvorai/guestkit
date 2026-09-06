@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Persistent local cache for cloud-pulled disk images.
 
 use anyhow::{Context, Result};

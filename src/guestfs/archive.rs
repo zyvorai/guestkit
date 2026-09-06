@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Archive operations (tar, tgz, cpio)
 //!
 //! This implementation uses system tar command with mounted filesystems.

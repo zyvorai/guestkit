@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Storage operations: rescan, TRIM, and (opt-in) filesystem expansion.
 
 use anyhow::{bail, Context, Result};

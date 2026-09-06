@@ -1,3 +1,4 @@
+# Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
 # shellcheck shell=bash
 # GuestKit UI remote-deploy helpers (self-contained under scripts/lib/).

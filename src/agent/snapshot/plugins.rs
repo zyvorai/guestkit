@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Application-aware snapshot plugins.
 //!
 //! Each plugin knows how to flush/quiesce one application class before a

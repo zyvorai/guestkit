@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Windows Event Log journal slice (parity with Linux journal RPC).
 
 use crate::journal::analyze::analyze_journal;

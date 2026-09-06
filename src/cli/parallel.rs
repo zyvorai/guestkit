@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Parallel processing for batch VM inspection operations
 //!
 //! This module provides parallel batch inspection capabilities using rayon,

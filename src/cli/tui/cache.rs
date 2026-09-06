@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! On-disk inspect cache for faster repeat TUI opens.
 
 use crate::cli::profiles::ProfileReport;

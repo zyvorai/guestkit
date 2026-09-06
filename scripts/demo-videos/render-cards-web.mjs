@@ -1,3 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
+// SPDX-License-Identifier: Apache-2.0
+
 // Render title/caption PNG cards for the GuestKit *web dashboard* demo videos
 // (tour + tutorial) — carbon/teal theme matching zyvor-ui's own aesthetic.
 import { chromium } from "playwright";

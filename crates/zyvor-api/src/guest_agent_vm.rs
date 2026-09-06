@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Per-VM guest agent JSON-RPC via QEMU guest-agent guest-exec.
 
 use base64::{engine::general_purpose::STANDARD, Engine};

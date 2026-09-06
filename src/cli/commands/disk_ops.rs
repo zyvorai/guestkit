@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Disk operations module
 //!
 //! Functions: create_disk, check_filesystem, show_disk_usage, execute_command,

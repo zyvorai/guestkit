@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Windows live evidence (WMI + Event Log when agent runs on Windows).
 
 use crate::evidence::snapshot::WindowsEvidence;

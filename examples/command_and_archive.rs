@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Example: Execute commands and work with archives
 //!
 //! This demonstrates command execution and archive operations.

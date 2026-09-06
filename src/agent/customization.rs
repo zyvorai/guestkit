@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Guest customization / desired-state (spec §14 subset).
 //!
 //! Concrete, validated, policy-gated identity operations: hostname,

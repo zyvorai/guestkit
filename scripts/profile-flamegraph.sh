@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
 # Generate flamegraph profiles for guestkit operations
 # Requires: cargo-flamegraph (install with: cargo install flamegraph)

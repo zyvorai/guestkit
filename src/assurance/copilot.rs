@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Migration Copilot — deterministic AI-style briefings from evidence + boot analysis.
 
 use crate::boot::BootabilityReport;

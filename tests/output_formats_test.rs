@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Tests for JSON/YAML/CSV output formats
 //!
 //! These tests verify output format functionality via the CLI interface

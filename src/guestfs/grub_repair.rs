@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Offline GRUB repair via chroot `grub-mkconfig` / optional `grub-install`,
 //! with a first-boot oneshot fallback when chroot tools are unavailable.
 

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Certificate and SSH host-key inventory (spec §23).
 //!
 //! Read-only: discovers X.509 certificates in standard locations, parses

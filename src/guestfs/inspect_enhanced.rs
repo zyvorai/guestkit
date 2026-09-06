@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Enhanced inspection operations for comprehensive guest analysis
 use crate::core::Result;
 use crate::guestfs::Guestfs;

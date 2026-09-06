@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Command execution inside guest
 //!
 //! This implementation uses chroot to execute commands inside the

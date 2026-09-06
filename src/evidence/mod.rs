@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Normalized evidence snapshot — digital twin primitive for migration assurance.
 
 #[cfg(not(target_os = "windows"))]

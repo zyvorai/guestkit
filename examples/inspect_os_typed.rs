@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Example: OS inspection with type-safe enums
 //!
 //! This example shows how to use the new type-safe OS detection enums

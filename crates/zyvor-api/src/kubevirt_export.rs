@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Export cluster VM root disk into Zyvor ingest storage.
 
 use axum::extract::{Path, Query, State};

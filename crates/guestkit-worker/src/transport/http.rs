@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! HTTP-based job transport (REST API)
 //!
 //! This transport receives jobs via REST API endpoints instead of filesystem watching.

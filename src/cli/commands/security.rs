@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Security commands: scan, secrets, rescue, optimize, network, compliance,
 //! malware, health, patch, audit, repair, intelligence, verify
 #![allow(clippy::too_many_arguments)]

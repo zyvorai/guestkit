@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
 # Deploy Zyvor VM Services to a k3s host (build with podman, helm install).
 # Run ON the remote host or GHA runner after guestkit sources are synced.

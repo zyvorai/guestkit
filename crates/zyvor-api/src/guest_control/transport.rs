@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Transport ladder for guest control operations.
 
 use guestkit_agent_protocol::capabilities::METHOD_GET_CAPABILITIES;

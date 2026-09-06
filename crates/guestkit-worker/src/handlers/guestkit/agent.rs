@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Worker handlers for live guest agent RPC via host proxy.
 
 use async_trait::async_trait;

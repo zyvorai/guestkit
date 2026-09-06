@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Example: Using retry logic
 
 use guestkit::core::retry::{retry_with_backoff, RetryConfig};

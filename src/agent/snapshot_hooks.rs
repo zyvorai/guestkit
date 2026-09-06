@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Snapshot hooks and readiness enrichment.
 
 use crate::evidence::collectors::snapshot_live::collect_snapshot_readiness_live;

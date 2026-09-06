@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! PDF report generation with professional layout
 
 use crate::cli::formatters::InspectionReport;

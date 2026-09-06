@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 /** GuestKit API client — wires Apple shell to zyvor-api /api/v1 */
 
 const API_BASE = window.ZYVOR_API_URL || '/api/v1';

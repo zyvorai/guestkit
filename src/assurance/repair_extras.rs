@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Optional offline repair operations (QGA inject, cloud-init network, fstab).
 
 use crate::boot::BootabilityReport;

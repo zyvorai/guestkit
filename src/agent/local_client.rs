@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Local Unix socket client for in-guest zyvor-guestctl status.
 
 use anyhow::{bail, Context, Result};

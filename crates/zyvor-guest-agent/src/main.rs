@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Standalone Zeus VM Tools guest agent entry (Linux + Windows).
 
 use anyhow::{bail, Context, Result};

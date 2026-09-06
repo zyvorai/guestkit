@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Loop device support for mounting disk images
 //!
 //! This module provides loop device management for mounting disk images

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Progressive inspection loading stages for the TUI.
 
 /// Stages executed one per tick so the UI can render between steps.

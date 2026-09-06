@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Migration repair planner: failed checks → auditable FixPlan operations.
 //!
 //! Every generated operation carries undo information and (where the

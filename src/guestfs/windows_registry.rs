@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Windows Registry parsing using nt_hive2
 //!
 //! This module provides pure Rust parsing of Windows registry hive files.

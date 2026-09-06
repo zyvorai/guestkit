@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Tiny Rego deny-evaluator + optional `opa eval` handoff.
 //!
 //! GuestKit does not embed the OPA runtime. This module:

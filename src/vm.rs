@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! GuestKit-native VM lifecycle: a deliberately small virsh/libvirt replacement.
 //!
 //! GuestKit owns guest inspection and boot assurance. QEMU owns execution.

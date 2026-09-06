@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Agent Doctor — preflight probes and decision tree.
 
 use guestkit_agent_protocol::capabilities::METHOD_DOCTOR;

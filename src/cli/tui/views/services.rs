@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Services view - Systemd services viewer
 
 use crate::cli::tui::app::{App, LayoutMode};

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Replace `virtctl guestfs` (libguestfs appliance pod) with a GuestKit pod.
 //!
 //! No extra crates: talks to the cluster through `kubectl` already on PATH.

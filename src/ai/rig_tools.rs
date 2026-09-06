@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Native rig-core `Tool` wrappers over [`SnapshotTools`].
 //!
 //! Each of the 6 read-only evidence tools gets its own zero-sized-ish

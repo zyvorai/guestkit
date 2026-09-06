@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Migration assurance CLI commands (doctor, policy, fleet, migrate-plan, forensic diff).
 
 use crate::assurance::{

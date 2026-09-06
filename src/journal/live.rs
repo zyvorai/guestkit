@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Live journal collection (sd-journal native on Linux, Event Log on Windows).
 
 use guestkit_agent_protocol::JournalSlice;

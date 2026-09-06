@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! TUI Configuration system
 //!
 //! Loads and saves user preferences from ~/.config/guestkit/tui.toml

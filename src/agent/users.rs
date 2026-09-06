@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! User and access inventory (spec §13, read-only surface).
 //!
 //! Enumerates local accounts and highlights access risks (empty passwords,

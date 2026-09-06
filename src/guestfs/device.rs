@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Device and filesystem operations for disk image manipulation
 
 use crate::core::{Error, Result};

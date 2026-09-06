@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! One-shot JSON-RPC call to a guest agent unix socket (host-side).
 
 use anyhow::{Context, Result};

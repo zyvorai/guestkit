@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! S3 disk source (downloads via AWS CLI, optional local cache).
 
 use super::cloud_cache;

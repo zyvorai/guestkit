@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Channel update check with SHA256-verified staging for privileged apply.
 
 use anyhow::{Context, Result};

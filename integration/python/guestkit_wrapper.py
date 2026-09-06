@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
 """
 Python wrapper for guestkit - For use with hyper2kvm

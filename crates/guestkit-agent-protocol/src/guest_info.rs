@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Normalized guest identity and service health models.
 
 use serde::{Deserialize, Serialize};

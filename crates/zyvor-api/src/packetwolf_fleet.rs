@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Periodic fleet-wide PacketWolf correlation across all guest-agent reports.
 
 use kube::api::{Api, PatchParams};

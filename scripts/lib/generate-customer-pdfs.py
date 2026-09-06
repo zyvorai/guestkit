@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
+# Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
-# Copyright (c) 2026 ZyvorAI Labs Private Limited. All rights reserved.
-# Proprietary software — see LICENSE in the repository root.
 # https://zyvor.dev · info@zyvor.dev
 
 """Branded customer documentation: premium PDFs + offline welcome page."""

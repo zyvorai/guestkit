@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Forward guest health snapshots to PacketWolf for VM ↔ flow correlation.
 
 use kube::api::{Api, Patch, PatchParams};

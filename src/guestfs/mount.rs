@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Mount operations for disk image manipulation
 //!
 //! This implementation uses qemu-nbd to export disk images as NBD devices,

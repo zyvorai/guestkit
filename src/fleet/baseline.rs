@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Persisted per-VM golden baselines for `fleet watch` — scheduled drift
 //! monitoring against a fixed known-good `EvidenceSnapshot`, rather than
 //! against whatever the previous scan happened to see.

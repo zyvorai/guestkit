@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Guestkit inspect handler - VM disk inspection
 
 use async_trait::async_trait;

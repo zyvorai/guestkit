@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Normalized guest health model for Zeus OS.
 
 use serde::{Deserialize, Serialize};

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Device inventory for filesystem rewriting
 //!
 //! This module builds a complete inventory of all block devices with their

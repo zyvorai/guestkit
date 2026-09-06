@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Build evidence snapshots from Guestfs inspection.
 
 use super::snapshot::*;

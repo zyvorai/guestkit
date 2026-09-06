@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Host-side raw QEMU guest-agent client.
 //!
 //! Talks the QGA wire format (one JSON object per line) over a unix socket.

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Offline cutover prep plans: SELinux relabel, Windows sysprep, BitLocker escrow.
 //!
 //! None of these decrypt a volume or run sysprep.exe while the guest is

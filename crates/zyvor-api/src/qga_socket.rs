@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! In-pod QGA transport that does **not** call `virsh`.
 //!
 //! virt-launcher images ship `virsh`, but GuestKit speaks the QGA unix socket

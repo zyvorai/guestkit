@@ -1,3 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
+// SPDX-License-Identifier: Apache-2.0
+
 #!/usr/bin/env node
 /**
  * Shared PDF builder — set CUSTOMER_DOCS_PRODUCT and optional CUSTOMER_DOCS_SLUG.

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Pure Rust implementation of GuestFS-compatible API
 //!
 //! This module provides a GuestFS-compatible API implemented entirely in Rust,

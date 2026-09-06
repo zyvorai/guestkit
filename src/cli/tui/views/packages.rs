@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Packages view - Installed packages browser
 
 use crate::cli::tui::app::{App, LayoutMode};

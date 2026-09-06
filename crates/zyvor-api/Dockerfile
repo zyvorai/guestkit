@@ -1,3 +1,5 @@
+# Copyright 2026 Zyvor AI Labs · https://zyvor.dev
+# SPDX-License-Identifier: Apache-2.0
 FROM rust:slim-bookworm AS builder
 WORKDIR /build
 RUN apt-get update && apt-get install -y pkg-config libssl-dev libsystemd-dev && rm -rf /var/lib/apt/lists/*

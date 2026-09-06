@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Read-only fix plan preview overlay (migration assurance).
 
 use crate::cli::plan::types::{Operation, Priority};

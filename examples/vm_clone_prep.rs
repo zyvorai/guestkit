@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Example: VM cloning and preparation
 //!
 //! This example demonstrates how to prepare a VM for cloning:

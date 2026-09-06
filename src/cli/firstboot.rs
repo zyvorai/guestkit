@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! First-boot attestation: offline doctor + optional live QGA ping.
 //!
 //! CI: `guestkit firstboot disk.qcow2 --target kvm --fail-below 80 -o firstboot.json`

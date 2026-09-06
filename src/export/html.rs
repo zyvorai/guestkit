@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! HTML export functionality with Chart.js visualizations
 //!
 //! This module generates interactive HTML reports with charts and graphs

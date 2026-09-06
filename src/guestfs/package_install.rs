@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Offline package installation via chroot, reusing the bind-mount
 //! machinery `grub_repair` already uses to run tools inside a mounted
 //! guest root.

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! AI Insights panel — recommendations + narrative (Phase 2/3 TUI).
 
 use crate::cli::tui::app::App;

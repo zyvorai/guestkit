@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Resolve guest agent pull path via Guest Control Fabric transport ladder.
 
 use serde_json::Value;

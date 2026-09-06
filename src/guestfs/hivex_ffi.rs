@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Windows registry **write** support via hand-rolled FFI to libhivex.
 //!
 //! The read path uses the pure-Rust `nt_hive2` crate (see [`super::hivex_ops`] and

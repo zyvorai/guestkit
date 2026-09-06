@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Systemd Deep Dive — Phase 0/1 TUI (units, timers, sockets, problems).
 
 use crate::cli::tui::app::App;

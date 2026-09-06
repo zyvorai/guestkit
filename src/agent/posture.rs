@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Security posture assessment (spec §18, Phase 5 scope).
 //!
 //! Evidence-first: each finding is a concrete observation with an id,

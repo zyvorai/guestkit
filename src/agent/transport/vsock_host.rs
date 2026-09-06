@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Host-side AF_VSOCK listener — guests connect outward to the hypervisor.
 
 use anyhow::{bail, Context, Result};

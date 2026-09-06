@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! qemu-img front-end owned by GuestKit.
 //!
 //! Scripts should call `guestkit img …` instead of shelling out to qemu-img.

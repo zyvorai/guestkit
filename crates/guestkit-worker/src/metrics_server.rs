@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! HTTP server for Prometheus metrics endpoint
 //!
 //! Provides a simple HTTP server that exposes worker metrics at /metrics

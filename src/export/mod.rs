@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Export module for generating reports in various formats
 //!
 //! This module provides functionality to export inspection results

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! End-to-end test for offline Windows registry writes via libhivex FFI.
 //!
 //! Requires a seed hive in libhivex's writable format. Point `GK_TEST_HIVE`

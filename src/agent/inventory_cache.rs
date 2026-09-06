@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Offline + online inventory correlation cache (spec §31).
 //!
 //! The running agent periodically writes a compact snapshot of what only a

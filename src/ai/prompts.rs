@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Versioned system prompts for the Guest Intelligence Agent.
 
 pub const PROMPT_VERSION: &str = "guest-intelligence-v1";

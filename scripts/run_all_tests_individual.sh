@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
 # Run all Phase 3 tests individually with proper cleanup between runs
 #

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Live evidence collection from a running guest (no guestfs).
 
 use super::snapshot::*;

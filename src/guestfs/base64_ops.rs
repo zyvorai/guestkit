@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Base64 encoding/decoding operations for disk image manipulation
 //!
 //! This implementation provides Base64 encoding and decoding for file content.

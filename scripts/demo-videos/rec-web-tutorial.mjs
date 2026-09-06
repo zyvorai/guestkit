@@ -1,3 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
+// SPDX-License-Identifier: Apache-2.0
+
 // Records a detailed tutorial walkthrough of the GuestKit web dashboard (zyvor-ui).
 // Env vars:
 //   GK_WEB_URL   Base URL of the running zyvor-ui dashboard (default: http://212.8.248.187:30081/)

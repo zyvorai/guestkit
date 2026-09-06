@@ -1,3 +1,4 @@
+# Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
 # shellcheck shell=bash
 # Shared client uninstall helpers — sourced by uninstall.sh in the tarball.

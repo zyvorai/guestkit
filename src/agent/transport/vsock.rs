@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Linux AF_VSOCK client transport for the in-guest agent.
 
 use super::FramedTransport;

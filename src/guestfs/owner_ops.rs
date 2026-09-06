@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Extended ownership and permissions operations for disk image manipulation
 //!
 //! This implementation provides comprehensive file ownership management.

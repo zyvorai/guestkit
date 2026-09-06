@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! LDM (Windows Logical Disk Manager) operations for disk image manipulation
 //!
 //! This implementation provides Windows dynamic disk support.

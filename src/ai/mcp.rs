@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! MCP (Model Context Protocol) server exposing the same 6 read-only
 //! evidence tools as `ai/tools.rs`/`ai/rig_tools.rs`, so external MCP hosts
 //! (Claude Desktop, etc.) can query a VM's offline diagnostics directly —

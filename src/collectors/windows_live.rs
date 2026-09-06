@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Windows WMI/Event Log collectors (live guest).
 
 use guestkit_agent_protocol::{

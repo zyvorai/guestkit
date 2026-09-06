@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Phase 3 — fleet semantic drift explanations.
 
 use crate::ai::semantic::{analyze_semantic, SemanticAnalysis};

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Offline cloud-init datasource + seed inject.
 //!
 //! migrate-plan already says "reconfigure datasource". This writes the

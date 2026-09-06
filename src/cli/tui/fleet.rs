@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Fleet mode: multiple disk images in one TUI session.
 
 use anyhow::{Context, Result};

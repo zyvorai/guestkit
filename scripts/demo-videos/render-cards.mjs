@@ -1,3 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
+// SPDX-License-Identifier: Apache-2.0
+
 // Render title/caption PNG cards for the GuestKit CLI/TUI demo video.
 // Requires `playwright` — run from this directory (node_modules symlinked
 // to a sibling project's node_modules, see README.md).

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Windows VSS requestor (diskshadow-based).
 //!
 //! Creating a shadow copy through diskshadow drives the full VSS writer

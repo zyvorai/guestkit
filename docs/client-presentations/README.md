@@ -1,6 +1,6 @@
 # guestkit client presentations
 
-Hyper2kvm-format HTML decks (A4 portrait, purple cover, #ff8f3f accent).
+H2kvm-format HTML decks (A4 portrait, purple cover, #ff8f3f accent).
 
 | File | Topic |
 | --- | --- |
@@ -8,4 +8,4 @@ Hyper2kvm-format HTML decks (A4 portrait, purple cover, #ff8f3f accent).
 | 02-guestkit-architecture.html | Architecture |
 | 03-guestkit-deployment.html | Deployment |
 
-Generate PDFs locally with Chrome headless or run `npm run presentations:sync` from hypersdk-web.
+Generate PDFs locally with Chrome headless or run `npm run presentations:sync` from zyvor-platform-web.

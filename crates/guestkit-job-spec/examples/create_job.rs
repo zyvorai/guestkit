@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Example: Creating and validating job documents
 
 use guestkit_job_spec::builder::{inspect_job, JobBuilder};

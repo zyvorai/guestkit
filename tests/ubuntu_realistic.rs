@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Realistic Ubuntu disk image testing
 //!
 //! This test creates production-quality Ubuntu disk images with:

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Local Unix socket API for in-guest read-only queries.
 
 use crate::agent::handler::RequestHandler;

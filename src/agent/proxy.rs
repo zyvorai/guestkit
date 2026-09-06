@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Host-side proxy: libvirt unix socket or vsock listener ↔ optional HTTP bridge.
 
 use crate::agent::handler::RequestHandler;

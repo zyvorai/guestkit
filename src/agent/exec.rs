@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Synchronous guest command execution for VMRogue (replaces K8s guest-exec subresource).
 
 use base64::{engine::general_purpose::STANDARD, Engine};

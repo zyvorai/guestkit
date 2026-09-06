@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Policy-scoped file operations (`guestkit.file*`).
 //!
 //! Everything here is confined by the `capabilities.file_ops` policy:

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! LVM cloning operations for host logical volumes
 //!
 //! This module provides LVM-based cloning of logical volumes on the **host**,

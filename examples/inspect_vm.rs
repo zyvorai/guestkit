@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Example: Inspect a VM disk image
 //!
 //! This demonstrates OS detection and inspection capabilities.

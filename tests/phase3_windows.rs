@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Comprehensive Phase 3 API testing with a fake Windows-like disk image
 //!
 //! This test creates a minimal Windows-like disk image and exercises all

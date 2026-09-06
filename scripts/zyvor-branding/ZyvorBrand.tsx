@@ -1,3 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * Zyvor suite branding — text only.
  * Footer: zyvor.dev · © 2026 (both orange) · optional host OS

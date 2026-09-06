@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Windows named-pipe local API (`\\.\pipe\guestkit-agent`).
 //!
 //! Same framed JSON-RPC as the Unix local socket: 4-byte big-endian

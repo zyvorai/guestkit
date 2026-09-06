@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Storage view - LVM, RAID, and mount points
 
 use crate::cli::tui::app::App;

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Industry benchmark policies (CIS, NIST, etc.)
 
 use super::policy::{Policy, PolicyRule, RuleType};

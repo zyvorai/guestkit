@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Sync VMGuestAgent CR status from guest push reports.
 
 use kube::api::{Api, ApiResource, Patch, PatchParams};

@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Offline PackageInstall staging into the guest for first-boot install.
 //!
 //! Live `dnf`/`apt` still requires a running guest. When matching `.rpm` / `.deb`

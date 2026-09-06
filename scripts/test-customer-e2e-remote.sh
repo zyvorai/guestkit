@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
 # From your laptop: sync test script, optionally rebuild one product, run remote E2E.
 # Same script in every Zyvor product repo — paths resolve via sibling checkout under tt/.

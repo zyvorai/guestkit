@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Comprehensive Phase 3 API testing with a fake Fedora-like disk image
 //!
 //! This test creates a minimal Fedora-like disk image and exercises all

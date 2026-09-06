@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Integration tests for LVM and LUKS operations
 //!
 //! These tests verify complex scenarios involving encryption and logical volumes.

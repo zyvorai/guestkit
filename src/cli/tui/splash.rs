@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Splash screen — carbon surfaces, orange accent, Zyvor branding.
 
 use crate::cli::tui::config::UiConfig;

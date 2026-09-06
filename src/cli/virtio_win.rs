@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! virtio-win tree discovery and an offline inject plan.
 //!
 //! Does not copy files by itself — it resolves the host directories

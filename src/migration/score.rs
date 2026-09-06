@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Migration assessment: categorized sub-scores over the check results.
 
 use super::checks::run_all_checks;

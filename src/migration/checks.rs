@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Migration-readiness checks: general (MIG-G), Linux (MIG-L), Windows (MIG-W).
 
 use super::readiness::{

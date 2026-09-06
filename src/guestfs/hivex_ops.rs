@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Hivex (Windows Registry) operations for disk image manipulation
 //!
 //! This implementation provides Windows registry hive manipulation functionality

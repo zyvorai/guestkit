@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
 # CI orchestrator: health, e2e-smoke, VM tools bundle/API checks.
 set -euo pipefail

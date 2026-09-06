@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Migration readiness assessment and repair planning.
 //!
 //! Checks run against [`crate::evidence::EvidenceSnapshot`], so the engine

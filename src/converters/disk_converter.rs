@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Disk format converter using qemu-img
 
 use crate::core::{ConversionResult, DiskFormat, Error, Result};

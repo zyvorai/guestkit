@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Performance-history wire types (protocol 1.3).
 //!
 //! The agent keeps three fixed-size rolling buffers of samples

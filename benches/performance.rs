@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Performance benchmarks for guestkit operations
 
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};

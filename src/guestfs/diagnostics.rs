@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Backend diagnostics for callers that want to log which engine and attach
 //! mode handled a disk, and how long launch took.
 

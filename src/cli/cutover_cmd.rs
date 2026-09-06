@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! CLI for selinux-relabel, sysprep, bitlocker escrow.
 
 use crate::cli::plan::cutover_prep::{

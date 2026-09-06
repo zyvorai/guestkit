@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Guest Intelligence Agent — evidence-grounded analysis and optional LLM co-pilot.
 //!
 //! Phases 0–4 of the AI Guest Agent roadmap. Deterministic analysis modules work

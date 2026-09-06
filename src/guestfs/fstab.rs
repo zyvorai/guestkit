@@ -1,4 +1,6 @@
+// Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 // SPDX-License-Identifier: Apache-2.0
+
 //! Universal fstab/crypttab rewriter for VM migration
 //!
 //! This module provides deterministic rewriting of /etc/fstab and /etc/crypttab
