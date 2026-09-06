@@ -1,0 +1,35 @@
+{
+  "score": 78,
+  "decision": "REVIEW — fix blockers first",
+  "target": "kvm",
+  "gate": 80,
+  "formats": ["qcow2", "vmdk", "vhdx", "vhd", "vdi", "raw"],
+  "targets": ["kvm", "kubevirt", "openstack", "ahv", "xen", "hyper-v", "vmware", "cloud"],
+  "passport": { "status": "hold", "target": "kvm", "gate": 80 },
+  "plan_notes": "virtio-initramfs · rebuild initramfs · inject guest agents · gate --fail-below 80",
+  "findings": [
+    {
+      "severity": "high",
+      "title": "Missing virtio drivers in initramfs",
+      "detail": "First boot on KVM will hang waiting for root disk.",
+      "fix": "guestkit plan generate disk.qcow2 -p virtio-initramfs"
+    },
+    {
+      "severity": "medium",
+      "title": "Legacy IDE boot disk",
+      "detail": "Disk attached as IDE; target profile expects virtio-blk.",
+      "fix": "Remap to virtio-blk in migrate-plan before cutover."
+    },
+    {
+      "severity": "low",
+      "title": "Cloud-init seed absent",
+      "detail": "No NoCloud seed detected; SSH key injection may fail.",
+      "fix": "Attach a seed ISO or bake authorized_keys offline."
+    },
+    {
+      "severity": "info",
+      "title": "Filesystem clean",
+      "detail": "ext4 root fsck clean; no journal recovery needed."
+    }
+  ]
+}

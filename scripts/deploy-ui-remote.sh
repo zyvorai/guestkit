@@ -117,7 +117,8 @@ if [ "$GUESTKIT_UI_PORT" -lt 1 ] || [ "$GUESTKIT_UI_PORT" -gt 65535 ]; then
 fi
 
 [ -f "$REPO_DIR/deploy/ui/serve-https.py" ] || error "deploy/ui/serve-https.py missing"
-[ -f "$REPO_DIR/deploy/ui/zyvor-ux.js" ] || error "zyvor-ux.js missing — run the Zyvor orange GA apply first"
+[ -f "$REPO_DIR/deploy/ui/index.html" ] || error "deploy/ui/index.html missing"
+[ -f "$REPO_DIR/deploy/ui/demo-doctor.json" ] || error "deploy/ui/demo-doctor.json missing"
 guestkit_ui_build_metadata "$REPO_DIR"
 DEPLOY_UI_PORT="$GUESTKIT_UI_PORT"
 DEPLOY_UI_SCHEME="https"

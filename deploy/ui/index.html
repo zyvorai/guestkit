@@ -1,689 +1,193 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='8' y1='8' x2='56' y2='56' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23ff8a3d'/%3E%3Cstop offset='1' stop-color='%23f0583a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23bg)'/%3E%3Cpath d='M19 18h26v7L29 40h16v7H19v-7l16-15H19z' fill='%23fff'/%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='8' y1='8' x2='56' y2='56' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23ff8a3d'/%3E%3Cstop offset='1' stop-color='%23f0583a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23bg)'/%3E%3Cpath d='M19 18h26v7L29 40h16v7H19v-7l16-15H19z' fill='%23fff'/%3E%3C/svg%3E">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="color-scheme" content="light" />
-  <title>GuestKit — Offline VM Intelligence</title>
-  <!-- Structural layout only; Zyvor orange/white GA is the sole product UX. -->
-  <link rel="stylesheet" href="abyss-tokens.css?v=20260627abyss1" />
-  <link rel="stylesheet" href="abyss-components.css?v=20260710fix14" />
-  <link rel="stylesheet" href="style.css?v=20260627abyss1" />
-  <link rel="stylesheet" href="zyvor-ux.css?v=20260906ga1" />
-</head>
-<body>
-  <div class="nebula-root guestkit-shell" id="nebulaRoot">
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f5f7">
+<title>GuestKit — Offline VM intelligence.</title>
+<link rel="icon" type="image/svg+xml" href="zyvor-mark.svg">
+<style>
+:root{--bg:#f5f5f7;--card:rgba(255,255,255,.84);--ink:#1d1d1f;--muted:#6e6e73;--line:rgba(0,0,0,.08);--blue:#0071e3;--green:#248a3d;--orange:#c93400;--accent:#ff5a15;--red:#d70015;--shadow:0 18px 60px rgba(0,0,0,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 50% -20%,#fff 0,#f5f5f7 42%,#ececf0 100%);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+.nav{height:54px;position:sticky;top:0;z-index:10;backdrop-filter:saturate(180%) blur(20px);background:rgba(250,250,252,.78);border-bottom:1px solid var(--line)}
+.navin{max-width:1180px;margin:auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 22px}
+.brand{font-weight:700;letter-spacing:-.02em;display:flex;gap:8px;align-items:center;color:inherit;text-decoration:none}
+.brand-mark{display:block;flex:0 0 auto}
+.brand-zyvor{font-weight:800;color:var(--accent);margin-right:.22em}
+.nav small{color:var(--muted)}
+main{max-width:1180px;margin:auto;padding:0 22px 70px}
+.hero{text-align:center;padding:92px 0 54px}
+.eyebrow{font-size:18px;font-weight:600;color:var(--blue)}
+h1{font-size:clamp(46px,7vw,82px);line-height:.98;letter-spacing:-.055em;margin:12px auto 20px;max-width:980px}
+.hero p{font-size:clamp(20px,2.4vw,28px);line-height:1.25;color:var(--muted);max-width:780px;margin:0 auto}
+.actions{margin-top:34px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{border:0;border-radius:999px;padding:12px 20px;font:600 15px inherit;cursor:pointer;transition:.2s}
+.primary{background:var(--blue);color:#fff}
+.secondary{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.btn:hover{transform:translateY(-1px)}
+.btn:disabled{opacity:.55;cursor:default;transform:none}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
+.card{background:var(--card);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.7);box-shadow:var(--shadow);border-radius:30px;padding:28px}
+.card h2{font-size:24px;letter-spacing:-.03em;margin:0 0 6px}
+.sub{color:var(--muted);margin:0 0 20px;line-height:1.5}
+.drop{border:1.5px dashed #c7c7cc;border-radius:20px;padding:22px;text-align:center;background:rgba(255,255,255,.5);cursor:pointer}
+.drop strong{display:block;margin-bottom:5px}
+.drop span{color:var(--muted);font-size:13px}
+.tabs{display:flex;gap:8px;margin:18px 0 9px}
+.tab{border:0;background:#e9e9ed;padding:8px 12px;border-radius:10px;font-weight:600;cursor:pointer}
+.tab.on{background:#1d1d1f;color:#fff}
+textarea{width:100%;height:260px;resize:vertical;border:1px solid var(--line);border-radius:18px;padding:16px;background:#111113;color:#f5f5f7;font:12.5px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;outline:none}
+.run{width:100%;margin-top:12px;padding:14px}
+.scorewrap{text-align:center;padding:5px 0 22px}
+.score{font-size:96px;line-height:1;font-weight:700;letter-spacing:-.065em}
+.decision{font-size:18px;font-weight:700;margin-top:8px}
+.safe{color:var(--green)}.review{color:var(--orange)}.stop{color:var(--red)}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.chip{padding:16px;background:rgba(0,0,0,.035);border-radius:17px}
+.chip b{display:block;font-size:22px}
+.chip span{color:var(--muted);font-size:12px}
+.section{margin-top:18px}
+.finding{display:grid;grid-template-columns:82px 1fr;gap:12px;padding:16px 0;border-top:1px solid var(--line)}
+.sev{text-transform:uppercase;font-size:11px;font-weight:800;letter-spacing:.07em}
+.sev.critical,.sev.high{color:var(--red)}.sev.medium{color:var(--orange)}.sev.low{color:var(--muted)}
+.finding b{font-size:14px}
+.finding p{font-size:12px;color:var(--muted);margin:5px 0 0;line-height:1.45}
+.empty{padding:50px 10px;text-align:center;color:var(--muted)}
+.detailgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+.mini{min-height:180px}
+.mini h3{margin:0 0 12px}
+.row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:13px}
+.row span:last-child{font-weight:600;text-align:right}
+.footer{text-align:center;color:var(--muted);padding:55px 0 10px;font-size:13px}
+@media(max-width:850px){.grid,.detailgrid{grid-template-columns:1fr}.hero{padding-top:62px}.chips{grid-template-columns:1fr 1fr}.score{font-size:78px}}
+</style>
+</head><body>
+<div class="nav"><div class="navin">
+  <a class="brand" href="https://zyvor.dev" target="_blank" rel="noopener" aria-label="Zyvor home">
+    <svg class="brand-mark" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 2h14L6.6 16H16" fill="none" stroke="#ff5a15" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/></svg>
+    <span><span class="brand-zyvor">zyvor</span> GuestKit</span>
+  </a>
+  <small>Open source · offline · migration-ready</small>
+</div></div>
 
-  <header class="nebula-header" role="banner">
-    <a class="nebula-header__brand" href="https://zyvor.dev" target="_blank" rel="noopener noreferrer">
-      <img class="nebula-header__logo" src="img/zyvor-logo.png" width="96" height="32" alt="Zyvor" />
-      <span class="nebula-header__title">GuestKit</span>
-      <span class="nebula-header__tagline">Zeus AI · Offline VM Intelligence</span>
-    </a>
-    <nav class="nebula-header__nav guestkit-menubar__nav" aria-label="View">
-      <button type="button" class="nebula-header__link guestkit-menubar__link active" data-goto="ingest">Capture</button>
-      <button type="button" class="nebula-header__link guestkit-menubar__link" data-goto="assure">Image Vault</button>
-      <button type="button" class="nebula-header__link" id="menubarClusterBtn">Cluster</button>
-      <button type="button" class="nebula-header__link guestkit-menubar__link" data-goto="launch">Launch</button>
-      <button type="button" class="nebula-header__link guestkit-menubar__link" data-goto="assure">Reports</button>
-    </nav>
-    <div class="nebula-header__actions">
-      <select class="target-select" id="targetSelect" aria-label="Migration target" style="font-size:12px;padding:6px 10px;border-radius:8px;background:var(--bg-card);border:1px solid var(--border-soft);color:var(--text-muted);">
-        <option value="kubevirt" selected>kubevirt</option>
-        <option value="kvm">kvm</option>
-        <option value="proxmox">proxmox</option>
-        <option value="generic">generic</option>
-      </select>
-      <div class="recent-disks-wrap">
-        <button type="button" class="nebula-header__chip" id="recentDisksToggle">Recent</button>
-        <div class="recent-disks-menu" id="recentDisksMenu"></div>
-      </div>
-      <button type="button" class="nebula-header__chip brain-drawer-trigger" id="brainDrawerToggle" aria-label="Open Ask Zeus">⚡ Ask Zeus</button>
-      <button type="button" class="nebula-header__chip" id="cinemaModeBtn" aria-label="Cinema mode">Cinema</button>
-      <span class="nebula-header__pill" id="healthPill"><span class="pulse-dot" id="healthDot"></span> <span id="healthLabel">Connecting…</span></span>
-      <div class="nebula-header__more" id="headerMore">
-        <button type="button" class="nebula-header__chip" id="headerMoreBtn" aria-label="More options">More ▾</button>
-        <div class="nebula-header__more-menu">
-          <button type="button" class="nebula-header__chip" id="helpShortcutsBtn">Shortcuts</button>
-          <button type="button" class="nebula-header__chip" id="openSettingsBtn">Settings</button>
-          <span class="nebula-header__chip hidden" id="authUserChip"></span>
-          <button type="button" class="nebula-header__chip hidden" id="authSignOutBtn">Sign out</button>
-          <button type="button" class="nebula-header__chip" id="refreshFleetBtn">Refresh</button>
-        </div>
-      </div>
+<main>
+<section class="hero">
+  <div class="eyebrow">Offline VM intelligence</div>
+  <h1>Know if it will boot.<br>Before you power on.</h1>
+  <p>Score disk readiness offline, surface blockers, and certify cutover with a Passport — without an appliance daemon.</p>
+  <div class="actions">
+    <button class="btn primary" type="button" onclick="loadDemo()">Try the live demo</button>
+    <button class="btn secondary" type="button" onclick="document.querySelector('#workspace').scrollIntoView()">Inspect a disk report</button>
+  </div>
+</section>
+
+<section id="workspace" class="grid">
+  <div class="card">
+    <h2>Doctor</h2>
+    <p class="sub">Paste a GuestKit doctor JSON report, or drop a sample. Analyzed in this browser — no SaaS round-trip.</p>
+    <div class="drop" onclick="document.getElementById('file').click()">
+      <strong>Drop or choose JSON</strong>
+      <span>guestkit doctor --format json · Passport · migrate-plan</span>
+      <input id="file" type="file" accept=".json,.txt" hidden>
     </div>
-  </header>
-
-  <div class="cinema-bar">
-    <strong>GuestKit Cinema</strong>
-    <button type="button" class="btn secondary sm" id="cinemaExitBtn">Exit Cinema</button>
-  </div>
-
-  <div class="nebula-status-strip" id="statusStrip" aria-label="System status">
-    <span><span class="status-dot" id="statusDotApi"></span> API <strong id="healthLabelStrip">online</strong></span>
-    <span><strong id="hudVmCount">0 assets</strong></span>
-    <span>Cluster <strong id="hudCluster">—</strong></span>
-    <span>Storage <strong id="hudStorage">—</strong></span>
-    <span>Agent <strong id="hudAgent">—</strong></span>
-    <span>KubeVirt <strong id="hudKubevirt">—</strong></span>
-    <span>CDI <strong id="hudCdi">—</strong></span>
-    <span>Last scan <strong id="hudLastScan">—</strong></span>
-    <span class="hidden" id="hudWorker">—</span>
-    <span class="hidden" id="hudDiskCount">—</span>
-  </div>
-
-  <div class="nebula-body">
-    <main class="nebula-main">
-      <div class="workspace-grid">
-        <div class="workspace-main">
-
-          <div class="nebula-card nebula-intake" id="dropzone">
-            <input type="file" id="fileInput" accept=".qcow2,.vmdk,.raw,.ova,.img,.vpc,.vdi,.vhdx,.iso" hidden />
-            <div class="dropzone-inner">
-              <div class="nebula-intake__icon" aria-hidden="true">💿</div>
-              <h1 class="page-title">Drop a VM disk. GuestKit will fingerprint it before you boot it.</h1>
-              <p class="body-text">Detect OS, bootloader, drivers, packages, services, network config, cloud-init, risk, and migration readiness.</p>
-              <div class="format-chips">
-                <span class="format-chip">QCOW2</span><span class="format-chip">VMDK</span><span class="format-chip">VHDX</span>
-                <span class="format-chip">RAW</span><span class="format-chip">OVA</span><span class="format-chip">ISO</span>
-              </div>
-              <span class="nebula-intake__badge">Analyze without booting</span>
-              <p class="caption" id="serverStoragePath">Server path: —</p>
-            </div>
-            <div class="drop-progress hidden" id="uploadProgress">
-              <div class="drop-progress-bar" id="uploadBar"></div>
-              <span id="uploadLabel">Uploading…</span>
-            </div>
-            <div class="intake-actions">
-              <button type="button" class="btn primary" id="nebulaUpload">Upload Disk</button>
-              <button type="button" class="btn secondary" id="nebulaBrowseVault">Browse Server Vault</button>
-              <button type="button" class="btn secondary" id="nebulaImportUrl">Import from URL</button>
-            </div>
-            <details class="intake-more">
-              <summary>More sources: S3, NFS, OVA, Cluster PVC</summary>
-              <div class="intake-more-actions">
-                <button type="button" class="btn secondary sm" id="importUrlBtn">Import URL</button>
-                <button type="button" class="btn secondary sm" id="importS3Btn">Import S3</button>
-                <button type="button" class="btn secondary sm" id="importNfsBtn">Import NFS</button>
-                <button type="button" class="btn secondary sm" id="openClusterFleetBtn2">OVA / Cluster</button>
-                <button type="button" class="btn secondary sm" id="ingestUploadBtn2">Upload Local</button>
-                <button type="button" class="btn secondary sm" id="serverStorageUploadBtn2">Browse Server</button>
-              </div>
-            </details>
-          </div>
-
-          <div class="source-segmented" role="tablist" aria-label="Import source">
-            <button type="button" class="source-segment active" data-source="local" role="tab">Local Upload</button>
-            <button type="button" class="source-segment" data-source="server" role="tab">Server Vault</button>
-            <button type="button" class="source-segment" data-source="url" role="tab">URL</button>
-            <button type="button" class="source-segment" data-source="s3" role="tab">S3</button>
-            <button type="button" class="source-segment" data-source="nfs" role="tab">NFS</button>
-            <button type="button" class="source-segment" data-source="ova" role="tab">OVA / Cluster</button>
-          </div>
-
-          <div class="source-panel active" data-source-panel="local" id="panel-ingest" data-panel="ingest">
-            <p class="body-text">Drag a disk here or choose a file. GuestKit analyzes locally before upload when possible.</p>
-            <button type="button" class="btn secondary sm" id="browseBtn">Choose file…</button>
-            <button type="button" class="btn secondary sm hidden" id="ingestUploadBtn">Upload disk</button>
-          </div>
-          <div class="source-panel" data-source-panel="server">
-            <div class="vault-toolbar">
-              <input type="search" class="vault-search" id="vaultSearch" placeholder="Search images…" spellcheck="false" />
-              <select id="vaultTypeFilter" aria-label="Type filter">
-                <option value="">Type: All</option>
-                <option value="folder">Folders</option>
-                <option value="qcow2">QCOW2</option>
-                <option value="vmdk">VMDK</option>
-                <option value="raw">RAW</option>
-                <option value="iso">ISO</option>
-                <option value="ova">OVA</option>
-              </select>
-              <select id="vaultSort" aria-label="Sort">
-                <option value="name">Sort: Name</option>
-                <option value="size">Sort: Size</option>
-                <option value="date">Sort: Newest</option>
-              </select>
-              <select id="serverStorageRoot" aria-label="Storage location"></select>
-              <button type="button" class="btn secondary sm" id="serverStorageRefresh">Refresh</button>
-              <button type="button" class="btn primary sm" id="serverStorageUploadBtn">Upload to server</button>
-              <input type="file" id="serverFileInput" accept=".qcow2,.vmdk,.raw,.ova,.img,.vpc,.vdi" hidden />
-            </div>
-            <nav class="storage-breadcrumb" id="serverStorageBreadcrumb" aria-label="Storage path"></nav>
-            <div id="serverStorageBrowser"><p class="body-text">Loading server disks…</p></div>
-          </div>
-          <div class="source-panel" data-source-panel="url"><p class="body-text">Import a disk image from a public or signed URL.</p><button type="button" class="btn primary sm" id="importUrlBtnAlt">Import URL…</button></div>
-          <div class="source-panel" data-source-panel="s3"><p class="body-text">Pull from S3-compatible storage.</p><button type="button" class="btn primary sm" id="importS3BtnAlt">Import S3…</button></div>
-          <div class="source-panel" data-source-panel="nfs"><p class="body-text">Import from NFS path on the API host.</p><button type="button" class="btn primary sm" id="importNfsBtnAlt">Import NFS…</button></div>
-          <div class="source-panel" data-source-panel="ova">
-            <p class="body-text">Browse KubeVirt cluster VMs or import OVA bundles.</p>
-            <button type="button" class="btn primary sm" id="openClusterFleetBtn">Browse cluster VMs</button>
-          </div>
-
-          <div class="pipeline-ribbon" id="pipelineRibbon" aria-label="Intelligence pipeline"></div>
-
-          <div class="nebula-card disk-preview" id="diskPreview">
-            <p class="brain-rec">Select a disk to see intelligence preview.</p>
-          </div>
-
-          <div class="wizard-bar hidden" id="wizardBar"><div class="wizard-steps" id="wizardSteps"></div><p class="wizard-subtitle" id="wizardSubtitle"></p></div>
-          <div class="panels" id="panels" data-wizard-step="ingest">
-          <section class="nebula-card" id="panel-fleet" data-panel="assure">
-            <div class="panel-head row">
-              <div><h2 class="section-title">Server Image Vault</h2><p class="caption" id="fleetSubtitle">Imported disks and live cluster VMs.</p></div>
-              <div class="fleet-head-actions">
-                <div class="fleet-tabs" role="tablist" aria-label="Fleet source">
-                  <button type="button" class="fleet-tab active" data-fleet="disks" id="fleetTabDisks">Imported disks</button>
-                  <button type="button" class="fleet-tab" data-fleet="cluster" id="fleetTabCluster">KubeVirt cluster</button>
-                </div>
-                <div class="fleet-toolbar">
-                  <div class="fleet-cluster-filters hidden" id="fleetClusterFilters">
-                    <select class="fleet-select" id="fleetNamespaceFilter" aria-label="Namespace filter">
-                      <option value="">All namespaces</option>
-                    </select>
-                    <input type="search" class="fleet-search" id="fleetSearchFilter" placeholder="Search VMs…" spellcheck="false" />
-                    <div class="fleet-phase-chips" role="group" aria-label="Phase filter">
-                      <button type="button" class="phase-chip active" data-phase="">All</button>
-                      <button type="button" class="phase-chip" data-phase="Running">Running</button>
-                      <button type="button" class="phase-chip" data-phase="Stopped">Stopped</button>
-                      <button type="button" class="phase-chip" data-phase="Pending">Pending</button>
-                    </div>
-                  </div>
-                  <button type="button" class="btn glass sm" id="fleetUploadBtn" title="Upload a disk image">Upload disk</button>
-                  <button type="button" class="btn glass sm hidden" id="fleetBrowseClusterBtn" title="Browse live cluster VMs">Browse cluster</button>
-                  <button type="button" class="btn glass sm hidden" id="fleetRefreshClusterBtn" title="Refresh cluster VM list">Refresh</button>
-                </div>
-                <span class="badge fleet-sync hidden" id="fleetClusterSync">—</span>
-                <span class="badge fleet-vmtools hidden" id="fleetVmtoolsCoverage" title="Zeus VM Tools fleet coverage">—</span>
-                <span class="badge fleet-policy hidden" id="fleetVmtoolsPolicyBadge">Policy off</span>
-                <span class="badge fleet-packetwolf hidden" id="fleetPacketwolfBadge" title="PacketWolf fleet correlation">PW —</span>
-                <span class="badge fleet-guest-approvals hidden" id="fleetGuestApprovalsBadge" title="Guest remediation approvals">Approvals</span>
-                <span class="badge" id="fleetCount">0 images</span>
-              </div>
-              <div class="fleet-vmtools-policy hidden" id="fleetVmtoolsPolicy">
-                <label class="policy-toggle">
-                  <input type="checkbox" id="vmtoolsAutoInstall" />
-                  Auto-install VM Tools on missing Linux VMs
-                </label>
-                <label class="policy-toggle">
-                  <input type="checkbox" id="vmtoolsAutoUpgrade" />
-                  Auto-upgrade when bundle version is newer
-                </label>
-                <button type="button" class="btn glass sm accent" id="vmtoolsReconcileBtn">Reconcile fleet</button>
-                <button type="button" class="btn glass sm hidden" id="packetwolfSyncBtn">PacketWolf sync</button>
-              </div>
-              <div class="fleet-vmtools-policy hidden" id="fleetGuestApprovals">
-                <h4 class="fleet-panel-title">Guest action approvals</h4>
-                <div id="fleetGuestApprovalsPending"></div>
-                <h5 class="fleet-panel-subtitle">Recent history</h5>
-                <div id="fleetGuestApprovalsAudit"></div>
-              </div>
-            </div>
-            <div class="inspect-mode-bar glass-inset" id="inspectModeBar">
-              <span class="inspect-mode-label">Inspection</span>
-              <div class="inspect-mode-toggle" role="group" aria-label="Inspection mode">
-                <button type="button" class="mode-btn active" data-mode="offline" id="modeOfflineBtn">Offline disk</button>
-                <button type="button" class="mode-btn" data-mode="online" id="modeOnlineBtn">Online agent</button>
-              </div>
-              <span class="agent-status" id="agentStatus">agent idle</span>
-            </div>
-            <div class="fleet-vault-summary carbon-glass" id="fleetVaultSummary">0 imported</div>
-            <div class="fleet-filter-chips" id="fleetFilterChips" role="group" aria-label="Disk filters">
-              <button type="button" class="filter-chip active" data-filter="">All</button>
-              <button type="button" class="filter-chip" data-filter="unscanned">Unscanned</button>
-              <button type="button" class="filter-chip" data-filter="bootable">Bootable</button>
-              <button type="button" class="filter-chip" data-filter="repair">Needs Repair</button>
-              <button type="button" class="filter-chip" data-filter="ready">Ready for KubeVirt</button>
-              <button type="button" class="filter-chip" data-filter="linux">Linux</button>
-              <button type="button" class="filter-chip" data-filter="windows">Windows</button>
-              <button type="button" class="filter-chip" data-filter="failed">Failed</button>
-            </div>
-            <div class="fleet-vault-toolbar">
-              <input type="search" class="fleet-search" id="fleetDiskSearch" placeholder="Search disks… (/)" spellcheck="false" />
-              <select class="fleet-select" id="fleetDiskSort" aria-label="Sort disks">
-                <option value="rank">Best first</option>
-                <option value="name">Name</option>
-                <option value="size">Size</option>
-                <option value="score">Boot score</option>
-              </select>
-              <select class="fleet-select" id="fleetSavedView" aria-label="Saved view">
-                <option value="">Saved views</option>
-                <option value="all">All imported</option>
-                <option value="repair">Needs repair</option>
-                <option value="ready">Ready to launch</option>
-              </select>
-              <button type="button" class="btn sm ghost" id="fleetViewCard" title="Card view">Cards</button>
-              <button type="button" class="btn sm ghost" id="fleetViewTable" title="Table view">Table</button>
-              <button type="button" class="btn sm glass" id="fleetAiOverviewBtn">AI fleet scan</button>
-              <button type="button" class="btn sm primary" id="fullMigrationBtn">Full migration</button>
-            </div>
-            <div class="fleet-batch-bar hidden" id="fleetBatchBar">
-              <span id="fleetBatchCount">0 selected</span>
-              <button type="button" class="btn sm glass" id="batchScanBtn">Scan selected</button>
-              <button type="button" class="btn sm accent" id="batchDoctorBtn">Doctor selected</button>
-              <button type="button" class="btn sm glass" id="batchExportBtn">Export report</button>
-              <button type="button" class="btn sm danger" id="batchDeleteBtn">Delete</button>
-            </div>
-            <div class="fleet-layout">
-              <table class="fleet-table hidden" id="fleetTable">
-                <thead><tr><th><input type="checkbox" id="fleetSelectAll" /></th><th>Name</th><th>OS</th><th>Format</th><th>Size</th><th>Boot</th><th>KV</th><th>Risk</th><th>Last scan</th><th></th></tr></thead>
-                <tbody id="fleetTableBody"></tbody>
-              </table>
-              <div class="fleet-grid" id="fleetGrid">
-                <div class="fleet-empty" id="fleetEmpty">
-                  <p id="fleetEmptyText">No disks yet.</p>
-                  <div class="fleet-toolbar" style="justify-content:center;margin-top:0.75rem;">
-                    <button type="button" class="btn primary sm hidden" id="fleetEmptyImport">Upload disk</button>
-                    <button type="button" class="btn primary sm hidden" id="fleetEmptyBrowseCluster">Browse cluster VMs</button>
-                    <button type="button" class="btn secondary sm hidden" id="fleetEmptyRefresh">Refresh cluster</button>
-                  </div>
-                </div>
-              </div>
-              <aside class="cluster-detail-drawer hidden" id="clusterDetailDrawer" aria-label="Cluster VM details">
-                <div class="drawer-head">
-                  <h3 id="clusterDrawerTitle">VM details</h3>
-                  <button type="button" class="btn secondary sm" id="clusterDrawerClose" aria-label="Close details">×</button>
-                </div>
-                <dl class="drawer-meta" id="clusterDrawerMeta"></dl>
-                <div class="drawer-links" id="clusterDrawerLinks"></div>
-              </aside>
-            </div>
-          </section>
-
-          <div class="legacy-hidden wizard-footer" id="wizardFooter">
-            <button type="button" id="wizardBackBtn"></button>
-            <button type="button" id="wizardActionBtn"></button>
-            <button type="button" id="wizardChainBtn"></button>
-            <button type="button" id="wizardContinueBtn"></button>
-          </div>
-          <div class="legacy-hidden" id="copilotBanner"><span id="copilotBannerTitle"></span><p id="copilotBannerMsg"></p><button id="copilotBannerAction"></button></div>
-
-          <div class="legacy-hidden">
-            <div id="missionRail"><nav id="missionRailNav"></nav><div id="missionProgress"></div></div>
-            <div id="stickyMiniHeader"><span id="stickyDiskName"></span><span id="stickyRisk"></span></div>
-            <section id="panelHero"><div id="heroTitle"></div><div id="heroMeta"></div><div id="heroPath"></div><div id="heroSummary"></div><div id="heroJourneyStrip"></div><div id="heroNextAction"></div><div id="heroConfidenceRings"></div><div id="heroReadinessRing"></div></section>
-            <div id="diskInspector"><div id="diskInspectorRing"></div><h3 id="diskInspectorTitle"></h3><p id="diskInspectorMeta"></p><div id="diskInspectorFlight"></div><div id="diskInspectorActions"></div><div id="diskInspectorDna"></div><button id="diskInspectorClose"></button></div>
-            <div id="selectedCommandBar"><span id="commandBarName"></span><span id="commandBarScore"></span><span id="commandBarRisk"></span><button id="cmdBarInspect"></button><button id="cmdBarDoctor"></button><button id="cmdBarLaunch"></button><button id="cmdBarYaml"></button><button id="cmdBarRepair"></button><button id="cmdBarMigrate"></button><button id="cmdBarClear"></button></div>
-            <section id="panel-dna"><div id="panelDnaContent"></div></section>
-            <section id="panel-boot-doctor"><div id="panelBootDoctorContent"></div></section>
-            <section id="panel-repair-bay"><div id="panelRepairBayContent"></div></section>
-            <section id="panel-kubevirt-forge"><div id="panelForgeContent"></div></section>
-            <section id="panel-results"><div id="findingsContent"></div><div id="findingsEmpty"></div><div id="diffContent"></div><div id="diffEmpty"></div><div id="evidenceTimeline"></div><div id="timelineEmpty"></div><div id="riskContent"></div><div id="riskEmpty"></div><div id="evidenceLogs"></div><div id="logsEmpty"></div><pre id="rawJson"></pre><div id="yamlContent"></div><button id="copyDebugBundleBtn"></button><button id="copyYamlBtn"></button><button id="applyYamlBtn"></button></section>
-            <section id="panel-actions"><h2 id="selectedVmTitle"></h2><p id="selectedVmMeta"></p><div id="actionDeck"></div><div id="clusterDeck"></div></section>
-            <div id="brainFleetSummary"></div><div id="brainContextMode"></div><p id="brainConfidenceLabel"></p><div id="brainDna"></div><div id="brainConfidence"></div><div id="brainRecs"></div><div id="brainPrimaryActions"><button id="brainQuickRepair"></button><button id="quickScanBtn"></button><button id="brainQuickYaml"></button></div>
-            <details id="brainOverflow"><button id="applyYamlBrainBtn"></button><button id="brainQuickExplain"></button><button id="brainQuickPlan"></button><button id="brainCompareBtn"></button><button id="brainExportReport"></button><button id="copyDiskIdBtn"></button><button id="copyJsonBtn"></button><button id="exportTimelineBtn"></button><button id="openZeusBtn"></button><button id="deleteDiskBtn"></button><button id="cleanupShadowsBtn"></button></details>
-            <div id="brainAiDeck"></div><div id="brainAiNarrative"></div><div id="brainPromptChips"></div><div id="brainAskChat"></div><form id="brainAskForm"><input id="brainAskInput" /><button type="submit"></button></form>
-            <div id="brainJobHistory"></div><ul id="brainTimeline"></ul><div id="brainChecks"></div><div id="jobTracker"><span id="jobOp"></span><span id="jobStatus"></span><div id="jobBar"></div><p id="jobIdDisplay"></p><button id="jobRetryBtn"></button><span id="jobBadge"></span></div>
-          </div>
-
-          </div><!-- /.panels -->
-          </div><!-- /.workspace-main -->
-
-          <aside class="nebula-brain nebula-brain--side" id="brainPanel" aria-label="Ask Zeus">
-            <div id="brainPanelContent"></div>
-          </aside>
-        </div><!-- /.workspace-grid -->
-    </main>
-  </div><!-- /.nebula-body -->
-
-  <div class="nebula-brain-drawer" id="nebulaBrainDrawer">
-    <div class="nebula-brain-drawer__overlay"></div>
-    <div class="nebula-brain-drawer__panel">
-      <button type="button" class="btn ghost sm" id="brainDrawerClose" style="float:right;">×</button>
-      <div id="brainDrawerContent"></div>
+    <div class="tabs">
+      <button id="treport" class="tab on" type="button" onclick="showTab('report')">Report</button>
+      <button id="tplan" class="tab" type="button" onclick="showTab('plan')">Plan notes</button>
     </div>
+    <textarea id="report" spellcheck="false" placeholder='{"score":86,"decision":"REVIEW","findings":[...]}'></textarea>
+    <textarea id="plan" spellcheck="false" style="display:none" placeholder="Optional migrate-plan notes or target checklist"></textarea>
+    <button id="run" class="btn primary run" type="button" onclick="runDoctor()">Score readiness</button>
   </div>
-
-  <aside class="legacy-hidden" id="brainDrawer"></aside>
-  <aside class="cluster-readiness-drawer hidden" id="clusterReadinessDrawer" aria-label="Cluster readiness">
-    <div class="drawer-head"><h3>Cluster Readiness</h3><button type="button" class="btn ghost sm" id="clusterReadinessClose">×</button></div>
-    <div id="clusterReadinessBody"></div>
-  </aside>
-
-  <div class="guestkit-modal-backdrop hidden" id="launchMonitorModal">
-    <div class="guestkit-modal launch-monitor">
-      <h2>Launch Monitor</h2>
-      <div id="launchMonitorBody"></div>
-      <div class="guestkit-modal__actions">
-        <button type="button" class="btn glass" id="launchMonitorClose">Close</button>
-        <button type="button" class="btn primary" id="launchMonitorConsole">Open Console</button>
-      </div>
-    </div>
+  <div class="card">
+    <h2>Boot readiness</h2>
+    <p class="sub">Evidence-backed score from offline disk intelligence.</p>
+    <div id="result"><div class="empty">Run doctor to see your readiness score.</div></div>
   </div>
+</section>
 
-  <div class="guestkit-modal-backdrop hidden" id="sessionRestoreModal">
-    <div class="guestkit-modal">
-      <h2>Continue where you left off?</h2>
-      <p id="sessionRestoreText">—</p>
-      <div class="guestkit-modal__actions">
-        <button type="button" class="btn glass" id="sessionRestoreFresh">Start fresh</button>
-        <button type="button" class="btn primary" id="sessionRestoreResume">Resume</button>
-      </div>
-    </div>
-  </div>
+<section id="details" class="detailgrid" style="display:none">
+  <div class="card mini"><h3>Blockers</h3><div id="blockers"></div></div>
+  <div class="card mini"><h3>Targets</h3><div id="targets"></div></div>
+  <div class="card mini"><h3>Passport</h3><div id="passport"></div></div>
+</section>
 
-  <div class="guestkit-modal-backdrop hidden" id="fleetScanModal">
-    <div class="guestkit-modal">
-      <h2>Fleet Scan</h2>
-      <p id="fleetScanStatus">Queued…</p>
-      <ul class="fleet-scan-stages" id="fleetScanStages">
-        <li>Import check</li><li>Partition scan</li><li>OS detection</li><li>Bootloader scan</li><li>Driver scan</li><li>KubeVirt readiness</li>
-      </ul>
-      <div class="guestkit-modal__actions">
-        <button type="button" class="btn glass" id="fleetScanClose">Close</button>
-      </div>
-    </div>
-  </div>
+<div class="footer">GuestKit · Apache-2.0 · Built by Zyvor</div>
+</main>
 
-  <div class="dock-controls dock-controls--cinema hidden" id="dockControls" aria-hidden="true">
-    <button type="button" class="dock-ctrl-btn" id="dockPinBtn" title="Pin dock">📌</button>
-    <button type="button" class="dock-ctrl-btn" id="dockCompactBtn" title="Compact">▣</button>
-    <button type="button" class="dock-ctrl-btn" id="dockAutoHideBtn" title="Auto-hide">◐</button>
-    <button type="button" class="dock-ctrl-btn" id="dockPosBtn" title="Position">⇄</button>
-  </div>
+<script>
+const R=document.getElementById('report'),P=document.getElementById('plan');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-  <nav class="mac-dock command-dock pos-bottom dock-hidden" id="commandDock" aria-label="Command Dock">
-    <div class="mac-dock-inner mac-dock-inner-unified">
-      <button type="button" class="mac-dock-item dock-item" data-goto="ingest" aria-label="Capture">
-        <span class="dock-icon" aria-hidden="true">↓</span>
-        <span class="mac-dock-tooltip">Capture</span>
-      </button>
-      <button type="button" class="mac-dock-item dock-item" data-action="inspect" disabled id="dockInspect" aria-label="Inspect">
-        <span class="dock-icon" aria-hidden="true">⌕</span>
-        <span class="mac-dock-tooltip">Inspect</span>
-      </button>
-      <button type="button" class="mac-dock-item dock-item" data-action="doctor" disabled id="dockDoctor" aria-label="Doctor">
-        <span class="dock-icon" aria-hidden="true">◉</span>
-        <span class="mac-dock-tooltip">Doctor</span>
-      </button>
-      <button type="button" class="mac-dock-item dock-item" data-action="passport" disabled id="dockPassport" aria-label="Cutover Passport">
-        <span class="dock-icon" aria-hidden="true">☰</span>
-        <span class="mac-dock-tooltip">Passport</span>
-      </button>
-      <button type="button" class="mac-dock-item dock-item" data-action="repair-plan" disabled id="dockRepair" aria-label="Repair">
-        <span class="dock-icon" aria-hidden="true">⚙</span>
-        <span class="mac-dock-tooltip">Repair</span>
-      </button>
-      <button type="button" class="mac-dock-item dock-item" data-action="migration-plan" disabled id="dockPlan" aria-label="Convert">
-        <span class="dock-icon" aria-hidden="true">◎</span>
-        <span class="mac-dock-tooltip">Convert</span>
-      </button>
-      <button type="button" class="mac-dock-item dock-item dock-launch" data-action="provision" disabled id="dockLaunch" aria-label="Launch">
-        <span class="dock-icon" aria-hidden="true">✦</span>
-        <span class="mac-dock-tooltip">Launch</span>
-      </button>
-      <span class="mac-dock-divider" aria-hidden="true"></span>
-      <button type="button" class="mac-dock-item dock-item" id="dockLogsBtn" aria-label="Logs">
-        <span class="dock-icon" aria-hidden="true">{ }</span>
-        <span class="mac-dock-tooltip">Logs</span>
-      </button>
-      <button type="button" class="mac-dock-item dock-item" id="dockYamlBtn" aria-label="YAML">
-        <span class="dock-icon" aria-hidden="true">▤</span>
-        <span class="mac-dock-tooltip">YAML</span>
-      </button>
-      <button type="button" class="mac-dock-item dock-item mac-dock-item-ask" id="dockAiBtn" aria-label="Ask Zeus">
-        <span class="dock-icon" aria-hidden="true">⚡</span>
-        <span class="mac-dock-tooltip">Ask Zeus</span>
-      </button>
-    </div>
-  </nav>
+document.getElementById('file').onchange=async e=>{
+  const f=e.target.files[0];
+  if(f) R.value=await f.text();
+};
 
-  <div class="guestkit-modal-backdrop hidden" id="launchPreviewModal">
-    <div class="guestkit-modal launch-drawer">
-      <div class="launch-drawer__head">
-        <div class="launch-drawer__ring-wrap">
-          <div class="readiness-ring readiness-ring--lg" id="launchReadinessRing" data-score="0">
-            <svg viewBox="0 0 36 36" class="readiness-ring__svg" aria-hidden="true">
-              <circle class="readiness-ring__track" cx="18" cy="18" r="15.5" />
-              <circle class="readiness-ring__fill" cx="18" cy="18" r="15.5" />
-            </svg>
-            <span class="readiness-ring__value" id="launchReadinessScore">—</span>
-          </div>
-          <div>
-            <h2>Launch Preview</h2>
-            <p class="launch-drawer__subtitle" id="launchReadinessLabel">Readiness check</p>
-          </div>
-        </div>
-      </div>
-      <ul class="launch-checklist" id="launchChecklist"></ul>
-      <table class="launch-preview-table"><tbody id="launchPreviewBody"></tbody></table>
-      <div class="guestkit-modal__actions">
-        <button type="button" class="btn glass" id="launchPreviewCancel">Cancel</button>
-        <button type="button" class="btn glass" id="launchPreviewDryRun">Launch Dry Run</button>
-        <button type="button" class="btn primary" id="launchPreviewConfirm">Launch VM</button>
-      </div>
-    </div>
-  </div>
+function showTab(x){
+  R.style.display=x==='report'?'block':'none';
+  P.style.display=x==='plan'?'block':'none';
+  document.getElementById('treport').classList.toggle('on',x==='report');
+  document.getElementById('tplan').classList.toggle('on',x==='plan');
+}
 
-  <div class="guestkit-modal-backdrop hidden" id="convertStudioModal">
-    <div class="guestkit-modal">
-      <h2>Conversion Studio</h2>
-      <p>Source: <strong id="convertSourceFmt">—</strong> → Target: <select id="convertTargetFmt"><option value="qcow2">qcow2</option><option value="raw">raw</option><option value="vmdk">vmdk</option></select></p>
-      <label><input type="checkbox" id="convertCompression" /> Enable compression</label>
-      <div class="guestkit-modal__actions">
-        <button type="button" class="btn glass" id="convertCancel">Cancel</button>
-        <button type="button" class="btn primary" id="convertSubmit">Start Conversion</button>
-      </div>
-    </div>
-  </div>
+async function loadDemo(){
+  const d=await fetch('demo-doctor.json').then(r=>r.json());
+  R.value=JSON.stringify(d,null,2);
+  P.value=d.plan_notes||'virtio-initramfs · target kvm · gate --fail-below 80';
+  document.querySelector('#workspace').scrollIntoView();
+  runDoctor();
+}
 
-  <div class="guestkit-modal-backdrop hidden" id="importUrlModal">
-    <div class="guestkit-modal">
-      <h2>Import from URL</h2>
-      <input type="url" id="importUrlInput" placeholder="https://…/image.qcow2" style="width:100%;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-      <div class="guestkit-modal__actions">
-        <button type="button" class="btn glass" id="importUrlCancel">Cancel</button>
-        <button type="button" class="btn primary" id="importUrlSubmit">Import</button>
-      </div>
-    </div>
-  </div>
+function normalize(raw){
+  let d=raw;
+  if(typeof raw==='string'){
+    const t=raw.trim();
+    if(!t) throw new Error('Paste a doctor JSON report first.');
+    d=JSON.parse(t);
+  }
+  const score=Number(d.score??d.readiness??d.boot_score);
+  if(Number.isNaN(score)) throw new Error('Report needs a numeric score.');
+  const findings=Array.isArray(d.findings)?d.findings:(d.blockers||[]).map(b=>({
+    severity:b.severity||'high',title:b.title||b.id||'Blocker',detail:b.detail||b.message||'',fix:b.fix||b.recommendation||''
+  }));
+  let decision=d.decision||d.verdict||'';
+  if(!decision){
+    decision=score>=90?'SAFE — ready to cut over':score>=70?'REVIEW — fix blockers first':'STOP — do not power on';
+  }
+  return {
+    score:Math.round(score),
+    decision,
+    findings,
+    blockers:d.blockers_count??findings.filter(f=>['critical','high'].includes(String(f.severity||'').toLowerCase())).length,
+    formats:d.formats||d.disk_formats||['qcow2','vmdk','vhdx'],
+    targets:d.targets||d.migration_targets||['kvm','kubevirt','openstack'],
+    passport:d.passport||{status:score>=80?'eligible':'hold',target:d.target||'kvm',gate:d.gate||80},
+    plan_notes:d.plan_notes||P.value||''
+  };
+}
 
-  <div class="guestkit-modal-backdrop hidden" id="importS3Modal">
-    <div class="guestkit-modal">
-      <h2>Import from S3</h2>
-      <input type="text" id="importS3Bucket" placeholder="Bucket" style="width:100%;margin-bottom:0.5rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-      <input type="text" id="importS3Key" placeholder="Object key" style="width:100%;margin-bottom:0.5rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-      <input type="text" id="importS3Endpoint" placeholder="Endpoint (optional)" style="width:100%;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-      <div class="guestkit-modal__actions">
-        <button type="button" class="btn glass" id="importS3Cancel">Cancel</button>
-        <button type="button" class="btn primary" id="importS3Submit">Import</button>
-      </div>
-    </div>
-  </div>
+function runDoctor(){
+  const btn=document.getElementById('run');
+  btn.disabled=true;btn.textContent='Scoring…';
+  try{
+    render(normalize(R.value));
+  }catch(e){
+    document.getElementById('result').innerHTML=`<div class="empty">${esc(e.message)}</div>`;
+    document.getElementById('details').style.display='none';
+  }finally{
+    btn.disabled=false;btn.textContent='Score readiness';
+  }
+}
 
-  <div class="guestkit-modal-backdrop hidden" id="compareModal">
-    <div class="guestkit-modal" style="max-width:640px;">
-      <h2>Compare Mode</h2>
-      <p>Before: <select id="compareBeforeSelect"></select> After: <select id="compareAfterSelect"></select></p>
-      <div id="compareResults"></div>
-      <div class="guestkit-modal__actions">
-        <button type="button" class="btn glass" id="compareCancelBtn">Close</button>
-        <button type="button" class="btn primary" id="compareRunBtn">Compare</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="guestkit-modal-backdrop hidden" id="importNfsModal">
-    <div class="guestkit-modal">
-      <h2>Import from NFS</h2>
-      <p class="brain-rec">Path on the API host. Optional server label maps to {{NFS_MOUNT_ROOT}}/server/path.</p>
-      <input type="text" id="importNfsHost" placeholder="NFS server label (optional)" style="width:100%;margin-bottom:0.5rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-      <input type="text" id="importNfsPath" placeholder="/mnt/nfs/images/disk.qcow2" style="width:100%;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-      <div class="guestkit-modal__actions">
-        <button type="button" class="btn glass" id="importNfsCancel">Cancel</button>
-        <button type="button" class="btn primary" id="importNfsSubmit">Import</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="guestkit-modal-backdrop hidden" id="aiCommandModal">
-    <div class="guestkit-modal">
-      <h2>AI Command</h2>
-      <p class="brain-rec">Natural language or slash commands: /doctor /repair /launch /fleet</p>
-      <form id="aiCommandForm">
-        <input type="text" id="aiCommandInput" placeholder="Ask GuestKit anything…" style="width:100%;padding:0.6rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" autocomplete="off" />
-      </form>
-      <div class="guestkit-modal__actions">
-        <button type="button" class="btn glass" id="aiCommandClose">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="guestkit-modal-backdrop hidden" id="fleetAiModal">
-    <div class="guestkit-modal" style="max-width:560px;">
-      <h2>Fleet AI Overview</h2>
-      <div id="fleetAiBody"><p class="brain-rec">Analyzing vault…</p></div>
-      <div class="guestkit-modal__actions">
-        <button type="button" class="btn glass" id="fleetAiClose">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="guestkit-modal-backdrop hidden" id="shortcutsModal">
-    <div class="guestkit-modal">
-      <h2>Keyboard shortcuts</h2>
-      <ul class="shortcuts-list">
-        <li><kbd>?</kbd> This help</li>
-        <li><kbd>1</kbd>–<kbd>6</kbd> Mission Rail steps</li>
-        <li><kbd>I</kbd> Inspect · <kbd>D</kbd> Doctor · <kbd>R</kbd> Repair</li>
-        <li><kbd>M</kbd> Migration plan · <kbd>L</kbd> Launch preview</li>
-        <li><kbd>B</kbd> Toggle Brain · <kbd>E</kbd> Evidence console</li>
-        <li><kbd>U</kbd> Upload · <kbd>/</kbd> Search disks</li>
-        <li><kbd>Esc</kbd> Close modals · clear disk selection</li>
-        <li><kbd>Q</kbd> Quick scan (inspect + doctor)</li>
-        <li><kbd>C</kbd> Compare mode</li>
-        <li><kbd>A</kbd> Focus AI chat</li>
-        <li><kbd>⌘K</kbd> / <kbd>Ctrl+K</kbd> AI command palette</li>
-      </ul>
-      <div class="guestkit-modal__actions">
-        <button type="button" class="btn primary" id="shortcutsCloseBtn">Got it</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="guestkit-modal-backdrop hidden" id="settingsModal">
-    <div class="guestkit-modal" style="max-width:720px;">
-      <h2>Settings</h2>
-      <div class="settings-tabs" style="display:flex;gap:0.5rem;margin-bottom:1rem;">
-        <button type="button" class="btn glass sm active" data-settings-tab="identity">Identity</button>
-        <button type="button" class="btn glass sm" data-settings-tab="sso">SSO</button>
-      </div>
-      <div data-settings-panel="identity">
-        <label style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.75rem;">
-          <input type="checkbox" id="identityAllowBypass" /> Allow local bypass when auth is enabled
-        </label>
-        <label style="display:block;margin-bottom:0.75rem;">Default role
-          <input type="text" id="identityDefaultRole" style="width:100%;margin-top:0.25rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-        </label>
-        <label style="display:block;margin-bottom:0.75rem;">Session hours
-          <input type="number" id="identitySessionHours" min="1" max="720" style="width:100%;margin-top:0.25rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-        </label>
-        <label style="display:block;margin-bottom:0.75rem;">Role claim (OIDC/SAML groups field)
-          <input type="text" id="identityRoleClaim" placeholder="groups" style="width:100%;margin-top:0.25rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-        </label>
-        <label style="display:block;margin-bottom:0.75rem;">Admin roles (comma-separated)
-          <input type="text" id="identityAdminRoles" placeholder="admin, guestkit-admin" style="width:100%;margin-top:0.25rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-        </label>
-        <label style="display:block;margin-bottom:0.75rem;">Admin emails (comma-separated)
-          <input type="text" id="identityAdminEmails" placeholder="admin@example.com" style="width:100%;margin-top:0.25rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-        </label>
-        <button type="button" class="btn primary" id="saveIdentityBtn">Save Identity</button>
-      </div>
-      <div data-settings-panel="sso" class="hidden">
-        <h3 style="margin-top:0;">OIDC</h3>
-        <label style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.75rem;">
-          <input type="checkbox" id="oidcEnabled" /> Enable OIDC login
-        </label>
-        <label style="display:block;margin-bottom:0.75rem;">Issuer URL
-          <input type="url" id="oidcIssuerUrl" placeholder="https://idp.example.com/realms/guestkit" style="width:100%;margin-top:0.25rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-        </label>
-        <label style="display:block;margin-bottom:0.75rem;">Client ID
-          <input type="text" id="oidcClientId" style="width:100%;margin-top:0.25rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-        </label>
-        <label style="display:block;margin-bottom:0.75rem;">Client secret
-          <input type="password" id="oidcClientSecret" style="width:100%;margin-top:0.25rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-        </label>
-        <label style="display:block;margin-bottom:0.75rem;">Scopes
-          <input type="text" id="oidcScopes" placeholder="openid profile email" style="width:100%;margin-top:0.25rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-        </label>
-        <label style="display:block;margin-bottom:1rem;">Login button label
-          <input type="text" id="oidcButtonLabel" style="width:100%;margin-top:0.25rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-        </label>
-        <h3>SAML</h3>
-        <label style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.75rem;">
-          <input type="checkbox" id="samlEnabled" /> Enable SAML login
-        </label>
-        <label style="display:block;margin-bottom:0.75rem;">Entity ID
-          <input type="text" id="samlEntityId" style="width:100%;margin-top:0.25rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-        </label>
-        <label style="display:block;margin-bottom:0.75rem;">SSO URL
-          <input type="url" id="samlSsoUrl" style="width:100%;margin-top:0.25rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-        </label>
-        <label style="display:block;margin-bottom:0.75rem;">IdP metadata URL
-          <input type="url" id="samlMetadataUrl" style="width:100%;margin-top:0.25rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-        </label>
-        <label style="display:block;margin-bottom:0.75rem;">IdP certificate (PEM)
-          <textarea id="samlCertificatePem" rows="4" style="width:100%;margin-top:0.25rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);font-family:var(--iw-mono,monospace);"></textarea>
-        </label>
-        <label style="display:block;margin-bottom:1rem;">NameID format
-          <input type="text" id="samlNameIdFormat" placeholder="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress" style="width:100%;margin-top:0.25rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-        </label>
-        <label style="display:block;margin-bottom:1rem;">Login button label
-          <input type="text" id="samlButtonLabel" placeholder="Sign in with SAML" style="width:100%;margin-top:0.25rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-primary);color:var(--text-primary);" />
-        </label>
-        <div style="display:flex;gap:0.5rem;">
-          <button type="button" class="btn primary" id="saveSsoBtn">Save SSO</button>
-          <button type="button" class="btn glass" id="copySamlMetadataBtn">Copy SP Metadata</button>
-        </div>
-      </div>
-      <div class="guestkit-modal__actions">
-        <button type="button" class="btn glass" id="settingsCloseBtn">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
-
-  <footer class="nebula-footer" role="contentinfo">
-    <a class="nebula-footer__logo" href="https://zyvor.dev" target="_blank" rel="noopener noreferrer" title="zyvor.dev">
-      <img src="img/zyvor-logo.png" width="66" height="22" alt="Zyvor" />
-    </a>
-    <span class="nebula-footer__line">
-      <a class="nebula-footer__link" href="https://zyvor.dev" target="_blank" rel="noopener noreferrer">zyvor.dev</a>
-      <span class="nebula-footer__sep" aria-hidden="true">·</span>
-      <span class="nebula-footer__copy">Built by Zyvor</span>
-    </span>
-  </footer>
-  </div>
-  <style>
-    /* ── Zyvor brand footer ── */
-    .nebula-footer{
-      display:flex; align-items:center; justify-content:center; flex-wrap:wrap;
-      gap:12px 14px; padding:16px 20px 22px; margin-top:8px;
-      border-top:1px solid rgba(0,0,0,.08);
-      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif; font-size:12px; line-height:1.5;
-      color:#6f625b;
-    }
-    .nebula-footer__logo{display:inline-flex; align-items:center; border-radius:6px; opacity:.9; transition:opacity .15s}
-    .nebula-footer__logo:hover{opacity:1}
-    .nebula-footer__logo img{height:22px; width:auto; display:block}
-    .nebula-footer__logo:focus-visible{outline:2px solid #f36b21; outline-offset:3px}
-    .nebula-footer__line{display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap}
-    .nebula-footer__link{color:#f36b21; text-decoration:none; font-weight:600}
-    .nebula-footer__link:hover{text-decoration:underline}
-    .nebula-footer__link:focus-visible{outline:2px solid #f36b21; outline-offset:2px; border-radius:3px}
-    .nebula-footer__sep{opacity:.6}
-    .nebula-footer__copy{opacity:.85}
-  </style>
-  <script src="guestkit-auth.js?v=20260710fix14"></script>
-  <script src="guestkit-journey.js?v=20260710fix14"></script>
-  <script src="guestkit-nebula.js?v=20260710fix14"></script>
-  <script src="guestkit-console.js?v=20260710fix14"></script>
-  <script src="guestkit-ai.js?v=20260710fix14"></script>
-  <script src="guestkit-features.js?v=20260710fix14"></script>
-  <script src="guestkit-ux.js?v=20260711trend1"></script>
-  <script src="app.js?v=20260710fix14"></script>
-  <script src="zyvor-ux.js?v=20260906ga1" defer></script>
-</body>
-</html>
+function render(d){
+  const cls=d.decision.startsWith('SAFE')?'safe':d.decision.startsWith('REVIEW')?'review':'stop';
+  const top=d.findings.slice().sort((a,b)=>['critical','high','medium','low','info'].indexOf(String(a.severity||'').toLowerCase())-['critical','high','medium','low','info'].indexOf(String(b.severity||'').toLowerCase())).slice(0,7);
+  document.getElementById('result').innerHTML=`<div class="scorewrap"><div class="score ${cls}">${d.score}</div><div class="decision ${cls}">${esc(d.decision)}</div></div><div class="chips"><div class="chip"><b>${d.blockers}</b><span>high-risk blockers</span></div><div class="chip"><b>${d.formats.length}</b><span>disk formats</span></div><div class="chip"><b>${d.targets.length}</b><span>migration targets</span></div></div><div class="section">${top.map(f=>`<div class="finding"><div class="sev ${esc(String(f.severity||'low').toLowerCase())}">${esc(f.severity||'info')}</div><div><b>${esc(f.title||'Finding')}</b><p>${esc(f.detail||f.evidence||'')}</p>${f.fix?`<p><strong>Fix:</strong> ${esc(f.fix)}</p>`:''}</div></div>`).join('')||'<div class="empty">No findings.</div>'}</div>`;
+  document.getElementById('details').style.display='grid';
+  document.getElementById('blockers').innerHTML=top.filter(f=>['critical','high'].includes(String(f.severity||'').toLowerCase())).slice(0,6).map(f=>`<div class="row"><span>${esc(f.title)}</span><span>${esc(f.severity)}</span></div>`).join('')||'<div class="empty">No critical blockers.</div>';
+  document.getElementById('targets').innerHTML=d.targets.map(t=>`<div class="row"><span>${esc(t)}</span><span>supported</span></div>`).join('');
+  const pass=d.passport;
+  document.getElementById('passport').innerHTML=`<div class="row"><span>Status</span><span>${esc(pass.status)}</span></div><div class="row"><span>Target</span><span>${esc(pass.target)}</span></div><div class="row"><span>Gate</span><span>≥ ${esc(pass.gate)}</span></div>`;
+}
+</script>
+</body></html>

@@ -47,7 +47,6 @@ fi
   exit 2
 }
 BASE="${BASE%/}"
-# Lab certs are self-signed
 CURL=(curl -ksS)
 TMP="${TMPDIR:-/tmp}"
 
@@ -58,24 +57,24 @@ echo "GuestKit UI smoke → ${BASE}"
 
 code="$("${CURL[@]}" -o "${TMP}/gk-ui.html" -w '%{http_code}' "${BASE}/")"
 [ "$code" = "200" ] || fail "index HTTP ${code}"
-grep -qi 'GuestKit\|zyvor' "${TMP}/gk-ui.html" || fail "index body unexpected"
-grep -q 'zyvor-ux.css\|zyvor-ux.js' "${TMP}/gk-ui.html" || fail "Zyvor GA UX assets not linked"
+grep -qi 'GuestKit' "${TMP}/gk-ui.html" || fail "index missing GuestKit"
+grep -q 'brand-zyvor' "${TMP}/gk-ui.html" || fail "missing Zyvor brand mark class"
 grep -qi 'Built by Zyvor' "${TMP}/gk-ui.html" || fail "footer missing Built by Zyvor"
 grep -qi 'HyperSDK' "${TMP}/gk-ui.html" && fail "HyperSDK still present in UI" || true
-pass "index + Zyvor GA UX"
+grep -q 'zyvor-ux' "${TMP}/gk-ui.html" && fail "old zyvor-ux overlay still linked" || true
+pass "index + Apple/KubeFlight shell"
 
 code="$("${CURL[@]}" -o "${TMP}/gk-login.html" -w '%{http_code}' "${BASE}/login.html")"
 [ "$code" = "200" ] || fail "login HTTP ${code}"
-grep -q 'zyvor-ux.css\|zyvor-ux.js' "${TMP}/gk-login.html" || fail "login missing Zyvor GA UX"
-grep -qi 'HyperSDK' "${TMP}/gk-login.html" && fail "HyperSDK still present on login" || true
+grep -qi 'Built by Zyvor\|GuestKit' "${TMP}/gk-login.html" || fail "login body unexpected"
 pass "login"
 
-code="$("${CURL[@]}" -o /dev/null -w '%{http_code}' "${BASE}/zyvor-ux.css")"
-[ "$code" = "200" ] || fail "zyvor-ux.css HTTP ${code}"
-pass "zyvor-ux.css"
+code="$("${CURL[@]}" -o /dev/null -w '%{http_code}' "${BASE}/demo-doctor.json")"
+[ "$code" = "200" ] || fail "demo-doctor.json HTTP ${code}"
+pass "demo-doctor.json"
 
-code="$("${CURL[@]}" -o /dev/null -w '%{http_code}' "${BASE}/zyvor-ux.js")"
-[ "$code" = "200" ] || fail "zyvor-ux.js HTTP ${code}"
-pass "zyvor-ux.js"
+code="$("${CURL[@]}" -o /dev/null -w '%{http_code}' "${BASE}/zyvor-mark.svg")"
+[ "$code" = "200" ] || fail "zyvor-mark.svg HTTP ${code}"
+pass "zyvor-mark.svg"
 
 echo "  ✨ smoke OK"
