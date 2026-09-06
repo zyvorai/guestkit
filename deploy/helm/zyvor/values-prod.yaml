@@ -28,7 +28,7 @@ networkPolicy:
 
 # Pin GHCR semver tags — never :latest in production.
 zyvorApi:
-  image: ghcr.io/hypersdk/zyvor-api:v1.0.1
+  image: ghcr.io/zyvorai/zyvor-api:v1.0.1
   replicas: 2
   storageClass: longhorn
   auth:
@@ -42,11 +42,11 @@ zyvorApi:
     serverSans: "localhost,zyvor-api,api.example.com,agent-api.example.com"
 
 zyvorUi:
-  image: ghcr.io/hypersdk/zyvor-ui:v1.0.1
+  image: ghcr.io/zyvorai/zyvor-ui:v1.0.1
   replicas: 2
 
 guestkitWorker:
-  image: ghcr.io/hypersdk/guestkit-worker:v1.0.1
+  image: ghcr.io/zyvorai/guestkit-worker:v1.0.1
   replicas: 2
 
 postgresql:

@@ -25,7 +25,7 @@ guestkit-1.0.1-linux-amd64/
 - `guestkit-<version>-linux-amd64.tar.gz` (+ `.sha256`)
 - `guestkit-<version>-linux-amd64-musl.tar.gz` (+ `.sha256`)
 - `zyvor-vm-tools-linux-amd64.tar.gz`, `.deb`, optional `.iso` (Zeus VM Tools agent)
-- Docker images on GHCR: `ghcr.io/hypersdk/guestkit-worker`, `zyvor-api`, `zyvor-ui` tagged `v<version>`
+- Docker images on GHCR: `ghcr.io/zyvorai/guestkit-worker`, `zyvor-api`, `zyvor-ui` tagged `v<version>`
 
 See [deploy/README.md](../deploy/README.md) for k3s deploy and CI E2E.
 

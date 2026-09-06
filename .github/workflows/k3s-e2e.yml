@@ -33,7 +33,7 @@ jobs:
         run: |
           if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
             VERSION="${GITHUB_REF#refs/tags/}"
-            echo "pull_registry=ghcr.io/hypersdk" >> "${GITHUB_OUTPUT}"
+            echo "pull_registry=ghcr.io/zyvorai" >> "${GITHUB_OUTPUT}"
             echo "image_tag=${VERSION}" >> "${GITHUB_OUTPUT}"
             echo "use_release_images=true" >> "${GITHUB_OUTPUT}"
           else
@@ -55,16 +55,16 @@ jobs:
         run: |
           TAG="${{ steps.images.outputs.image_tag }}"
           for img in guestkit-worker zyvor-api zyvor-ui; do
-            echo "Waiting for ghcr.io/hypersdk/${img}:${TAG}..."
+            echo "Waiting for ghcr.io/zyvorai/${img}:${TAG}..."
             for i in $(seq 1 40); do
               if curl -sf -H "Authorization: Bearer ${GITHUB_TOKEN}" \
                 -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
-                "https://ghcr.io/v2/hypersdk/${img}/manifests/${TAG}" >/dev/null; then
+                "https://ghcr.io/v2/zyvorai/${img}/manifests/${TAG}" >/dev/null; then
                 echo "  ${img} available"
                 break
               fi
               if [[ "${i}" -eq 40 ]]; then
-                echo "ERROR: timed out waiting for ghcr.io/hypersdk/${img}:${TAG}" >&2
+                echo "ERROR: timed out waiting for ghcr.io/zyvorai/${img}:${TAG}" >&2
                 exit 1
               fi
               sleep 30

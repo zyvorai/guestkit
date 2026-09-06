@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **GHCR registry** — container images publish/pull from `ghcr.io/zyvorai/{zyvor-ui,zyvor-api,guestkit-worker}` (was `ghcr.io/hypersdk`).
+
 ## [1.2.2] - 2026-09-06
 
 ### Added

@@ -49,7 +49,7 @@ Operator cheat sheets (cutover cookbook, day-0/rescue, Passport, env vars): **[G
 | Guide | Description |
 |-------|-------------|
 | [**DevOps runbooks**](devops/README.md) | Passport CI gate, repair worker, air-gap packages, fleet, cutover weekend, triage |
-| [Run from GHCR](guides/DOCKER.md#published-images-ghcr) | Pull `ghcr.io/hypersdk/*` images, `docker compose up`, or Helm |
+| [Run from GHCR](guides/DOCKER.md#published-images-ghcr) | Pull `ghcr.io/zyvorai/*` images, `docker compose up`, or Helm |
 | [Docker](guides/DOCKER.md) | Container usage (web stack + CLI) |
 | [Cloud disk sources](guides/cloud-disk-sources.md) | S3 / GCS / Azure URI pulls + cache + CI recipe |
 | [Remote deploy](guides/DEPLOY-REMOTE.md) | SSH deploy to Linux hosts + web console access |

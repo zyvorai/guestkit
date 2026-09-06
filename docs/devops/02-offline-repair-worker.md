@@ -30,7 +30,7 @@ docker compose -f deploy/docker-compose.ghcr.yml up -d
 open http://localhost:8088
 ```
 
-Images: `zyvor-ui`, `zyvor-api`, `guestkit-worker` under `ghcr.io/hypersdk`.
+Images: `zyvor-ui`, `zyvor-api`, `guestkit-worker` under `ghcr.io/zyvorai`.
 
 **Eval only** — unauthenticated by default. Do not expose beyond localhost. Production: `deploy/docker-compose.prod.example.yml` / Helm `deploy/helm/zyvor`. Change default console login before any network exposure ([DEPLOY-REMOTE](../guides/DEPLOY-REMOTE.md)).
 

@@ -11,7 +11,7 @@ use serde_json::Value;
 use std::io::Write;
 use std::process::{Command, Stdio};
 
-pub const DEFAULT_IMAGE: &str = "ghcr.io/hypersdk/guestkit:latest";
+pub const DEFAULT_IMAGE: &str = "ghcr.io/zyvorai/guestkit:latest";
 pub const CONTAINER_NAME: &str = "guestkit";
 pub const POD_PREFIX: &str = "guestkit-tools";
 
@@ -422,7 +422,7 @@ mod tests {
         let req = GuestfsRequest {
             namespace: "migration".into(),
             pvc: "legacy-app-disk".into(),
-            image: "ghcr.io/hypersdk/guestkit:test".into(),
+            image: "ghcr.io/zyvorai/guestkit:test".into(),
             ..GuestfsRequest::default()
         };
         let yaml = render_pod_yaml("guestkit-tools-x", &req);

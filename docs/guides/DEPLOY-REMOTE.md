@@ -3,7 +3,7 @@
 Deploy GuestKit to a Linux VM or bare-metal host over SSH, using the same workflow as [PacketWolf](../../../packetwolf/scripts/deploy-remote.sh).
 
 > **Prefer prebuilt images?** The web stack is published to GHCR
-> (`ghcr.io/hypersdk/{zyvor-ui,zyvor-api,guestkit-worker}`) — pull and run with
+> (`ghcr.io/zyvorai/{zyvor-ui,zyvor-api,guestkit-worker}`) — pull and run with
 > `docker compose` or Helm instead of building from source. See
 > [Docker → Published images](DOCKER.md#published-images-ghcr). This SSH workflow
 > builds the **CLI binary** from source on the host.

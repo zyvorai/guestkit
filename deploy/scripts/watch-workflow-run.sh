@@ -22,7 +22,7 @@
 # in a loop / CI gate, not just interactively.
 set -uo pipefail
 
-REPO="${REPO:-hypersdk/guestkit}"
+REPO="${REPO:-zyvorai/guestkit}"
 
 if [[ "${1:-}" == "--run-id" ]]; then
   RUN_ID="${2:?usage: watch-workflow-run.sh --run-id <run-id>}"

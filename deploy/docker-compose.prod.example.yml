@@ -11,7 +11,7 @@
 name: zyvor
 
 x-images:
-  registry: &registry ${REGISTRY:-ghcr.io/hypersdk}
+  registry: &registry ${REGISTRY:-ghcr.io/zyvorai}
 
 services:
   postgres:
@@ -38,7 +38,7 @@ services:
       retries: 10
 
   zyvor-api:
-    image: ${REGISTRY:-ghcr.io/hypersdk}/zyvor-api:${TAG:?set TAG e.g. v1.0.1}
+    image: ${REGISTRY:-ghcr.io/zyvorai}/zyvor-api:${TAG:?set TAG e.g. v1.0.1}
     depends_on:
       postgres:
         condition: service_healthy
@@ -58,7 +58,7 @@ services:
       - vm-images:/var/lib/zyvor/images
 
   guestkit-worker:
-    image: ${REGISTRY:-ghcr.io/hypersdk}/guestkit-worker:${TAG:?set TAG e.g. v1.0.1}
+    image: ${REGISTRY:-ghcr.io/zyvorai}/guestkit-worker:${TAG:?set TAG e.g. v1.0.1}
     depends_on:
       redis:
         condition: service_healthy
@@ -84,7 +84,7 @@ services:
       - worker-work:/var/lib/guestkit/work
 
   zyvor-ui:
-    image: ${REGISTRY:-ghcr.io/hypersdk}/zyvor-ui:${TAG:?set TAG e.g. v1.0.1}
+    image: ${REGISTRY:-ghcr.io/zyvorai}/zyvor-ui:${TAG:?set TAG e.g. v1.0.1}
     depends_on:
       - zyvor-api
     ports:

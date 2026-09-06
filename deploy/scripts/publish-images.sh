@@ -5,18 +5,18 @@
 #
 # Usage:
 #   ./deploy/scripts/publish-images.sh
-#   REGISTRY=ghcr.io/hypersdk TAG=v0.4.0 ./deploy/scripts/publish-images.sh
+#   REGISTRY=ghcr.io/zyvorai TAG=v0.4.0 ./deploy/scripts/publish-images.sh
 #   PUSH=0 ./deploy/scripts/publish-images.sh   # build only
 #
 # Deploy published images (on cluster host):
-#   REGISTRY=ghcr.io/hypersdk TAG=latest helm upgrade --install zyvor deploy/helm/zyvor \
-#     --set guestkitWorker.image=ghcr.io/hypersdk/guestkit-worker:latest \
-#     --set zyvorApi.image=ghcr.io/hypersdk/zyvor-api:latest \
-#     --set zyvorUi.image=ghcr.io/hypersdk/zyvor-ui:latest
+#   REGISTRY=ghcr.io/zyvorai TAG=latest helm upgrade --install zyvor deploy/helm/zyvor \
+#     --set guestkitWorker.image=ghcr.io/zyvorai/guestkit-worker:latest \
+#     --set zyvorApi.image=ghcr.io/zyvorai/zyvor-api:latest \
+#     --set zyvorUi.image=ghcr.io/zyvorai/zyvor-ui:latest
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-REGISTRY="${REGISTRY:-ghcr.io/hypersdk}"
+REGISTRY="${REGISTRY:-ghcr.io/zyvorai}"
 TAG="${TAG:-latest}"
 BUILDER="${BUILDER:-podman}"
 PUSH="${PUSH:-1}"

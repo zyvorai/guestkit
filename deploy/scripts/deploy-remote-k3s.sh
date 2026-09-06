@@ -7,7 +7,7 @@
 # Usage:
 #   bash deploy/scripts/deploy-remote-k3s.sh
 #   ROOT=/path/to/guestkit bash deploy/scripts/deploy-remote-k3s.sh
-#   PULL_REGISTRY=ghcr.io/hypersdk IMAGE_TAG=v1.2.3 bash deploy/scripts/deploy-remote-k3s.sh
+#   PULL_REGISTRY=ghcr.io/zyvorai IMAGE_TAG=v1.2.3 bash deploy/scripts/deploy-remote-k3s.sh
 #   HELM_VALUES_FILE=values-ci.yaml bash deploy/scripts/deploy-remote-k3s.sh
 #   SKIP_K3S_INSTALL=1 bash deploy/scripts/deploy-remote-k3s.sh
 set -euo pipefail

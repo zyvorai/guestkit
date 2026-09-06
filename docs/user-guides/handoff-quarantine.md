@@ -52,4 +52,4 @@ virtctl-guestkit doctor --vm my-vm -n default
 ```
 
 Local `--image` still works without a cluster. PVC attach uses `kubectl` and
-the GuestKit image (`$GUESTKIT_IMAGE` or `ghcr.io/hypersdk/guestkit:latest`).
+the GuestKit image (`$GUESTKIT_IMAGE` or `ghcr.io/zyvorai/guestkit:latest`).

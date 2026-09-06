@@ -42,7 +42,7 @@ enum PluginCmd {
         /// Resolve root PVC and copy nodeSelector/tolerations from this VM
         #[arg(long)]
         vm: Option<String>,
-        /// GuestKit image (default $GUESTKIT_IMAGE or ghcr.io/hypersdk/guestkit:latest)
+        /// GuestKit image (default $GUESTKIT_IMAGE or ghcr.io/zyvorai/guestkit:latest)
         #[arg(long)]
         image: Option<String>,
         #[arg(long, default_value = "IfNotPresent")]

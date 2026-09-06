@@ -12,13 +12,13 @@ automation and batch processing.
 ## Published images (GHCR)
 
 The web stack is published to the GitHub Container Registry under
-**`ghcr.io/hypersdk`**. The packages are **public — no `docker login` needed to pull.**
+**`ghcr.io/zyvorai`**. The packages are **public — no `docker login` needed to pull.**
 
 | Image | Role | Port |
 |-------|------|------|
-| `ghcr.io/hypersdk/zyvor-ui` | Web console + login page (nginx) | 80 |
-| `ghcr.io/hypersdk/zyvor-api` | API backend (auto-runs DB migrations) | 8080 |
-| `ghcr.io/hypersdk/guestkit-worker` | Disk-inspection worker (Redis queue) | — |
+| `ghcr.io/zyvorai/zyvor-ui` | Web console + login page (nginx) | 80 |
+| `ghcr.io/zyvorai/zyvor-api` | API backend (auto-runs DB migrations) | 8080 |
+| `ghcr.io/zyvorai/guestkit-worker` | Disk-inspection worker (Redis queue) | — |
 
 **Tags:** `latest`, semver `vX.Y.Z` (e.g. `v1.0.1`), and a per-commit short SHA.
 Published automatically by CI — `publish-zyvor-images.yml` on every push to `main`
@@ -27,9 +27,9 @@ Published automatically by CI — `publish-zyvor-images.yml` on every push to `m
 ### Pull
 
 ```bash
-docker pull ghcr.io/hypersdk/zyvor-ui:latest
-docker pull ghcr.io/hypersdk/zyvor-api:latest
-docker pull ghcr.io/hypersdk/guestkit-worker:latest
+docker pull ghcr.io/zyvorai/zyvor-ui:latest
+docker pull ghcr.io/zyvorai/zyvor-api:latest
+docker pull ghcr.io/zyvorai/guestkit-worker:latest
 ```
 
 ### Run the full stack (evaluation)
@@ -56,7 +56,7 @@ The console Image Vault supports inspect inventory tabs, Assurance (doctor / pla
 Pin a version or a different registry with env vars:
 
 ```bash
-REGISTRY=ghcr.io/hypersdk TAG=v1.0.1 \
+REGISTRY=ghcr.io/zyvorai TAG=v1.0.1 \
   docker compose -f deploy/docker-compose.ghcr.yml up -d
 ```
 
@@ -77,9 +77,9 @@ pointing each image at GHCR:
 ```bash
 helm upgrade --install zyvor deploy/helm/zyvor \
   --create-namespace --namespace zyvor \
-  --set guestkitWorker.image=ghcr.io/hypersdk/guestkit-worker:v1.0.1 \
-  --set zyvorApi.image=ghcr.io/hypersdk/zyvor-api:v1.0.1 \
-  --set zyvorUi.image=ghcr.io/hypersdk/zyvor-ui:v1.0.1
+  --set guestkitWorker.image=ghcr.io/zyvorai/guestkit-worker:v1.0.1 \
+  --set zyvorApi.image=ghcr.io/zyvorai/zyvor-api:v1.0.1 \
+  --set zyvorUi.image=ghcr.io/zyvorai/zyvor-ui:v1.0.1
 ```
 
 The chart also provisions Postgres, Redis, and MinIO. Enable auth via

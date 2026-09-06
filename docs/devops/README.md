@@ -30,5 +30,5 @@ Operational docs for platform / migration / SRE teams who gate cutovers with **G
 
 ```text
 CLI:     cargo install guestkit   # or distro/package pin
-Worker:  ghcr.io/hypersdk/guestkit-worker   # pin digest/tag in compose/Helm
+Worker:  ghcr.io/zyvorai/guestkit-worker   # pin digest/tag in compose/Helm
 ```

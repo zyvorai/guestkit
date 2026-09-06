@@ -39,7 +39,7 @@ bash deploy/scripts/deploy-remote-k3s.sh
 HELM_VALUES_FILE=values-ci.yaml bash deploy/scripts/deploy-remote-k3s.sh
 
 # Pull release images from GHCR instead of local build
-PULL_REGISTRY=ghcr.io/hypersdk IMAGE_TAG=v1.0.1 bash deploy/scripts/deploy-remote-k3s.sh
+PULL_REGISTRY=ghcr.io/zyvorai IMAGE_TAG=v1.0.1 bash deploy/scripts/deploy-remote-k3s.sh
 ```
 
 Override public URLs when the node IP is not the client-facing address:
@@ -68,9 +68,9 @@ not exist. A working from-scratch install (verified) overrides those:
 ```bash
 helm install zyvor deploy/helm/zyvor -n zyvor --create-namespace \
   --set namespace=zyvor \
-  --set zyvorApi.image=ghcr.io/hypersdk/zyvor-api:<ver> \
-  --set zyvorUi.image=ghcr.io/hypersdk/zyvor-ui:<ver> \
-  --set guestkitWorker.image=ghcr.io/hypersdk/guestkit-worker:<ver> \
+  --set zyvorApi.image=ghcr.io/zyvorai/zyvor-api:<ver> \
+  --set zyvorUi.image=ghcr.io/zyvorai/zyvor-ui:<ver> \
+  --set guestkitWorker.image=ghcr.io/zyvorai/guestkit-worker:<ver> \
   --set zyvorApi.storageClass=<sc> \
   --set persistence.vmImages.storageClass=<sc> \
   --set persistence.vmImages.accessMode=ReadWriteMany   # RWX for multi-node; RWO single-node
@@ -107,9 +107,9 @@ The [release workflow](../.github/workflows/release.yml) publishes:
 |-------|-------------|
 | `guestkit-<ver>-linux-amd64(.tar.gz)` | GitHub Release |
 | `zyvor-vm-tools-linux-amd64.tar.gz`, `.deb`, optional `.iso` | GitHub Release |
-| `ghcr.io/hypersdk/guestkit-worker:v<ver>` | GHCR |
-| `ghcr.io/hypersdk/zyvor-api:v<ver>` | GHCR |
-| `ghcr.io/hypersdk/zyvor-ui:v<ver>` | GHCR |
+| `ghcr.io/zyvorai/guestkit-worker:v<ver>` | GHCR |
+| `ghcr.io/zyvorai/zyvor-api:v<ver>` | GHCR |
+| `ghcr.io/zyvorai/zyvor-ui:v<ver>` | GHCR |
 
 Build images locally with `deploy/scripts/publish-images.sh`. The root `Dockerfile` is deprecated; use per-service Dockerfiles under `crates/` and `deploy/ui/`.
 

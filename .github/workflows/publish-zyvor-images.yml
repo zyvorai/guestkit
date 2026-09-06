@@ -24,7 +24,7 @@ permissions:
   packages: write
 
 env:
-  REGISTRY: ghcr.io/hypersdk
+  REGISTRY: ghcr.io/zyvorai
 
 jobs:
   publish:

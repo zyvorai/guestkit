@@ -106,7 +106,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           chmod +x deploy/scripts/publish-images.sh
-          REGISTRY=ghcr.io/hypersdk bash deploy/scripts/publish-images.sh
+          REGISTRY=ghcr.io/zyvorai bash deploy/scripts/publish-images.sh
 
   build-and-upload:
     name: Build and Upload Assets (${{ matrix.arch_suffix }})

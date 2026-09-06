@@ -5,7 +5,7 @@
 #       Suitable for local demos on localhost:8088 only.
 #       For production, use deploy/docker-compose.prod.example.yml
 #
-#   REGISTRY (default ghcr.io/hypersdk) · TAG (default latest)
+#   REGISTRY (default ghcr.io/zyvorai) · TAG (default latest)
 #
 #   docker compose -f deploy/docker-compose.ghcr.yml pull
 #   docker compose -f deploy/docker-compose.ghcr.yml up -d
@@ -16,7 +16,7 @@
 name: zyvor
 
 x-images:
-  registry: &registry ${REGISTRY:-ghcr.io/hypersdk}
+  registry: &registry ${REGISTRY:-ghcr.io/zyvorai}
 
 services:
   postgres:
@@ -44,7 +44,7 @@ services:
   # NOTE: service name MUST stay `zyvor-api` — the UI's nginx proxies
   # /api/ to http://zyvor-api:8080/api/ by that hostname.
   zyvor-api:
-    image: ${REGISTRY:-ghcr.io/hypersdk}/zyvor-api:${TAG:-latest}
+    image: ${REGISTRY:-ghcr.io/zyvorai}/zyvor-api:${TAG:-latest}
     depends_on:
       postgres:
         condition: service_healthy
@@ -65,7 +65,7 @@ services:
       - vm-images:/var/lib/zyvor/images
 
   guestkit-worker:
-    image: ${REGISTRY:-ghcr.io/hypersdk}/guestkit-worker:${TAG:-latest}
+    image: ${REGISTRY:-ghcr.io/zyvorai}/guestkit-worker:${TAG:-latest}
     depends_on:
       redis:
         condition: service_healthy
@@ -92,7 +92,7 @@ services:
       - worker-work:/var/lib/guestkit/work
 
   zyvor-ui:
-    image: ${REGISTRY:-ghcr.io/hypersdk}/zyvor-ui:${TAG:-latest}
+    image: ${REGISTRY:-ghcr.io/zyvorai}/zyvor-ui:${TAG:-latest}
     depends_on:
       - zyvor-api
     ports:

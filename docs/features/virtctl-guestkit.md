@@ -35,4 +35,4 @@ Filesystem PVCs mount at `/disk`. Block PVCs attach as `/dev/vda`. The pod is
 deleted when the session ends. The VM must be stopped so the PVC is free.
 
 Requires `kubectl` on PATH (`$KUBECTL` override). Image:
-`$GUESTKIT_IMAGE` or `ghcr.io/hypersdk/guestkit:latest`.
+`$GUESTKIT_IMAGE` or `ghcr.io/zyvorai/guestkit:latest`.

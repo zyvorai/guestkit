@@ -321,13 +321,13 @@ virtctl-guestkit guestfs -n ns pvc
 
 ## Run the free web stack (GHCR)
 
-Public images under **`ghcr.io/hypersdk`** — no `docker login` required.
+Public images under **`ghcr.io/zyvorai`** — no `docker login` required.
 
 | Image | Role |
 |-------|------|
-| `ghcr.io/hypersdk/zyvor-ui` | Web console — Image Vault, KubeVirt cluster |
-| `ghcr.io/hypersdk/zyvor-api` | API |
-| `ghcr.io/hypersdk/guestkit-worker` | Disk-inspection worker |
+| `ghcr.io/zyvorai/zyvor-ui` | Web console — Image Vault, KubeVirt cluster |
+| `ghcr.io/zyvorai/zyvor-api` | API |
+| `ghcr.io/zyvorai/guestkit-worker` | Disk-inspection worker |
 
 ```bash
 docker compose -f deploy/docker-compose.ghcr.yml pull

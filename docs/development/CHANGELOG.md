@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- **GHCR registry** — container images publish/pull from `ghcr.io/zyvorai/{zyvor-ui,zyvor-api,guestkit-worker}` (was `ghcr.io/hypersdk`).
 - **Suite positioning** — GuestKit certifies/repairs disks; **FluxVM** runs and
   manages VMs (network, cloud-init, TTL) and is the host-local **libvirt/virsh
   replacement**. `guestkit vm` stays a minimal lab/CI smoke path. Docs:
@@ -594,7 +595,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   change-on-first-login warning. Also surfaced as a first-run hint on the login
   page, shown only when local login/bypass is available.
 - **Run the web stack from GHCR** — new `deploy/docker-compose.ghcr.yml` (pulls
-  only the public `ghcr.io/hypersdk/{zyvor-ui,zyvor-api,guestkit-worker}` images)
+  only the public `ghcr.io/zyvorai/{zyvor-ui,zyvor-api,guestkit-worker}` images)
   plus a "Published images (GHCR)" guide covering pull, Compose (eval), and Helm
   (prod), cross-linked from the README and deployment docs.
 
