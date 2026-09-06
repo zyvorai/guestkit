@@ -6,7 +6,7 @@ GuestKit is a pure-Rust control plane that reads a virtual machine's disk image 
 
 **70+** CLI subcommands · **6** disk formats read · ****0** appliance daemons needed · **8** migration targets scored · **0-100** boot assurance score · **5** inspection profiles
 
-This is the customer-facing onboarding guide — how to access the product, your first workflows, and how to use every feature. A print-ready PDF of the same content sits alongside this file.
+This is the user-facing onboarding guide — how to access the product, your first workflows, and how to use every feature. A print-ready PDF of the same content sits alongside this file.
 
 ## Contents
 
@@ -237,7 +237,7 @@ _Boot-inspect stopped VMs in-cluster and drive it all from a self-hosted web con
 - **Zeus VM Tools** — A Kubernetes-native guest agent with cloud-init, QGA, ISO, and airgap install paths plus VMToolsPolicy auto-install/upgrade reconciliation. — _The VMware Tools equivalent for KubeVirt._
   - **How:** Apply a `VMToolsPolicy` resource (or enable it from the web console) to auto-install/upgrade the KubeVirt guest agent via cloud-init, QGA, ISO or airgap path.
 - **Web console** — Self-hosted zyvor-ui + zyvor-api + guestkit-worker ship as public GHCR images and a Helm chart, backed by a Redis job queue. — _A team-facing UI over the same engine._
-  - **How:** Browse to http://localhost:8088 and sign in with `admin` / `Admin@321` (change immediately). The nginx front-end proxies `/api/` to zyvor-api. Inventory tabs, Assurance (doctor/plan/passport/repair), Profiles, and Files browse map to `POST /api/v1/vms/:id/{inspect,doctor,migration-plan,passport,repair-plan,profile,explore}`. Lab HTTPS: `./scripts/deploy-ui-remote.sh` with `--api-upstream`. See [Using the Dashboard](customer/using-the-dashboard.md).
+  - **How:** Browse to http://localhost:8088 and sign in with `admin` / `Admin@321` (change immediately). The nginx front-end proxies `/api/` to zyvor-api. Inventory tabs, Assurance (doctor/plan/passport/repair), Profiles, and Files browse map to `POST /api/v1/vms/:id/{inspect,doctor,migration-plan,passport,repair-plan,profile,explore}`. Lab HTTPS: `./scripts/deploy-ui-remote.sh` with `--api-upstream`. See [Using the Dashboard](user/using-the-dashboard.md).
 - **Python bindings** — [`hypersdk-guestkit`](https://pypi.org/project/hypersdk-guestkit/) on PyPI: Guestfs handle + assurance APIs (`run_doctor`, `run_migrate_repair`) for programmatic inspection and offline repair.
   - **How:** Python: `from guestkit import Guestfs` then `g = Guestfs(); g.add_drive("vm.qcow2"); g.launch(); g.inspect_os()` — a GuestKit-style API with 100+ methods.
 - **h2kvm pipeline** — Pairs with h2kvm for VMware-to-KVM conversion, sitting in the wider Transiva to GuestKit to v9s to PacketWolf flow. — _One assurance gate inside a full migration pipeline._

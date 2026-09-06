@@ -56,7 +56,7 @@ guestkit vm undefine demo
 `start` refuses by default when the boot score is below `--min-boot-score`
 (or when blockers are present). Pass `--force` to override.
 
-For customer cutover, prefer raising the score with offline plans and emitting
+For user cutover, prefer raising the score with offline plans and emitting
 a passport — then hand off to FluxVM — instead of relying on `--force`.
 
 ## Networking (intentionally minimal)
@@ -88,7 +88,7 @@ guestkit vm define uefi-demo disk.qcow2 \
 | `guestkit vm` | Named lab definitions + QMP lifecycle |
 | **FluxVM** | Production/disposable run: overlay, network, cloud-init, TTL |
 
-Prefer FluxVM for any customer-facing “boot and manage this qcow2” (libvirt
+Prefer FluxVM for any user-facing “boot and manage this qcow2” (libvirt
 replacement: create/list/get/delete + network/IP). Prefer `guestkit vm` /
 `guestkit-qemu` only for assurance smoke without the FluxVM daemon.
 

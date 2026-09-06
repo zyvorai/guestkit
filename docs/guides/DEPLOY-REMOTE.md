@@ -10,7 +10,7 @@ Deploy GuestKit to a Linux VM or bare-metal host over SSH, using the same workfl
 >
 > **Lab web UI only:** ship static `deploy/ui` with built-in HTTPS via
 > `./scripts/deploy-ui-remote.sh <host> <user> --port 27173 --api-upstream http://127.0.0.1:8080`.
-> Dashboard guide: [Using the Dashboard](../customer/using-the-dashboard.md).
+> Dashboard guide: [Using the Dashboard](../user/using-the-dashboard.md).
 
 ## Quick start
 

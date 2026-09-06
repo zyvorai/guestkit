@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 # Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
-# Rebuild customer tarballs on a remote Linux host (fresh HELP.txt, install-everything, UX).
+# Rebuild user tarballs on a remote Linux host (fresh HELP.txt, install-everything, UX).
 # Same script in every Zyvor product repo — paths resolve via sibling checkout under tt/.
 #
 # Usage:
-#   ./scripts/rebuild-all-customer-tarballs-remote.sh HOST USER
-#   ./scripts/rebuild-all-customer-tarballs-remote.sh HOST USER --reuse-build
+#   ./scripts/rebuild-all-user-tarballs-remote.sh HOST USER
+#   ./scripts/rebuild-all-user-tarballs-remote.sh HOST USER --reuse-build
 #
 # Then verify:
-#   ./scripts/test-customer-e2e-remote.sh HOST USER --quick
+#   ./scripts/test-user-e2e-remote.sh HOST USER --quick
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -48,7 +48,7 @@ declare -a PRODUCTS=(
   "forge:${TT}/forge/scripts/package-binary-remote.sh"
 )
 
-echo "==> Rebuilding customer tarballs on ${USER}@${HOST}"
+echo "==> Rebuilding user tarballs on ${USER}@${HOST}"
 echo "    Workspace: ${TT}"
 for entry in "${PRODUCTS[@]}"; do
   name="${entry%%:*}"
@@ -65,4 +65,4 @@ for entry in "${PRODUCTS[@]}"; do
 done
 
 echo ""
-echo "==> Done. Run E2E: ${SCRIPT_DIR}/test-customer-e2e-remote.sh ${HOST} ${USER} --quick"
+echo "==> Done. Run E2E: ${SCRIPT_DIR}/test-user-e2e-remote.sh ${HOST} ${USER} --quick"

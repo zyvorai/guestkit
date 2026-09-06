@@ -1,10 +1,10 @@
 # Client bundle policy — binaries only, no source tree
 
-Customer tarballs from `scripts/package-binary-remote.sh` must **never** require a git clone or compile on the install host. Build happens on **your** remote pack host; the customer gets **artifacts + install scripts only**.
+User tarballs from `scripts/package-binary-remote.sh` must **never** require a git clone or compile on the install host. Build happens on **your** remote pack host; the user gets **artifacts + install scripts only**.
 
 ## Bundle types
 
-| Type | Products | What ships | Customer runs |
+| Type | Products | What ships | User runs |
 |------|----------|------------|---------------|
 | **A — Native binary** | VMRogue, v9s, machina, guestkit, hypersdk, packetwolf, ragnarok, Aether, IronWolf | Single executable(s), optional `web/dist` or `frontend/dist`, env example | `./install.sh` → `./binary` or systemd via `install-full.sh` (machina) |
 | **B — Container extract** | VMRogue, v9s | Binary + UI from OCI image build (still type A at install time) | Same as A |
@@ -12,20 +12,20 @@ Customer tarballs from `scripts/package-binary-remote.sh` must **never** require
 | **D — Go multi-binary** | hypersdk | `bin/hypervisord`, `hyperctl`, … + `dashboard/` | `./bin/hypervisord` |
 | **E — K8s cluster add-on** | VMRogue, v9s only | `cluster/` YAML + `install-cluster.sh` (not app source) | Cluster admin scripts; app still type A/B |
 
-## What must NOT be in customer tarballs
+## What must NOT be in user tarballs
 
 - Full git tree, `Cargo.toml` / `Makefile` (except optional small `contrib/` snippets machina ships for mkosi defs)
 - `target/`, `node_modules/`, `.git/`
-- Installers that call `cargo build`, `npm run build`, or `git clone` on the customer host
+- Installers that call `cargo build`, `npm run build`, or `git clone` on the user host
 
 ## Python products (hyper2kvm, forge) — distribute differently
 
 These are **not** shipped as one static ELF like Rust/Go tools.
 
 1. **Remote build** creates `.pkg-venv` on the pack host (`pip install .` or `requirements.txt`).
-2. **Tarball** contains the whole **`venv/`** directory (relocated paths; customer path is fixed at extract dir).
+2. **Tarball** contains the whole **`venv/`** directory (relocated paths; user path is fixed at extract dir).
 3. **`bin/hyper2kvm`** (and similar) are **wrappers** that exec `venv/bin/python -m …`.
-4. Customer needs **Python 3.10+ system libs** (libvirt, openssl) via `install-client-deps.sh`; they do **not** need to run `pip install` again unless recreating the venv.
+4. User needs **Python 3.10+ system libs** (libvirt, openssl) via `install-client-deps.sh`; they do **not** need to run `pip install` again unless recreating the venv.
 
 hyper2kvm additionally bundles **Go `h2kweb`** as a native binary; dashboard is static files under `web/dashboard/`.
 
@@ -58,7 +58,7 @@ Do not copy the repo `install.sh` into tarballs without **bundle mode** (machina
 
 ## Remote pack script naming
 
-Phases say **“Sync to build host”** (rsync for remote *build*, not customer source). Customer-facing docs must say **“extract tarball”**, not “clone repo”.
+Phases say **“Sync to build host”** (rsync for remote *build*, not user source). User-facing docs must say **“extract tarball”**, not “clone repo”.
 
 ## Adding a new product
 

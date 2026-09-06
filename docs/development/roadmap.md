@@ -32,7 +32,7 @@ High-level direction for GuestKit / GuestCtl. Full release notes are in [CHANGEL
 - **v0.3.7–0.3.10** — `zyvor-guest-agent`, Windows forensics, KubeVirt QGA, web Copilot API, k3s E2E
 - **v0.3.6** — In-guest agent, offline `--inject-agent`, worker jobs, TUI LIVE / Assurance
 - **v0.3.5** — Migration assurance platform (`doctor`, `migrate-plan`, `policy`, `fleet`, `forensic-diff`)
-- **v0.3.3–0.3.4** — `guestctl` binary, customer release tarballs, TUI theming
+- **v0.3.3–0.3.4** — `guestctl` binary, user release tarballs, TUI theming
 - **v0.3.1** — VM migration (fstab/crypttab rewriter), Windows registry detection, LVM cleanup
 
 ### AI Guest Agent (all phases shipped)

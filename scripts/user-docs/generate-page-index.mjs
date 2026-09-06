@@ -7,11 +7,11 @@ import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
-const OUT = resolve(ROOT, 'docs/customer/PAGE_INDEX.md')
-const GUIDES = resolve(ROOT, 'docs/customer/pages')
-const { routes } = JSON.parse(readFileSync(resolve(ROOT, 'scripts/customer-docs/routes.json'), 'utf8'))
-const purposes = JSON.parse(readFileSync(resolve(ROOT, 'scripts/customer-docs/page-purposes.json'), 'utf8'))
-const PRODUCT = process.env.CUSTOMER_DOCS_PRODUCT || 'GuestKit'
+const OUT = resolve(ROOT, 'docs/user/PAGE_INDEX.md')
+const GUIDES = resolve(ROOT, 'docs/user/pages')
+const { routes } = JSON.parse(readFileSync(resolve(ROOT, 'scripts/user-docs/routes.json'), 'utf8'))
+const purposes = JSON.parse(readFileSync(resolve(ROOT, 'scripts/user-docs/page-purposes.json'), 'utf8'))
+const PRODUCT = process.env.USER_DOCS_PRODUCT || 'GuestKit'
 
 function discoverGuides(dir) {
   const map = new Map()
@@ -44,7 +44,7 @@ const lines = [
   '',
   `_Generated: ${new Date().toISOString().slice(0, 10)} · ${routes.length} routes_`,
   '',
-  'Regenerate: `node scripts/customer-docs/generate-page-index.mjs`',
+  'Regenerate: `node scripts/user-docs/generate-page-index.mjs`',
   '',
 ]
 
@@ -58,6 +58,6 @@ for (const [cat, list] of byCat) {
   lines.push('')
 }
 
-lines.push('## Related', '', '- [Customer docs home](README.md)', '- [Page-by-page guides](pages/README.md)', '')
+lines.push('## Related', '', '- [User docs home](README.md)', '- [Page-by-page guides](pages/README.md)', '')
 writeFileSync(OUT, lines.join('\n'))
 console.log(`Wrote ${OUT}`)

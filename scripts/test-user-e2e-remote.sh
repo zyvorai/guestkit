@@ -5,13 +5,13 @@
 # Same script in every Zyvor product repo — paths resolve via sibling checkout under tt/.
 #
 # Usage:
-#   ./scripts/test-customer-e2e-remote.sh HOST USER
-#   ./scripts/test-customer-e2e-remote.sh HOST USER --quick          # skip rebuild
-#   ./scripts/test-customer-e2e-remote.sh HOST USER --product machina # rebuild one tarball
+#   ./scripts/test-user-e2e-remote.sh HOST USER
+#   ./scripts/test-user-e2e-remote.sh HOST USER --quick          # skip rebuild
+#   ./scripts/test-user-e2e-remote.sh HOST USER --product machina # rebuild one tarball
 #
 # Examples:
-#   ./scripts/test-customer-e2e-remote.sh 212.8.252.194 sus
-#   ZYVOR_E2E_SKIP=VMRogue,v9s ./scripts/test-customer-e2e-remote.sh 212.8.252.194 sus --quick
+#   ./scripts/test-user-e2e-remote.sh 212.8.252.194 sus
+#   ZYVOR_E2E_SKIP=VMRogue,v9s ./scripts/test-user-e2e-remote.sh 212.8.252.194 sus --quick
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -48,7 +48,7 @@ SSH_OPTS=(-o ConnectTimeout=15 -o BatchMode=yes -o StrictHostKeyChecking=accept-
 TEST_SCRIPT="${SCRIPT_DIR}/test-packages-remote-only.sh"
 [[ -f "${TEST_SCRIPT}" ]] || TEST_SCRIPT="${VMROGUE}/scripts/test-packages-remote-only.sh"
 
-echo "==> Remote customer E2E → ${REMOTE}"
+echo "==> Remote user E2E → ${REMOTE}"
 echo ""
 
 scp "${SSH_OPTS[@]}" "${TEST_SCRIPT}" "${REMOTE}:~/test-packages-remote-only.sh"

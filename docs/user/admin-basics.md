@@ -9,7 +9,7 @@
 | **8765** | Guest agent proxy (`guestkit agent-proxy`) when used |
 | KubeVirt API | zyvor-api guest / boot-inspect routes when integrated |
 
-Eval web (optional): `http://<host>:8088` — change default admin password immediately. Never publish lab IPs in customer docs.
+Eval web (optional): `http://<host>:8088` — change default admin password immediately. Never publish lab IPs in user docs.
 
 ## Auth
 

@@ -16,7 +16,7 @@
 <p align="center">
   <a href="https://zyvor.dev/guestkit?utm_source=github&utm_medium=guestkit"><b>Product</b></a> ·
   <a href="#see-it-in-action"><b>Demos</b></a> ·
-  <a href="#who-does-what-customers"><b>Suite path</b></a> ·
+  <a href="#who-does-what-users"><b>Suite path</b></a> ·
   <a href="#quick-start"><b>Quick start</b></a> ·
   <a href="#h2kvm-integration"><b>h2kvm</b></a> ·
   <a href="https://github.com/zyvorai/fluxvm"><b>FluxVM</b></a> ·
@@ -56,7 +56,7 @@ GuestKit reads the disk **while the guest is off**, scores first-boot probabilit
 
 ---
 
-## Who does what (customers)
+## Who does what (users)
 
 | You need… | Use |
 |-----------|-----|
@@ -224,7 +224,7 @@ See [python-bindings.md](docs/user-guides/python-bindings.md) and [examples/pyth
 | **h2kvm pipeline** | [hyper2kvm-integration.md](docs/features/hyper2kvm-integration.md) |
 | Remote SSH deploy | [DEPLOY-REMOTE.md](docs/guides/DEPLOY-REMOTE.md) |
 | Cheat sheet | [Quick reference](docs/user-guides/quick-reference.md) |
-| Full feature map | [Customer feature guide](docs/guestkit-customer-feature-guide.md) |
+| Full feature map | [User feature guide](docs/guestkit-user-feature-guide.md) |
 | Open source vs Enterprise | [ce-vs-enterprise.md](docs/ce-vs-enterprise.md) |
 
 ---
@@ -425,7 +425,7 @@ Try the control plane before you buy — same packaging pattern as Veyron:
 | Operator wiki | [zyvorai/guestkit/wiki](https://github.com/zyvorai/guestkit/wiki) |
 | Docs home | [docs/README.md](docs/README.md) · [INDEX](docs/INDEX.md) |
 | **DevOps runbooks** | [docs/devops](docs/devops/README.md) |
-| Feature guide | [guestkit-customer-feature-guide.md](docs/guestkit-customer-feature-guide.md) |
+| Feature guide | [guestkit-user-feature-guide.md](docs/guestkit-user-feature-guide.md) |
 | Docker / GHCR | [DOCKER.md](docs/guides/DOCKER.md#published-images-ghcr) |
 | Remote deploy | [DEPLOY-REMOTE.md](docs/guides/DEPLOY-REMOTE.md) |
 | **h2kvm integration** | [hyper2kvm-integration.md](docs/features/hyper2kvm-integration.md) |

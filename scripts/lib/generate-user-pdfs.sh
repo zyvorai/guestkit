@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
-# Generate branded PDFs from customer .txt docs and add docs/pdf/ to the bundle.
+# Generate branded PDFs from user .txt docs and add docs/pdf/ to the bundle.
 #
-# Usage: generate-customer-pdfs.sh <stage-dir> <build-dir> <product-name>
+# Usage: generate-user-pdfs.sh <stage-dir> <build-dir> <product-name>
 #
 # Logo search order (first match wins):
 #   ui/public, web/public, web-ui/public, frontend/public,
@@ -16,7 +16,7 @@ PRODUCT="${3:?product name}"
 VERSION="${4:-${V9S_PACKAGE_VERSION:-latest}}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-GEN_PY="${SCRIPT_DIR}/generate-customer-pdfs.py"
+GEN_PY="${SCRIPT_DIR}/generate-user-pdfs.py"
 
 find_zyvor_logo() {
   local bd="$1"
@@ -62,5 +62,5 @@ else
   fi
 fi
 
-echo "  › Customer PDFs (${PRODUCT} ${VERSION}) — logo: ${LOGO#${BUILD_DIR}/}"
+echo "  › User PDFs (${PRODUCT} ${VERSION}) — logo: ${LOGO#${BUILD_DIR}/}"
 "${PY}" "${GEN_PY}" "${STAGE}" "${PRODUCT}" "${LOGO}" --version "${VERSION}"

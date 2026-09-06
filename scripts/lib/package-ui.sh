@@ -252,7 +252,7 @@ pkg_license_help_block() {
 }
 
 # Print bundled HELP.txt or built-in summary.
-pkg_customer_help() {
+pkg_user_help() {
     local root="${PKG_INSTALL_ROOT:-.}"
     if [[ -f "${root}/HELP.txt" ]]; then
         cat "${root}/HELP.txt"
@@ -307,7 +307,7 @@ pkg_parse_install_args() {
                 shift
                 ;;
             -h | --help)
-                pkg_customer_help
+                pkg_user_help
                 exit 0
                 ;;
             *)
@@ -320,7 +320,7 @@ pkg_parse_install_args() {
 
 # Legacy name — scripts may still call this.
 pkg_install_args_help() {
-    pkg_customer_help
+    pkg_user_help
 }
 
 # --help for test-*.sh wrappers in the tarball.
@@ -513,7 +513,7 @@ pkg_k8s_env_configure() {
 }
 
 # Pleasant opener after tar xzf (also shown at start of install).
-pkg_customer_hero() {
+pkg_user_hero() {
     local product="${1:-}"
     echo ""
     pkg_box_begin "Welcome"
@@ -532,7 +532,7 @@ pkg_customer_hero() {
 # One-screen guide at start of ./install.sh
 pkg_install_welcome() {
     local product="$1"
-    pkg_customer_hero "${product}"
+    pkg_user_hero "${product}"
     pkg_detail "This run: ./install.sh (use ./install-everything.sh for full host + production setup)"
     pkg_detail "zyvor.dev · HyperSDK · © 2026"
     echo ""
@@ -548,7 +548,7 @@ pkg_bundle_sanity_check() {
             missing=$((missing + 1))
         fi
     done
-    [[ "${missing}" -eq 0 ]] && pkg_ok "Customer bundle layout OK (START_HERE, HELP, install scripts)"
+    [[ "${missing}" -eq 0 ]] && pkg_ok "User bundle layout OK (START_HERE, HELP, install scripts)"
     return "${missing}"
 }
 

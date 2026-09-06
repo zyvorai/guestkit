@@ -188,7 +188,7 @@ impl SnapshotPlugin for RedisPlugin {
     }
 }
 
-// --- Custom hook directories (customer scripts) ---
+// --- Custom hook directories (user scripts) ---
 
 pub struct HookDirPlugin;
 

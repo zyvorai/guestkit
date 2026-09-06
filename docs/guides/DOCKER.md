@@ -51,7 +51,7 @@ docker compose -f deploy/docker-compose.ghcr.yml up -d
 open http://localhost:8088          # macOS  (Linux: xdg-open)
 ```
 
-The console Image Vault supports inspect inventory tabs, Assurance (doctor / plan / passport / repair), Profiles, and Files browse when backed by a current zyvor-api + guestkit-worker. See [Using the Dashboard](../customer/using-the-dashboard.md).
+The console Image Vault supports inspect inventory tabs, Assurance (doctor / plan / passport / repair), Profiles, and Files browse when backed by a current zyvor-api + guestkit-worker. See [Using the Dashboard](../user/using-the-dashboard.md).
 
 Pin a version or a different registry with env vars:
 

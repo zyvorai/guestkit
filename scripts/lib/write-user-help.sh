@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
-# Generate HELP.txt for a customer tarball directory.
-# Usage: write-customer-help.sh <stage-dir> <product-name> <kind>
+# Generate HELP.txt for a user tarball directory.
+# Usage: write-user-help.sh <stage-dir> <product-name> <kind>
 #   kind: k8s | host | platform | minimal
 set -euo pipefail
 
@@ -13,7 +13,7 @@ KIND="${3:-minimal}"
 case "${KIND}" in
   k8s | host | platform | minimal) ;;
   *)
-    echo "write-customer-help.sh: unknown kind '${KIND}' (use k8s|host|platform|minimal)" >&2
+    echo "write-user-help.sh: unknown kind '${KIND}' (use k8s|host|platform|minimal)" >&2
     exit 1
     ;;
 esac
@@ -23,7 +23,7 @@ mkdir -p "${STAGE}"
 {
   cat <<EOF
 ================================================================================
-  ${PRODUCT} — customer bundle help
+  ${PRODUCT} — user bundle help
   zyvor.dev · HyperSDK · © 2026
 ================================================================================
 

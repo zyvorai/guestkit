@@ -7,7 +7,7 @@ import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
-const CUSTOMER = resolve(ROOT, 'docs/customer')
+const USER_DOCS = resolve(ROOT, 'docs/user')
 const LINK = /\[[^\]]*\]\(([^)]+)\)/g
 
 function walk(dir) {
@@ -22,7 +22,7 @@ function walk(dir) {
 
 let broken = 0
 let checked = 0
-for (const file of walk(CUSTOMER)) {
+for (const file of walk(USER_DOCS)) {
   for (const m of readFileSync(file, 'utf8').matchAll(LINK)) {
     const target = m[1].trim()
     if (/^(https?:|mailto:|#)/.test(target)) continue

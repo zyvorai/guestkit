@@ -78,7 +78,7 @@ Product: [zyvor.dev/guestkit](https://zyvor.dev/guestkit?utm_source=github&utm_m
 | Audit stream (assessments, Passports, disk actions) | Limited / DIY | ✅ |
 | Estate assessment job (one-click) | CLI / fleet batch | ✅ |
 | Control-plane API (bootstrap, waves, vault, reports) | OSS API for free UI | ✅ Enterprise API |
-| k3s / customer packaging / hardening docs | GHCR · Helm | ✅ |
+| k3s / user packaging / hardening docs | GHCR · Helm | ✅ |
 | Air-gapped / disconnected packs | Build yourself | ✅ |
 
 ---

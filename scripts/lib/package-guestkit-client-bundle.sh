@@ -1,7 +1,7 @@
 # Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
 # shellcheck shell=bash
-# Assemble GuestKit customer tarball layout (shared by remote pack and GitHub release).
+# Assemble GuestKit user tarball layout (shared by remote pack and GitHub release).
 #
 # Usage:
 #   package_guestkit_client_bundle STAGE BUILD_DIR VERSION
@@ -58,8 +58,8 @@ ENV_EOF
     chmod +x "${stage}/install.sh" "${stage}/install-client-deps.sh" \
         "${stage}/test-package.sh" "${stage}/test-host.sh" \
         "${stage}/install-everything.sh" "${stage}/uninstall.sh"
-    chmod +x "${lib}/write-customer-help.sh"
-    "${lib}/write-customer-help.sh" "${stage}" "GuestKit" host
+    chmod +x "${lib}/write-user-help.sh"
+    "${lib}/write-user-help.sh" "${stage}" "GuestKit" host
     cp "${lib}/START_HERE.txt" "${stage}/"
 
     cat > "${stage}/QUICKSTART.txt" <<'QEOF'
@@ -128,10 +128,10 @@ README_EOF
         fi
     done
 
-    chmod +x "${lib}/finalize-customer-bundle.sh"
-    "${lib}/finalize-customer-bundle.sh" "${stage}" "${build_dir}" "GuestKit" "${version}" || return 1
+    chmod +x "${lib}/finalize-user-bundle.sh"
+    "${lib}/finalize-user-bundle.sh" "${stage}" "${build_dir}" "GuestKit" "${version}" || return 1
 
-    echo "Customer bundle OK"
+    echo "User bundle OK"
 }
 
 package_guestkit_client_tarball() {

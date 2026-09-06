@@ -18,7 +18,7 @@ Operator cheat sheets (cutover cookbook, day-0/rescue, Passport, env vars): **[G
 | Guide | Description |
 |-------|-------------|
 | [TUI dashboard](features/tui-enhancements.md) | Two-tier tabs, **Assurance** (doctor/migrate-plan), fix-plan preview — [zyvor.dev/guestkit](https://zyvor.dev/guestkit) |
-| [Web Image Vault](customer/using-the-dashboard.md) | OSS zyvor-ui: inventory tabs, Assurance, Profiles, Files browse |
+| [Web Image Vault](user/using-the-dashboard.md) | OSS zyvor-ui: inventory tabs, Assurance, Profiles, Files browse |
 | [File explorer](features/explore/EXPLORE-QUICKSTART.md) | `guestkit explore` (+ web Browse files) |
 | [Interactive shell](user-guides/interactive-mode.md) | REPL mode |
 | [Security profiles](user-guides/profiles.md) | Security, compliance, migration profiles |

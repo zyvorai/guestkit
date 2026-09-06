@@ -114,7 +114,7 @@ runs:
         sha256sum -c "${ASSET}.sha256"
         tar -xzf "${ASSET}"
 
-        # The customer bundle tarball extracts into a versioned
+        # The user bundle tarball extracts into a versioned
         # subdirectory (guestkit-<version>-<arch>/guestkit), not a flat
         # binary at the tar root — find it rather than assume the path.
         BIN_PATH="$(find "${WORKDIR}" -mindepth 1 -maxdepth 2 -type f -name guestkit | head -n1)"
@@ -136,7 +136,7 @@ runs:
         set -euo pipefail
         # The release bundle ships its own installer next to the binary —
         # same package list (incl. libhivex0, required at runtime by the
-        # glibc build's registry-write feature) used by customers who
+        # glibc build's registry-write feature) used by users who
         # download the tarball directly. Reuse it instead of a second,
         # drifting copy of the dependency list here.
         INSTALLER="$(dirname "${GUESTKIT_BIN}")/install-client-deps.sh"

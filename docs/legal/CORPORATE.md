@@ -3,7 +3,7 @@
 GuestKit **source code** is licensed under **Apache-2.0** — see [LICENSE](../../LICENSE).  
 **Copyright owner:** ZyvorAI Labs Private Limited.
 
-**Zyvor-branded** binaries, customer bundles, and enterprise offerings also require acceptance of [ZYVOR-COMPANY-TERMS.md](../../ZYVOR-COMPANY-TERMS.md).
+**Zyvor-branded** binaries, user bundles, and enterprise offerings also require acceptance of [ZYVOR-COMPANY-TERMS.md](../../ZYVOR-COMPANY-TERMS.md).
 
 ## Legal entity
 
@@ -32,4 +32,4 @@ Software and licensing agreements may be executed by a **Director** of ZyvorAI L
 | [ZYVOR-COMPANY-TERMS.md](../../ZYVOR-COMPANY-TERMS.md) | Brand, Zyvor binaries, deploy acceptance |
 | [zyvor-enterprise.md](../zyvor-enterprise.md) | Enterprise / commercial |
 
-Internal MCA references: see ZyvorAI Labs corporate records (not required on customer-facing Apache 2.0 text).
+Internal MCA references: see ZyvorAI Labs corporate records (not required on user-facing Apache 2.0 text).

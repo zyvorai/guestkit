@@ -56,7 +56,7 @@ GuestKit inspects disk images **offline** — OS version, filesystem, bootabilit
 Enterprises and migration partners receive thousands of VM exports. They need automation to gate which VMs are ready for AWS, Azure, GCP, or private cloud.
 
 ```bash
-guestkit doctor customer-vm.qcow2 --target aws -o json --fail-below 80
+guestkit doctor user-vm.qcow2 --target aws -o json --fail-below 80
 ```
 
 **Business value:** Repeatable **migration gate** in CI/CD instead of manual VM checks.
@@ -69,7 +69,7 @@ GuestKit pairs with the in-repo **Zyvor web stack** and KubeVirt hooks (`crates/
 
 ### 6. Managed service provider (MSP) migration assessment
 
-MSPs run GuestKit on customer exports and deliver readiness reports: assurance score, blockers, warnings, target recommendation, fix plan, migration risk.
+MSPs run GuestKit on user exports and deliver readiness reports: assurance score, blockers, warnings, target recommendation, fix plan, migration risk.
 
 **Business value:** Paid **migration assessment** before the migration project.
 

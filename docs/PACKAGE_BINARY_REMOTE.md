@@ -1,6 +1,6 @@
 # Package GuestKit as a Linux binary (remote build)
 
-Ship a **client tarball** (`guestkit` + install/test scripts) without giving customers deploy scripts.
+Ship a **client tarball** (`guestkit` + install/test scripts) without giving users deploy scripts.
 
 ## What you get
 
@@ -20,7 +20,7 @@ guestkit-1.0.1-linux-amd64/
 
 ## Build
 
-**GitHub Release** (tag `v*`): CI builds the same customer tarball and attaches it to the release:
+**GitHub Release** (tag `v*`): CI builds the same user tarball and attaches it to the release:
 
 - `guestkit-<version>-linux-amd64.tar.gz` (+ `.sha256`)
 - `guestkit-<version>-linux-amd64-musl.tar.gz` (+ `.sha256`)
@@ -51,7 +51,7 @@ Environment:
 | `GUESTKIT_PACKAGE_VERSION` | Override version string |
 | `GUESTKIT_REMOTE_SKIP_SSH_CHECK=1` | Skip SSH preflight |
 
-## Customer install
+## User install
 
 ```bash
 tar xzf guestkit-*-linux-amd64.tar.gz && cd guestkit-*-linux-amd64
@@ -61,7 +61,7 @@ tar xzf guestkit-*-linux-amd64.tar.gz && cd guestkit-*-linux-amd64
 ./guestkit inspect /path/to/disk.qcow2
 ```
 
-## Customer uninstall
+## User uninstall
 
 ```bash
 ./uninstall.sh --yes

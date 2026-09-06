@@ -19,7 +19,7 @@ You must comply with **both**. If they conflict on software freedom, **Apache 2.
 
 ## 2. Acceptance
 
-By downloading, building, deploying, installing, or using GuestKit binaries or customer bundles from Zyvor (including `./scripts/deploy-remote.sh`, `./scripts/package-binary-remote.sh`, or `./install.sh`), you agree to these Company Terms.
+By downloading, building, deploying, installing, or using GuestKit binaries or user bundles from Zyvor (including `./scripts/deploy-remote.sh`, `./scripts/package-binary-remote.sh`, or `./install.sh`), you agree to these Company Terms.
 
 If you do not agree, do not use Zyvor-distributed builds. You may still use GuestKit source under Apache 2.0 subject to that license alone.
 
@@ -40,7 +40,7 @@ See [docs/legal/TRADEMARK-NOTICE.md](docs/legal/TRADEMARK-NOTICE.md).
 
 ## 5. Distribution and enterprise
 
-- **Crates.io / PyPI / GitHub** releases are under Apache 2.0; Zyvor-hosted **customer tarballs** and **enterprise** offerings may include additional terms on an Order Form.
+- **Crates.io / PyPI / GitHub** releases are under Apache 2.0; Zyvor-hosted **user tarballs** and **enterprise** offerings may include additional terms on an Order Form.
 - Offering GuestKit as a **managed service** or **white-label product** to third parties requires written permission from Zyvor (legal@zyvor.dev).
 - **Enterprise** features and support are described in [docs/zyvor-enterprise.md](docs/zyvor-enterprise.md).
 

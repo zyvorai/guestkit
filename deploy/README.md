@@ -83,7 +83,7 @@ Notes:
 - The KubeVirt ClusterRole/Binding are namespace-scoped
   (`zyvor-api-kubevirt-<ns>`), so multiple installs coexist.
 
-## Production hardening (before real customer data)
+## Production hardening (before real user data)
 
 These are deployment-time decisions the chart leaves to the operator:
 

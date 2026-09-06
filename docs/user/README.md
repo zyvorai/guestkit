@@ -1,4 +1,4 @@
-# GuestKit — Customer Documentation
+# GuestKit — User Documentation
 
 Offline VM intelligence — inspect disks without booting, score boot readiness, and produce hypervisor-aware fix plans.
 
@@ -10,19 +10,19 @@ Offline VM intelligence — inspect disks without booting, score boot readiness,
 | Look up any screen | [Complete page index](PAGE_INDEX.md) |
 | Deploy, auth, ports | [Admin basics](admin-basics.md) |
 | Multi-page jobs | [Common workflows](workflows.md) |
-| Capability map | [Feature Guide](../guestkit-customer-feature-guide.md) |
+| Capability map | [Feature Guide](../guestkit-user-feature-guide.md) |
 
 ## Printable PDFs
 
 ```bash
-node scripts/customer-docs/build-customer-pdfs.mjs
+node scripts/user-docs/build-user-pdfs.mjs
 ```
 
 Output lands in [`pdf/`](pdf/):
 
 | PDF | Contents |
 |-----|----------|
-| `GuestKit-Customer-README.pdf` | This overview |
+| `GuestKit-User-README.pdf` | This overview |
 | `GuestKit-Getting-Started.pdf` | Access, basics, workflows |
 | `GuestKit-Page-by-Page.pdf` | Complete page manual |
 | `GuestKit-Admin-Basics.pdf` | Deploy, auth, ports |

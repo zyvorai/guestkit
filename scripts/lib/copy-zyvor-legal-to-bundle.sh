@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
-# Copy license + Zyvor legal pack into a release/customer bundle directory.
+# Copy license + Zyvor legal pack into a release/user bundle directory.
 # Usage: copy-zyvor-legal-to-bundle.sh <stage-dir> <repo-root> [--with-accept]
 set -euo pipefail
 

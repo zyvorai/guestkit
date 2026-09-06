@@ -146,7 +146,7 @@ jobs:
         if: matrix.target == 'x86_64-unknown-linux-gnu'
         run: sudo apt-get install -y libhivex-dev
 
-      - name: Build and package customer bundle
+      - name: Build and package user bundle
         env:
           GUESTKIT_PACKAGE_VERSION: ${{ needs.create-release.outputs.version }}
           CARGO_TARGET: ${{ matrix.target }}

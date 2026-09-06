@@ -7,7 +7,7 @@ import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
-const PAGES = resolve(ROOT, 'docs/customer/pages')
+const PAGES = resolve(ROOT, 'docs/user/pages')
 const OUT = join(PAGES, 'README.md')
 
 function titleOf(file) {
@@ -56,6 +56,6 @@ if (existsSync(PAGES)) {
   }
 }
 
-lines.push('---', '', `${total} guides. Regenerate: \`node scripts/customer-docs/generate-guide-index.mjs\`.`, '')
+lines.push('---', '', `${total} guides. Regenerate: \`node scripts/user-docs/generate-guide-index.mjs\`.`, '')
 writeFileSync(OUT, lines.join('\n'))
 console.log(`Wrote ${OUT} (${total} guides)`)

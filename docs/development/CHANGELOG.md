@@ -97,7 +97,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.2] - 2026-09-06
 
 ### Added
-- **Web Image Vault TUI parity** — OSS `deploy/ui` renders inspect inventory tabs, Assurance (doctor / migration plan / passport / repair preview + gated apply), Profiles/Issues, and read-only Files browse (`guestkit.explore`). Docs: [using-the-dashboard.md](../customer/using-the-dashboard.md).
+- **Web Image Vault TUI parity** — OSS `deploy/ui` renders inspect inventory tabs, Assurance (doctor / migration plan / passport / repair preview + gated apply), Profiles/Issues, and read-only Files browse (`guestkit.explore`). Docs: [using-the-dashboard.md](../user/using-the-dashboard.md).
 - **`POST /api/v1/vms/:id/profile`** and **`POST /api/v1/vms/:id/explore`** — enqueue existing/new worker ops; repair-plan accepts `dry_run` query (default true).
 - **OpenAPI** documents profile, explore, and repair `dry_run`.
 
@@ -569,7 +569,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fall back to `systemctl restart` when the D-Bus `RestartUnit` call fails.
 
 ### Documentation
-- Page-by-page customer manual (`docs/customer/`) with per-page PDFs, linked from
+- Page-by-page user manual (`docs/user/`) with per-page PDFs, linked from
   the README.
 - `docs/features/guest-agent.md` documents the Windows offline install path
   end-to-end, including the stock-QGA disable step.
@@ -755,7 +755,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **`guestctl` binary** — separate crate binary (alias entry point); install via `cargo install guestkit` or client tarball symlink
-- **GitHub Release customer bundles** — full install tarball (`guestkit-<version>-linux-amd64.tar.gz`) matching remote deploy packaging
+- **GitHub Release user bundles** — full install tarball (`guestkit-<version>-linux-amd64.tar.gz`) matching remote deploy packaging
 - **`scripts/package-binary-release.sh`** — local/CI packaging shared with GitHub Actions
 - **TUI visual polish** — shared `widgets.rs` (stat chips, severity rail, progress bar, risk donut)
 - **Theme variants** — `high-contrast` and `minimal` via `[ui] theme` in `tui.toml`
@@ -765,7 +765,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CLI entry split into `guestkit::cli` module tree (`entry`, `invocation`, `commands_list`, `welcome`)
 - TUI header, stats bar, tabs, footer, loading bar, fleet sidebar, and modal dim layer
 - Dashboard and Issues views use carbon gauges, sparklines, and risk summary donut
-- GitHub release workflow uploads customer bundles (gnu + musl) instead of bare binaries
+- GitHub release workflow uploads user bundles (gnu + musl) instead of bare binaries
 - Documentation: [tui-enhancements.md](../features/tui-enhancements.md) updated for carbon theme and visual polish
 
 ## [0.3.3] - 2026-05-22

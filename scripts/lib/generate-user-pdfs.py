@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # https://zyvor.dev · info@zyvor.dev
 
-"""Branded customer documentation: premium PDFs + offline welcome page."""
+"""Branded user documentation: premium PDFs + offline welcome page."""
 from __future__ import annotations
 
 import argparse
@@ -527,7 +527,7 @@ def write_index(out_dir: Path, names: list[str], product: str) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Generate branded customer PDFs + welcome page")
+    parser = argparse.ArgumentParser(description="Generate branded user PDFs + welcome page")
     parser.add_argument("stage", type=Path)
     parser.add_argument("product")
     parser.add_argument("logo", type=Path)

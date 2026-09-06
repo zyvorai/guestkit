@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
-# Customer install: default web/API login admin / Admin@321 (API key Admin@321).
+# User install: default web/API login admin / Admin@321 (API key Admin@321).
 # Sourced from package-ui.sh (bundled as .package-lib/package-auth-bootstrap.sh).
 set -euo pipefail
 

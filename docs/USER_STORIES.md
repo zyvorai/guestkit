@@ -12,13 +12,13 @@ Cross-reference: [Documentation index](README.md) · [Main README](../README.md)
 | SRE | Morgan | Fleet drift analysis and forensic diff |
 | Platform Architect | Jordan | Boot probability scoring and fix plans |
 | Security / Forensics Analyst | Riley | Offline evidence collection, incident-time drift comparison |
-| MSP Migration Consultant | Casey | Batch assessment across customer VM exports, signed deliverables |
+| MSP Migration Consultant | Casey | Batch assessment across user VM exports, signed deliverables |
 
 ---
 
 ### Story 1 — Score boot probability offline
 
-**As Alex** (Migration Engineer), I want to inspect a qcow2/vmdk without powering it on and get a boot probability score with root-cause blockers, **so that** I can tell a customer *before* cutover weekend whether a VM will actually come up on the target hypervisor — not find out live, during the maintenance window.
+**As Alex** (Migration Engineer), I want to inspect a qcow2/vmdk without powering it on and get a boot probability score with root-cause blockers, **so that** I can tell a user *before* cutover weekend whether a VM will actually come up on the target hypervisor — not find out live, during the maintenance window.
 
 | Criterion | Notes |
 |-----------|-------|
@@ -76,9 +76,9 @@ Cross-reference: [Documentation index](README.md) · [Main README](../README.md)
 
 ---
 
-### Story 7 — Batch assessment deliverable for a customer engagement
+### Story 7 — Batch assessment deliverable for a user engagement
 
-**As Casey** (MSP Migration Consultant), I want to run one command across a customer's exported VM inventory and get a signed, per-VM readiness report (score, blockers, target recommendation, fix plan), **so that** the assessment phase of an engagement produces a defensible deliverable instead of a pile of ad-hoc notes.
+**As Casey** (MSP Migration Consultant), I want to run one command across a user's exported VM inventory and get a signed, per-VM readiness report (score, blockers, target recommendation, fix plan), **so that** the assessment phase of an engagement produces a defensible deliverable instead of a pile of ad-hoc notes.
 
 | Criterion | Notes |
 |-----------|-------|

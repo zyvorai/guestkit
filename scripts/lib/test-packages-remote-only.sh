@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
-# Run on remote host: pleasant end-to-end customer install tests for all *-dist tarballs.
+# Run on remote host: pleasant end-to-end user install tests for all *-dist tarballs.
 #
 # Usage:
 #   scp scripts/test-packages-remote-only.sh user@host:~/
@@ -91,7 +91,7 @@ verify_bundle_layout() {
   return "${ok}"
 }
 
-verify_customer_pdfs() {
+verify_user_pdfs() {
   local ok=0
   if [[ -d ./docs/pdf ]]; then
     [[ -f ./docs/welcome.html ]] && log_ok "  docs/welcome.html" || { log_fail "  missing docs/welcome.html"; ok=1; }
@@ -180,7 +180,7 @@ test_tarball() {
 
   verify_extracted_ux || ((WARN++))
   verify_script_paths || { ((FAIL++)); rm -rf "${work}"; return 1; }
-  verify_customer_pdfs || ((WARN++))
+  verify_user_pdfs || ((WARN++))
 
   local install_cmd timeout_secs
   install_cmd="$(choose_install_cmd)"
@@ -243,7 +243,7 @@ declare -a JOBS=(
   "forge|$(pick_latest "${HOME}/forge-dist")"
 )
 
-log "${C_BOLD}Zyvor customer bundle E2E (remote)${C_RESET}"
+log "${C_BOLD}Zyvor user bundle E2E (remote)${C_RESET}"
 log "  install mode: ${ZYVOR_E2E_INSTALL:-install-everything (when bundled)}"
 log "  log file: ${RESULTS}"
 log ""

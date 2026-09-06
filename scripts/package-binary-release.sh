@@ -2,7 +2,7 @@
 # Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
 # ============================================================================
-# package-binary-release.sh — Build GuestKit and assemble customer tarball
+# package-binary-release.sh — Build GuestKit and assemble user tarball
 # ============================================================================
 # Used locally and by .github/workflows/release.yml (same bundle as remote pack).
 #
@@ -53,7 +53,7 @@ case "${TARGET:-x86_64-unknown-linux-gnu}" in
     x86_64-unknown-linux-musl) ARCH_SUFFIX="linux-amd64-musl" ;;
     aarch64-unknown-linux-gnu) ARCH_SUFFIX="linux-arm64" ;;
     *)
-        echo "Unsupported target for customer bundle: ${TARGET}" >&2
+        echo "Unsupported target for user bundle: ${TARGET}" >&2
         exit 1
         ;;
 esac
@@ -100,7 +100,7 @@ source "${SCRIPT_DIR}/lib/package-guestkit-client-bundle.sh"
 STAGE="${OUT_DIR}/${ARTIFACT}"
 export GUESTKIT_BINARY="${BINARY}"
 
-echo "Assemble customer bundle → ${OUT_DIR}/${ARTIFACT}.tar.gz"
+echo "Assemble user bundle → ${OUT_DIR}/${ARTIFACT}.tar.gz"
 package_guestkit_client_bundle "${STAGE}" "${REPO_DIR}" "${VERSION}"
 package_guestkit_client_tarball "${OUT_DIR}" "${ARTIFACT}" "${STAGE}"
 

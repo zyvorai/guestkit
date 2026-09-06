@@ -3,7 +3,7 @@
 
 #!/usr/bin/env node
 /**
- * Shared PDF builder — set CUSTOMER_DOCS_PRODUCT and optional CUSTOMER_DOCS_SLUG.
+ * Shared PDF builder — set USER_DOCS_PRODUCT and optional USER_DOCS_SLUG.
  */
 import { execFileSync } from 'node:child_process'
 import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync, rmSync, statSync } from 'node:fs'
@@ -12,17 +12,17 @@ import { fileURLToPath } from 'node:url'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 try {
-  const envText = readFileSync(resolve(ROOT, 'scripts/customer-docs/product.env'), 'utf8')
+  const envText = readFileSync(resolve(ROOT, 'scripts/user-docs/product.env'), 'utf8')
   for (const line of envText.split('\n')) {
     const m = line.match(/^([A-Z0-9_]+)=(.*)$/)
     if (m) process.env[m[1]] = m[2].replace(/^['"]|['"]$/g, '')
   }
 } catch {}
-const CUSTOMER = resolve(ROOT, 'docs/customer')
-const PDF_DIR = resolve(CUSTOMER, 'pdf')
-const PRODUCT = process.env.CUSTOMER_DOCS_PRODUCT || 'Product'
-const SLUG = (process.env.CUSTOMER_DOCS_SLUG || PRODUCT).toLowerCase().replace(/\s+/g, '-')
-const PDF_PREFIX = process.env.CUSTOMER_DOCS_PDF_PREFIX || PRODUCT.replace(/\s+/g, '-')
+const USER_DOCS = resolve(ROOT, 'docs/user')
+const PDF_DIR = resolve(USER_DOCS, 'pdf')
+const PRODUCT = process.env.USER_DOCS_PRODUCT || 'Product'
+const SLUG = (process.env.USER_DOCS_SLUG || PRODUCT).toLowerCase().replace(/\s+/g, '-')
+const PDF_PREFIX = process.env.USER_DOCS_PDF_PREFIX || PRODUCT.replace(/\s+/g, '-')
 
 const MARKED_CANDIDATES = [
   resolve(ROOT, '.docs-tools/node_modules/.bin/marked'),
@@ -121,11 +121,11 @@ table{width:100%;border-collapse:collapse;margin:.8em 0 1.1em;font-size:9.5pt}
 th,td{border:1px solid #e5e7eb;padding:6px 8px;text-align:left;vertical-align:top}th{background:#f1f5f9}
 hr{border:none;border-top:1px solid #e5e7eb;margin:1.2em 0}
 </style></head><body>
-<section class="cover"><div class="kicker">ZyvorAI Labs · Customer Documentation</div>
+<section class="cover"><div class="kicker">ZyvorAI Labs · User Documentation</div>
 <h1>${theme.brandHtml}</h1>
 <div class="sub">${title}</div>
 <div class="badge">${today}</div>
-<div class="foot">zyvor.dev · Confidential — for licensed customers</div></section>
+<div class="foot">zyvor.dev · Confidential — for licensed users</div></section>
 <main>${bodyHtml}</main></body></html>`
 }
 
@@ -136,7 +136,7 @@ function printPdf(chrome, htmlPath, pdfPath) {
 }
 
 function collectPageGuides() {
-  const pages = join(CUSTOMER, 'pages')
+  const pages = join(USER_DOCS, 'pages')
   const files = []
   if (!existsSync(pages)) return files
   for (const dir of readdirSync(pages).sort()) {
@@ -153,29 +153,29 @@ if (!chrome) fail('Chrome/Chromium required')
 
 mkdirSync(PDF_DIR, { recursive: true })
 for (const script of ['generate-guides.mjs', 'generate-guide-index.mjs', 'generate-page-index.mjs']) {
-  execFileSync(process.execPath, [resolve(ROOT, 'scripts/customer-docs', script)], {
+  execFileSync(process.execPath, [resolve(ROOT, 'scripts/user-docs', script)], {
     stdio: 'inherit',
-    env: { ...process.env, CUSTOMER_DOCS_PRODUCT: PRODUCT, CUSTOMER_DOCS_SLUG: SLUG },
+    env: { ...process.env, USER_DOCS_PRODUCT: PRODUCT, USER_DOCS_SLUG: SLUG },
   })
 }
 
 const books = [
-  { id: `${PDF_PREFIX}-Customer-README`, title: 'Customer Documentation Overview', sources: [join(CUSTOMER, 'README.md')] },
+  { id: `${PDF_PREFIX}-User-README`, title: 'User Documentation Overview', sources: [join(USER_DOCS, 'README.md')] },
   {
     id: `${PDF_PREFIX}-Getting-Started`,
     title: 'Getting Started',
-    sources: [join(CUSTOMER, 'getting-started.md'), join(CUSTOMER, 'using-the-dashboard.md'), join(CUSTOMER, 'workflows.md')],
+    sources: [join(USER_DOCS, 'getting-started.md'), join(USER_DOCS, 'using-the-dashboard.md'), join(USER_DOCS, 'workflows.md')],
   },
-  { id: `${PDF_PREFIX}-Admin-Basics`, title: 'Admin Basics', sources: [join(CUSTOMER, 'admin-basics.md')] },
+  { id: `${PDF_PREFIX}-Admin-Basics`, title: 'Admin Basics', sources: [join(USER_DOCS, 'admin-basics.md')] },
   {
     id: `${PDF_PREFIX}-Page-by-Page`,
     title: 'Page-by-Page Product Manual',
     demote: true,
-    sources: [join(CUSTOMER, 'pages/README.md'), ...collectPageGuides(), join(CUSTOMER, 'PAGE_INDEX.md')],
+    sources: [join(USER_DOCS, 'pages/README.md'), ...collectPageGuides(), join(USER_DOCS, 'PAGE_INDEX.md')],
   },
 ]
 
-const indexLines = [`# ${PRODUCT} customer PDFs`, '', `Generated: ${new Date().toISOString().slice(0, 10)}`, '', 'Rebuild: `node scripts/customer-docs/build-customer-pdfs.mjs`', '']
+const indexLines = [`# ${PRODUCT} user PDFs`, '', `Generated: ${new Date().toISOString().slice(0, 10)}`, '', 'Rebuild: `node scripts/user-docs/build-user-pdfs.mjs`', '']
 for (const book of books) {
   const parts = book.sources.filter((p) => existsSync(p)).map((p, i) => {
     const raw = readFileSync(p, 'utf8')

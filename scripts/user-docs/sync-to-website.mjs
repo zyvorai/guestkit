@@ -8,18 +8,18 @@ import { fileURLToPath } from 'node:url'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 try {
-  const envText = readFileSync(resolve(ROOT, 'scripts/customer-docs/product.env'), 'utf8')
+  const envText = readFileSync(resolve(ROOT, 'scripts/user-docs/product.env'), 'utf8')
   for (const line of envText.split('\n')) {
     const m = line.match(/^([A-Z0-9_]+)=(.*)$/)
     if (m) process.env[m[1]] = m[2].replace(/^['"]|['"]$/g, '')
   }
 } catch {}
-const CUSTOMER = resolve(ROOT, 'docs/customer')
+const USER_DOCS = resolve(ROOT, 'docs/user')
 const SITE = resolve(process.argv[2] ?? resolve(ROOT, '../hypersdk-web'))
-const PRODUCT = process.env.CUSTOMER_DOCS_PRODUCT || 'Product'
-const SLUG = (process.env.CUSTOMER_DOCS_SLUG || PRODUCT).toLowerCase().replace(/\s+/g, '-')
-const PDF_PREFIX = process.env.CUSTOMER_DOCS_PDF_PREFIX || PRODUCT.replace(/\s+/g, '-')
-const MANUAL_DIR = process.env.CUSTOMER_DOCS_MANUAL_DIR || `${SLUG}-manual`
+const PRODUCT = process.env.USER_DOCS_PRODUCT || 'Product'
+const SLUG = (process.env.USER_DOCS_SLUG || PRODUCT).toLowerCase().replace(/\s+/g, '-')
+const PDF_PREFIX = process.env.USER_DOCS_PDF_PREFIX || PRODUCT.replace(/\s+/g, '-')
+const MANUAL_DIR = process.env.USER_DOCS_MANUAL_DIR || `${SLUG}-manual`
 const TARGET = join(SITE, `docs/${MANUAL_DIR}`)
 const PDF_TARGET = join(SITE, `static/downloads/${SLUG}-docs`)
 
@@ -39,19 +39,28 @@ const TOP_LEVEL_POSITION = {
 
 const REPO_ONLY = new RegExp(
   [
-    '(\\.\\./)+(handbook|guides|architecture|admin-guide|user-guide|getting-started|developer-guide|legal|client)/',
-    `${SLUG}-customer-feature-guide`,
-    'hypercluster-customer-feature-guide',
-    'hyper2kvm-customer-feature-guide',
-    'guestkit-customer-feature-guide',
-    'ragnarok-customer-feature-guide',
-    'aether-customer-feature-guide',
-    'zyvor-fabric-customer-feature-guide',
-    'hermes-customer-feature-guide',
-    'hypersdk-customer-feature-guide',
+        '(\\.\\./)+(handbook|guides|architecture|admin-guide|user-guide|getting-started|developer-guide|legal|client)/',
     'DEPLOYMENT_GUIDE',
     'AIRGAP_INSTALL',
     'CLI_GUIDE',
+    `${SLUG}-user-feature-guide`,
+    `${SLUG}-customer-feature-guide`,
+    'hypercluster-user-feature-guide',
+    'hypercluster-customer-feature-guide',
+    'hyper2kvm-user-feature-guide',
+    'hyper2kvm-customer-feature-guide',
+    'guestkit-user-feature-guide',
+    'guestkit-customer-feature-guide',
+    'ragnarok-user-feature-guide',
+    'ragnarok-customer-feature-guide',
+    'aether-user-feature-guide',
+    'aether-customer-feature-guide',
+    'zyvor-fabric-user-feature-guide',
+    'zyvor-fabric-customer-feature-guide',
+    'hermes-user-feature-guide',
+    'hermes-customer-feature-guide',
+    'hypersdk-user-feature-guide',
+    'hypersdk-customer-feature-guide',
   ].join('|'),
 )
 
@@ -70,13 +79,13 @@ function transformLinks(md) {
 
 function rewriteIndexPdfSection(md) {
   const pdfNames = [
-    `${PDF_PREFIX}-Customer-README`,
+    `${PDF_PREFIX}-User-README`,
     `${PDF_PREFIX}-Getting-Started`,
     `${PDF_PREFIX}-Page-by-Page`,
     `${PDF_PREFIX}-Admin-Basics`,
   ]
   let out = md.replace(
-    /```bash\nnode scripts\/customer-docs\/build-customer-pdfs\.mjs\n```\n\nOutput lands in \[`pdf\/`\]\(pdf\/\):/,
+    /```bash\nnode scripts\/user-docs\/build-user-pdfs\.mjs\n```\n\nOutput lands in \[`pdf\/`\]\(pdf\/\):/,
     'Prefer paper or offline reading? Download the print-ready PDFs:',
   )
   for (const name of pdfNames) {
@@ -108,8 +117,8 @@ mkdirSync(TARGET, { recursive: true })
 mkdirSync(PDF_TARGET, { recursive: true })
 
 let written = 0
-for (const file of walk(CUSTOMER)) {
-  const rel = relative(CUSTOMER, file)
+for (const file of walk(USER_DOCS)) {
+  const rel = relative(USER_DOCS, file)
   if (rel.startsWith('pdf/') || !rel.endsWith('.md')) continue
   const target = join(TARGET, renameTarget(rel))
   mkdirSync(dirname(target), { recursive: true })
@@ -144,7 +153,7 @@ if (existsSync(pagesDir)) {
 }
 
 let pdfs = 0
-const pdfDir = join(CUSTOMER, 'pdf')
+const pdfDir = join(USER_DOCS, 'pdf')
 if (existsSync(pdfDir)) {
   for (const f of readdirSync(pdfDir)) {
     if (!f.endsWith('.pdf')) continue

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Copyright 2026 Zyvor AI Labs · https://zyvor.dev
 # SPDX-License-Identifier: Apache-2.0
-# Zyvor — one-shot customer install (run inside extracted tarball directory).
+# Zyvor — one-shot user install (run inside extracted tarball directory).
 # Does everything ./install.sh does, plus host tests and production setup when bundled.
 set -euo pipefail
 
@@ -23,7 +23,7 @@ PRODUCT_NAME="${PRODUCT_NAME:-$(basename "${ROOT}" | sed 's/-linux-amd64$//')}"
 _PKG_SESSION_START=${SECONDS}
 
 pkg_counters_reset
-pkg_customer_hero "${PRODUCT_NAME}"
+pkg_user_hero "${PRODUCT_NAME}"
 pkg_detail "Full automatic install — dependencies, config, tests, production setup when bundled"
 pkg_detail "zyvor.dev · HyperSDK · © 2026"
 echo ""
