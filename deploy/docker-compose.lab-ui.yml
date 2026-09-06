@@ -1,0 +1,7 @@
+# Lab overlay: publish API on host :8080; skip legacy nginx UI (Apple shell is separate).
+services:
+  zyvor-api:
+    ports:
+      - "8080:8080"
+  zyvor-ui:
+    profiles: ["legacy-ui"]

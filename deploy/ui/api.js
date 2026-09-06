@@ -162,10 +162,38 @@ function provisionPath(vmId, apply = false) {
 }
 
 function extractDoctorView(result) {
-  const payload = result?.result || result || {};
+  // Worker wraps doctor JSON under result.data (sometimes result.result / boot_report).
+  const payload =
+    result?.data?.bootability ? result.data :
+    result?.result?.data?.bootability ? result.result.data :
+    result?.result?.bootability ? result.result :
+    result?.bootability ? result :
+    result?.result || result || {};
   const boot = payload.bootability || payload.boot_report || {};
   const score = Number(boot.score ?? payload.score ?? payload.boot_score);
-  const findings = payload.findings || boot.findings || payload.blockers || [];
+  const warnings = boot.warnings || [];
+  const blockers = boot.blockers || [];
+  const checks = boot.checks || [];
+  const findings = payload.findings || [
+    ...blockers.map((b) => ({
+      severity: 'high',
+      title: b.title || b.check_id || 'Blocker',
+      detail: b.message || '',
+      fix: b.remediation || '',
+    })),
+    ...warnings.map((w) => ({
+      severity: 'medium',
+      title: w.title || w.check_id || 'Warning',
+      detail: w.message || '',
+      fix: w.remediation || '',
+    })),
+    ...checks.filter((c) => c.passed === false).map((c) => ({
+      severity: (c.severity || 'medium').toLowerCase(),
+      title: c.name || c.id || 'Check',
+      detail: c.message || '',
+      fix: c.remediation || '',
+    })),
+  ];
   const normalized = (Array.isArray(findings) ? findings : []).map((f) => ({
     severity: f.severity || f.level || 'info',
     title: f.title || f.id || f.check || 'Finding',
