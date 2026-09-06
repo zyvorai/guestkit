@@ -3504,10 +3504,9 @@ function setupWizard() {
 }
 
 function setupTheme() {
-  var saved = null;
-  try { saved = localStorage.getItem('zyvor.theme'); } catch (e) {}
-  document.documentElement.dataset.theme =
-    ['carbon', 'phosphor', 'solaris', 'abyss'].includes(saved) ? saved : 'phosphor';
+  // Zyvor orange/white GA is the sole product UX — no multi-theme skins.
+  try { localStorage.removeItem('zyvor.theme'); } catch (e) {}
+  delete document.documentElement.dataset.theme;
 }
 
 function setupGlassToggle() {

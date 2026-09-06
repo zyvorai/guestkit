@@ -1,23 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="phosphor">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <script>try{var t=localStorage.getItem('zyvor.theme');if(['carbon','phosphor','solaris','abyss'].indexOf(t)>=0)document.documentElement.dataset.theme=t;}catch(e){}</script>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='8' y1='8' x2='56' y2='56' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23ff8a3d'/%3E%3Cstop offset='1' stop-color='%23f0583a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23bg)'/%3E%3Cpath d='M19 18h26v7L29 40h16v7H19v-7l16-15H19z' fill='%23fff'/%3E%3C/svg%3E">
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='8' y1='8' x2='56' y2='56' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23ff8a3d'/%3E%3Cstop offset='1' stop-color='%23f0583a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23bg)'/%3E%3Cpath d='M19 18h26v7L29 40h16v7H19v-7l16-15H19z' fill='%23fff'/%3E%3C/svg%3E">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="color-scheme" content="dark" />
+  <meta name="color-scheme" content="light" />
   <title>GuestKit — Offline VM Intelligence</title>
+  <!-- Structural layout only; Zyvor orange/white GA is the sole product UX. -->
   <link rel="stylesheet" href="abyss-tokens.css?v=20260627abyss1" />
-  <link rel="stylesheet" href="abyss-shell.css?v=20260627abyss1" />
   <link rel="stylesheet" href="abyss-components.css?v=20260710fix14" />
   <link rel="stylesheet" href="style.css?v=20260627abyss1" />
-  <link rel="stylesheet" href="phosphor-tokens.css?v=20260710phosphor3" />
-  <link rel="stylesheet" href="phosphor-shell.css?v=20260710phosphor3" />
-  <link rel="stylesheet" href="carbon-tokens.css?v=20260710carbon2" />
-  <link rel="stylesheet" href="carbon-shell.css?v=20260710carbon2" />
-  <link rel="stylesheet" href="solaris-tokens.css?v=20260710solaris1" />
-  <link rel="stylesheet" href="solaris-shell.css?v=20260710solaris1" />
   <link rel="stylesheet" href="zyvor-ux.css?v=20260906ga1" />
 </head>
 <body>
@@ -654,70 +647,35 @@
 
   <footer class="nebula-footer" role="contentinfo">
     <a class="nebula-footer__logo" href="https://zyvor.dev" target="_blank" rel="noopener noreferrer" title="zyvor.dev">
-      <img src="img/zavor-logo.webp" width="66" height="22" alt="Zyvor" />
+      <img src="img/zyvor-logo.png" width="66" height="22" alt="Zyvor" />
     </a>
     <span class="nebula-footer__line">
       <a class="nebula-footer__link" href="https://zyvor.dev" target="_blank" rel="noopener noreferrer">zyvor.dev</a>
-      <span class="nebula-footer__sep" aria-hidden="true">·</span>
-      <span class="nebula-footer__brand">HyperSDK</span>
       <span class="nebula-footer__sep" aria-hidden="true">·</span>
       <span class="nebula-footer__copy">Built by Zyvor</span>
     </span>
   </footer>
   </div>
-  <button id="themeToggle" type="button" aria-label="Switch theme" title="Switch theme (Abyss / Phosphor)">
-    <span aria-hidden="true">◐</span> <span id="themeName">Abyss</span>
-  </button>
   <style>
-    #themeToggle{
-      position:fixed; right:16px; bottom:16px; z-index:9999;
-      display:inline-flex; align-items:center; gap:7px;
-      font-family:var(--font-mono); font-size:12px; letter-spacing:.04em;
-      color:var(--text-main); background:var(--bg-panel-strong);
-      border:1px solid var(--border-strong); border-radius:22px;
-      padding:8px 14px; cursor:pointer; box-shadow:var(--glow-indigo);
-      -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
-      transition:border-color .15s, transform .15s;
-    }
-    #themeToggle:hover{border-color:var(--accent); transform:translateY(-1px)}
-    #themeToggle:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
-
-    /* ── Zyvor brand footer — zyvor.dev · HyperSDK · © (matches PacketWolf) ── */
+    /* ── Zyvor brand footer ── */
     .nebula-footer{
       display:flex; align-items:center; justify-content:center; flex-wrap:wrap;
       gap:12px 14px; padding:16px 20px 22px; margin-top:8px;
-      border-top:1px solid var(--border-soft, var(--border-strong));
-      font-family:var(--font-mono); font-size:12px; line-height:1.5;
-      color:var(--text-muted, var(--text-soft));
+      border-top:1px solid rgba(0,0,0,.08);
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif; font-size:12px; line-height:1.5;
+      color:#6f625b;
     }
     .nebula-footer__logo{display:inline-flex; align-items:center; border-radius:6px; opacity:.9; transition:opacity .15s}
     .nebula-footer__logo:hover{opacity:1}
     .nebula-footer__logo img{height:22px; width:auto; display:block}
-    .nebula-footer__logo:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+    .nebula-footer__logo:focus-visible{outline:2px solid #f36b21; outline-offset:3px}
     .nebula-footer__line{display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap}
-    .nebula-footer__link{color:var(--accent); text-decoration:none; font-weight:600}
+    .nebula-footer__link{color:#f36b21; text-decoration:none; font-weight:600}
     .nebula-footer__link:hover{text-decoration:underline}
-    .nebula-footer__link:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:3px}
-    .nebula-footer__sep{color:var(--text-muted, var(--text-soft)); opacity:.6}
-    .nebula-footer__brand{font-weight:600}
+    .nebula-footer__link:focus-visible{outline:2px solid #f36b21; outline-offset:2px; border-radius:3px}
+    .nebula-footer__sep{opacity:.6}
     .nebula-footer__copy{opacity:.85}
   </style>
-  <script>
-    (function(){
-      var THEMES=['carbon','phosphor','solaris'];
-      var LABELS={carbon:'Carbon',phosphor:'Phosphor',solaris:'Solaris'};
-      var btn=document.getElementById('themeToggle'), name=document.getElementById('themeName');
-      function cur(){var t=document.documentElement.dataset.theme; return LABELS[t]?t:'phosphor';}
-      function paint(){name.textContent = LABELS[cur()];}
-      paint();
-      btn.addEventListener('click',function(){
-        var next = THEMES[(THEMES.indexOf(cur())+1)%THEMES.length];
-        document.documentElement.dataset.theme = next;
-        try{localStorage.setItem('zyvor.theme', next);}catch(e){}
-        paint();
-      });
-    })();
-  </script>
   <script src="guestkit-auth.js?v=20260710fix14"></script>
   <script src="guestkit-journey.js?v=20260710fix14"></script>
   <script src="guestkit-nebula.js?v=20260710fix14"></script>

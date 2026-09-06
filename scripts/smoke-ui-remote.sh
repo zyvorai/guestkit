@@ -2,10 +2,10 @@
 # Copyright 2026 Zyvor
 # SPDX-License-Identifier: Apache-2.0
 # ============================================================================
-# smoke-ui-remote.sh — Verify a running GuestKit UI instance
+# smoke-ui-remote.sh — Verify a running GuestKit UI instance (HTTPS)
 # ============================================================================
 # Usage:
-#   GUESTKIT_UI_URL=http://212.8.248.187:27173 ./scripts/smoke-ui-remote.sh
+#   GUESTKIT_UI_URL=https://212.8.248.187:27173 ./scripts/smoke-ui-remote.sh
 #   ./scripts/smoke-ui-remote.sh --port 27173
 #   ./scripts/smoke-ui-remote.sh   # uses HOST:PORT from .deploy-ui-last
 #
@@ -39,14 +39,16 @@ if [ -z "$BASE" ]; then
   PORT_RESOLVED="${PORT_FROM_CLI:-${GUESTKIT_UI_PORT:-$PORT_FROM_LAST}}"
   HOST_RESOLVED="${GUESTKIT_UI_HOST:-$HOST_FROM_LAST}"
   if [ -n "$HOST_RESOLVED" ] && [ -n "$PORT_RESOLVED" ]; then
-    BASE="http://${HOST_RESOLVED}:${PORT_RESOLVED}"
+    BASE="https://${HOST_RESOLVED}:${PORT_RESOLVED}"
   fi
 fi
 [ -n "$BASE" ] || {
-  echo "Set GUESTKIT_UI_URL=http://host:port, or --port / GUESTKIT_UI_PORT with host from .deploy-ui-last" >&2
+  echo "Set GUESTKIT_UI_URL=https://host:port, or --port / GUESTKIT_UI_PORT with host from .deploy-ui-last" >&2
   exit 2
 }
 BASE="${BASE%/}"
+# Lab certs are self-signed
+CURL=(curl -ksS)
 TMP="${TMPDIR:-/tmp}"
 
 pass() { printf '  ✅ %s\n' "$*"; }
@@ -54,23 +56,25 @@ fail() { printf '  ❌ %s\n' "$*" >&2; exit 1; }
 
 echo "GuestKit UI smoke → ${BASE}"
 
-code="$(curl -sS -o "${TMP}/gk-ui.html" -w '%{http_code}' "${BASE}/")"
+code="$("${CURL[@]}" -o "${TMP}/gk-ui.html" -w '%{http_code}' "${BASE}/")"
 [ "$code" = "200" ] || fail "index HTTP ${code}"
 grep -qi 'GuestKit\|zyvor' "${TMP}/gk-ui.html" || fail "index body unexpected"
 grep -q 'zyvor-ux.css\|zyvor-ux.js' "${TMP}/gk-ui.html" || fail "Zyvor GA UX assets not linked"
 grep -qi 'Built by Zyvor' "${TMP}/gk-ui.html" || fail "footer missing Built by Zyvor"
+grep -qi 'HyperSDK' "${TMP}/gk-ui.html" && fail "HyperSDK still present in UI" || true
 pass "index + Zyvor GA UX"
 
-code="$(curl -sS -o "${TMP}/gk-login.html" -w '%{http_code}' "${BASE}/login.html")"
+code="$("${CURL[@]}" -o "${TMP}/gk-login.html" -w '%{http_code}' "${BASE}/login.html")"
 [ "$code" = "200" ] || fail "login HTTP ${code}"
 grep -q 'zyvor-ux.css\|zyvor-ux.js' "${TMP}/gk-login.html" || fail "login missing Zyvor GA UX"
+grep -qi 'HyperSDK' "${TMP}/gk-login.html" && fail "HyperSDK still present on login" || true
 pass "login"
 
-code="$(curl -sS -o /dev/null -w '%{http_code}' "${BASE}/zyvor-ux.css")"
+code="$("${CURL[@]}" -o /dev/null -w '%{http_code}' "${BASE}/zyvor-ux.css")"
 [ "$code" = "200" ] || fail "zyvor-ux.css HTTP ${code}"
 pass "zyvor-ux.css"
 
-code="$(curl -sS -o /dev/null -w '%{http_code}' "${BASE}/zyvor-ux.js")"
+code="$("${CURL[@]}" -o /dev/null -w '%{http_code}' "${BASE}/zyvor-ux.js")"
 [ "$code" = "200" ] || fail "zyvor-ux.js HTTP ${code}"
 pass "zyvor-ux.js"
 

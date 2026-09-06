@@ -1,23 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="phosphor">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <script>try{var t=localStorage.getItem('zyvor.theme');if(['carbon','phosphor','solaris','abyss'].indexOf(t)>=0)document.documentElement.dataset.theme=t;}catch(e){}</script>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='8' y1='8' x2='56' y2='56' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23ff8a3d'/%3E%3Cstop offset='1' stop-color='%23f0583a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23bg)'/%3E%3Cpath d='M19 18h26v7L29 40h16v7H19v-7l16-15H19z' fill='%23fff'/%3E%3C/svg%3E">
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='8' y1='8' x2='56' y2='56' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23ff8a3d'/%3E%3Cstop offset='1' stop-color='%23f0583a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23bg)'/%3E%3Cpath d='M19 18h26v7L29 40h16v7H19v-7l16-15H19z' fill='%23fff'/%3E%3C/svg%3E">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="color-scheme" content="dark" />
+  <meta name="color-scheme" content="light" />
   <title>GuestKit — Sign In</title>
   <link rel="stylesheet" href="abyss-tokens.css?v=20260627abyss1" />
-  <link rel="stylesheet" href="abyss-shell.css?v=20260627abyss1" />
   <link rel="stylesheet" href="abyss-components.css?v=20260710fix6" />
   <link rel="stylesheet" href="style.css?v=20260627abyss1" />
-  <link rel="stylesheet" href="phosphor-tokens.css?v=20260710phosphor3" />
-  <link rel="stylesheet" href="phosphor-shell.css?v=20260710phosphor3" />
-  <link rel="stylesheet" href="carbon-tokens.css?v=20260710carbon2" />
-  <link rel="stylesheet" href="carbon-shell.css?v=20260710carbon2" />
-  <link rel="stylesheet" href="solaris-tokens.css?v=20260710solaris1" />
-  <link rel="stylesheet" href="solaris-shell.css?v=20260710solaris1" />
   <style>
     .login-page {
       min-height: 100vh;
@@ -25,36 +17,36 @@
       place-items: center;
       padding: 2rem;
       background:
-        radial-gradient(ellipse 50% 60% at 20% 20%, rgba(99, 102, 241, 0.18), transparent 55%),
-        radial-gradient(ellipse 45% 55% at 80% 80%, rgba(139, 92, 246, 0.14), transparent 50%),
-        radial-gradient(ellipse 35% 40% at 85% 10%, rgba(20, 184, 166, 0.12), transparent 48%),
-        var(--abyss-950);
+        radial-gradient(1200px 580px at 50% -220px, rgba(243, 107, 33, 0.13), transparent 72%),
+        #ffffff;
+      color: #1d1d1f;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif;
     }
     .login-card {
       width: min(420px, 100%);
       padding: 2rem;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-soft);
-      background: var(--bg-panel-strong);
+      border-radius: 24px;
+      border: 1px solid rgba(0,0,0,.08);
+      background: rgba(255,255,255,.92);
       backdrop-filter: blur(24px) saturate(1.8);
-      box-shadow: 0 16px 56px rgba(1, 12, 26, 0.60), 0 0 0 1px rgba(99, 102, 241, 0.08);
+      box-shadow: 0 22px 70px rgba(0,0,0,.10);
     }
-    .login-card h1 { margin: 0 0 0.35rem; font-size: 1.5rem; }
-    .login-card p { margin: 0 0 1.25rem; color: var(--text-secondary); }
+    .login-card h1 { margin: 0 0 0.35rem; font-size: 1.5rem; color: #1d1d1f; }
+    .login-card p { margin: 0 0 1.25rem; color: #6f625b; }
     .login-error {
       margin-bottom: 1rem;
       padding: 0.75rem 1rem;
-      border-radius: var(--radius);
-      background: rgba(212, 90, 90, 0.12);
-      color: var(--accent-red);
+      border-radius: 12px;
+      background: rgba(255, 69, 58, 0.12);
+      color: #ff453a;
       font-size: 0.9rem;
     }
     .login-actions { display: grid; gap: 0.75rem; }
-    .login-foot { margin-top: 1.25rem; font-size: 0.8rem; color: var(--text-muted); text-align: center; }
-    .login-hint { margin-top: 0.9rem; font-size: 0.78rem; color: var(--text-muted); text-align: center; line-height: 1.5; }
-    .login-hint code { font-family: var(--iw-mono, monospace); font-size: 0.78rem; padding: 1px 5px; border-radius: 5px; background: var(--bg-panel-strong, rgba(127,127,127,.14)); color: var(--text-primary, inherit); }
-    .login-credit { margin-top: 1.25rem; font-size: 0.75rem; color: var(--text-muted); text-align: center; opacity: .8; }
-    .login-credit a { color: var(--accent, #7cc7ff); text-decoration: none; font-weight: 600; }
+    .login-foot { margin-top: 1.25rem; font-size: 0.8rem; color: #95877f; text-align: center; }
+    .login-hint { margin-top: 0.9rem; font-size: 0.78rem; color: #95877f; text-align: center; line-height: 1.5; }
+    .login-hint code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.78rem; padding: 1px 5px; border-radius: 5px; background: rgba(0,0,0,.06); color: #1d1d1f; }
+    .login-credit { margin-top: 1.25rem; font-size: 0.75rem; color: #95877f; text-align: center; opacity: .8; }
+    .login-credit a { color: #f36b21; text-decoration: none; font-weight: 600; }
     .login-credit a:hover { text-decoration: underline; }
   </style>
   <link rel="stylesheet" href="zyvor-ux.css?v=20260906ga1" />
@@ -63,7 +55,7 @@
   <div class="login-page">
     <div class="login-card">
       <a href="https://zyvor.dev" target="_blank" rel="noopener noreferrer" title="zyvor.dev" style="display:inline-block;margin-bottom:1rem;border-radius:6px;">
-        <img src="img/zavor-logo.webp" width="120" height="40" alt="Zyvor · GuestKit" />
+        <img src="img/zyvor-logo.png" width="120" height="40" alt="Zyvor · GuestKit" />
       </a>
       <h1>Sign in to GuestKit</h1>
       <p class="login-subtitle" id="loginSubtitle">Authenticate to access the VM migration console.</p>

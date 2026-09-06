@@ -2,10 +2,10 @@
 # Copyright 2026 Zyvor
 # SPDX-License-Identifier: Apache-2.0
 # ============================================================================
-# deploy-ui-remote.sh — Deploy GuestKit web UI (nginx) to a remote host via Docker
+# deploy-ui-remote.sh — Deploy GuestKit web UI with built-in HTTPS (no nginx)
 # ============================================================================
-# Ships deploy/ui, builds guestkit-ui:zyvor-ga on the remote host, runs a
-# container published on a configurable TCP port.
+# Ships deploy/ui to the remote host and runs serve-https.py under systemd.
+# TLS is terminated by Python's ssl module (self-signed lab cert under tls/).
 #
 # Usage:
 #   ./scripts/deploy-ui-remote.sh <host> [user] [password] [options]
@@ -14,8 +14,8 @@
 #   ./scripts/deploy-ui-remote.sh 212.8.248.187 sus --uninstall
 #
 # Options:
-#   --port N      Host TCP port mapped to container :80
-#   --uninstall   Stop/remove the guestkit-ui container
+#   --port N      Host TCP port for HTTPS
+#   --uninstall   Stop/remove the guestkit-ui service + files
 #   --dry-run     Print what would happen; make no changes
 #   --skip-smoke  Skip the smoke-ui-remote.sh step
 #
@@ -38,9 +38,10 @@ warn()  { guestkit_ui_warn "$@"; }
 error() { guestkit_ui_error "$@"; }
 step()  { LAST_ACTION="$*"; deploy_ui_step_start "$*"; }
 
-CONTAINER_NAME=guestkit-ui
-IMAGE_NAME=guestkit-ui:zyvor-ga
+SERVICE_NAME=guestkit-ui
+REMOTE_DIR=/opt/guestkit-ui
 STATE_FILE=".deploy-ui-last"
+OLD_CONTAINER=guestkit-ui
 
 UNINSTALL_MODE=false
 DRY_RUN=false
@@ -87,7 +88,6 @@ PASS="${POSITIONAL[2]:-${DEPLOY_PASS:-}}"
 guestkit_ui_parse_target HOST USER
 LAST_PORT=""
 STATE_PATH="$REPO_DIR/$STATE_FILE"
-# Temporarily point deploy-ui state helpers at .deploy-ui-last
 deploy_ui_deploy_state_file() { echo "$1/$STATE_FILE"; }
 
 if [ -z "$HOST" ] && guestkit_ui_load_deploy_last "$REPO_DIR"; then
@@ -116,10 +116,11 @@ if [ "$GUESTKIT_UI_PORT" -lt 1 ] || [ "$GUESTKIT_UI_PORT" -gt 65535 ]; then
     error "Port out of range: ${GUESTKIT_UI_PORT}"
 fi
 
-[ -f "$REPO_DIR/deploy/ui/Dockerfile" ] || error "deploy/ui/Dockerfile missing"
+[ -f "$REPO_DIR/deploy/ui/serve-https.py" ] || error "deploy/ui/serve-https.py missing"
 [ -f "$REPO_DIR/deploy/ui/zyvor-ux.js" ] || error "zyvor-ux.js missing — run the Zyvor orange GA apply first"
 guestkit_ui_build_metadata "$REPO_DIR"
 DEPLOY_UI_PORT="$GUESTKIT_UI_PORT"
+DEPLOY_UI_SCHEME="https"
 
 SUDO=""
 [ "$USER" != "root" ] && SUDO="sudo"
@@ -167,25 +168,30 @@ _scp() {
 if $DRY_RUN; then
     deploy_ui_banner "${DEPLOY_UI_ICON_MAGIC} Dry run" "no changes will be made"
     deploy_ui_kv "🎯" "Target" "${USER}@${HOST}"
-    deploy_ui_kv "📦" "Image" "$IMAGE_NAME"
+    deploy_ui_kv "🔐" "TLS" "built-in (serve-https.py)"
     deploy_ui_kv "🌐" "Port" "$GUESTKIT_UI_PORT"
     echo ""
-    deploy_ui_note "Would: ship deploy/ui → docker build → run ${CONTAINER_NAME} -p ${GUESTKIT_UI_PORT}:80 → smoke"
+    deploy_ui_note "Would: ship deploy/ui → systemd ${SERVICE_NAME} on :${GUESTKIT_UI_PORT} (HTTPS) → smoke"
     echo ""
     exit 0
 fi
 
 deploy_ui_banner "UI Remote Deploy" "${GUESTKIT_GIT_VERSION} (${GUESTKIT_GIT_COMMIT}) → ${USER}@${HOST}"
 deploy_ui_kv "🎯" "Target" "${USER}@${HOST}"
+deploy_ui_kv "🔐" "TLS" "built-in HTTPS (no nginx)"
 deploy_ui_kv "🌐" "Port" "$GUESTKIT_UI_PORT"
 echo ""
 
 if $UNINSTALL_MODE; then
     deploy_ui_uninstall_banner
-    step "Removing ${CONTAINER_NAME} from ${HOST}"
+    step "Removing ${SERVICE_NAME} from ${HOST}"
     _ssh "
-        $SUDO docker rm -f $CONTAINER_NAME 2>/dev/null || true
-        $SUDO rm -rf /opt/guestkit-ui
+        $SUDO systemctl stop ${SERVICE_NAME} 2>/dev/null || true
+        $SUDO systemctl disable ${SERVICE_NAME} 2>/dev/null || true
+        $SUDO rm -f /etc/systemd/system/${SERVICE_NAME}.service
+        $SUDO systemctl daemon-reload 2>/dev/null || true
+        $SUDO docker rm -f ${OLD_CONTAINER} 2>/dev/null || true
+        $SUDO rm -rf ${REMOTE_DIR}
     "
     info "guestkit-ui removed from ${HOST}"
     exit 0
@@ -196,47 +202,51 @@ BUILD_DIR="$(mktemp -d)"
 trap 'rm -rf "$BUILD_DIR"' EXIT
 UI_STAGE="$BUILD_DIR/ui"
 mkdir -p "$UI_STAGE"
-# Prefer rsync-like copy of UI tree without Apple xattrs noise
 COPYFILE_DISABLE=1 tar -C "$REPO_DIR/deploy/ui" \
     --exclude='.DS_Store' --exclude='__pycache__' --exclude='tests' \
+    --exclude='Dockerfile' --exclude='Dockerfile.ga' --exclude='nginx.conf' \
     -cf - . | tar -C "$UI_STAGE" -xf -
-# Standalone static nginx — no zyvor-api upstream required for lab UI deploys.
-cat > "$UI_STAGE/nginx.conf" <<'NGINX'
-server {
-    listen 80;
-    server_name _;
-    root /usr/share/nginx/html;
-    index index.html;
-
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
-
-    location ~* \.(js|css)$ {
-        add_header Cache-Control "no-cache, must-revalidate";
-        try_files $uri =404;
-    }
-}
-NGINX
+chmod +x "$UI_STAGE/serve-https.py"
 COPYFILE_DISABLE=1 tar -C "$BUILD_DIR" -czf "$BUILD_DIR/ui.tgz" ui
-_ssh "$SUDO mkdir -p /opt/guestkit-ui && $SUDO chown ${USER}:${USER} /opt/guestkit-ui 2>/dev/null || true"
+_ssh "$SUDO mkdir -p ${REMOTE_DIR} && $SUDO chown ${USER}:${USER} ${REMOTE_DIR} 2>/dev/null || true"
 _scp "$BUILD_DIR/ui.tgz" "${USER}@${HOST}:/tmp/guestkit-ui.tgz"
 _ssh "
     set -euo pipefail
-    mkdir -p /opt/guestkit-ui
-    tar -C /opt/guestkit-ui -xzf /tmp/guestkit-ui.tgz
+    mkdir -p ${REMOTE_DIR}
+    tar -C ${REMOTE_DIR} -xzf /tmp/guestkit-ui.tgz
     rm -f /tmp/guestkit-ui.tgz
+    chmod +x ${REMOTE_DIR}/ui/serve-https.py
 "
-info "UI sources synced to /opt/guestkit-ui"
+info "UI sources synced to ${REMOTE_DIR}"
 
-step "Building and starting ${CONTAINER_NAME}"
+step "Installing systemd ${SERVICE_NAME} (built-in HTTPS)"
+UNIT_TMP="$BUILD_DIR/${SERVICE_NAME}.service"
+cat > "$UNIT_TMP" <<EOF
+[Unit]
+Description=GuestKit UI (built-in HTTPS)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=${REMOTE_DIR}/ui
+ExecStart=/usr/bin/python3 ${REMOTE_DIR}/ui/serve-https.py --port ${GUESTKIT_UI_PORT} --dir ${REMOTE_DIR}/ui
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+EOF
+_scp "$UNIT_TMP" "${USER}@${HOST}:/tmp/${SERVICE_NAME}.service"
 _ssh "
     set -euo pipefail
-    cd /opt/guestkit-ui/ui
-    $SUDO docker build -t $IMAGE_NAME -f Dockerfile .
-    $SUDO docker rm -f $CONTAINER_NAME 2>/dev/null || true
-    $SUDO docker run -d --name $CONTAINER_NAME --restart unless-stopped \
-        -p ${GUESTKIT_UI_PORT}:80 $IMAGE_NAME
+    command -v python3 >/dev/null
+    command -v openssl >/dev/null
+    # Tear down legacy nginx Docker lab path if present
+    $SUDO docker rm -f ${OLD_CONTAINER} 2>/dev/null || true
+    $SUDO mv /tmp/${SERVICE_NAME}.service /etc/systemd/system/${SERVICE_NAME}.service
+    $SUDO systemctl daemon-reload
+    $SUDO systemctl enable ${SERVICE_NAME}
+    $SUDO systemctl restart ${SERVICE_NAME}
     if command -v firewall-cmd &>/dev/null; then
         $SUDO firewall-cmd --permanent --add-port=${GUESTKIT_UI_PORT}/tcp 2>/dev/null || true
         $SUDO firewall-cmd --reload 2>/dev/null || true
@@ -244,21 +254,21 @@ _ssh "
         $SUDO ufw allow ${GUESTKIT_UI_PORT}/tcp 2>/dev/null || true
     fi
     sleep 1
-    $SUDO docker ps --filter name=$CONTAINER_NAME --format '{{.Status}}'
+    $SUDO systemctl is-active ${SERVICE_NAME}
 "
-info "${CONTAINER_NAME} running on port ${GUESTKIT_UI_PORT}"
+info "${SERVICE_NAME} listening on HTTPS port ${GUESTKIT_UI_PORT}"
 
 step "Verifying deployment"
-BASE_URL="http://${HOST}:${GUESTKIT_UI_PORT}"
-DEPLOY_UI_SCHEME="http"
-_ssh "curl -fsS http://127.0.0.1:${GUESTKIT_UI_PORT}/ >/dev/null" \
-    && info "UI OK (http://127.0.0.1:${GUESTKIT_UI_PORT}/, on-host)"
+BASE_URL="https://${HOST}:${GUESTKIT_UI_PORT}"
+DEPLOY_UI_SCHEME="https"
+_ssh "curl -kfsS https://127.0.0.1:${GUESTKIT_UI_PORT}/ >/dev/null" \
+    && info "UI OK (https://127.0.0.1:${GUESTKIT_UI_PORT}/, on-host)"
 
 guestkit_ui_save_deploy_last "$REPO_DIR" "$HOST" "$USER" "ui"
 
 deploy_ui_highlight "📋 Final checklist"
-deploy_ui_checklist "container" "$(_ssh_batch "$SUDO docker inspect -f '{{.State.Running}}' $CONTAINER_NAME" | tr -d '\r' | sed 's/true/active/;s/false/exited/')"
-deploy_ui_checklist "http"      "$(_ssh_batch "curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:${GUESTKIT_UI_PORT}/" | tr -d '\r')"
+deploy_ui_checklist "service" "$(_ssh_batch "$SUDO systemctl is-active ${SERVICE_NAME}" | tr -d '\r')"
+deploy_ui_checklist "https"   "$(_ssh_batch "curl -ksS -o /dev/null -w '%{http_code}' https://127.0.0.1:${GUESTKIT_UI_PORT}/" | tr -d '\r')"
 
 guestkit_ui_print_success "$HOST" 0
 
