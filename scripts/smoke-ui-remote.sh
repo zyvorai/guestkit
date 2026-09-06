@@ -60,14 +60,19 @@ code="$("${CURL[@]}" -o "${TMP}/gk-ui.html" -w '%{http_code}' "${BASE}/")"
 grep -qi 'GuestKit' "${TMP}/gk-ui.html" || fail "index missing GuestKit"
 grep -q 'brand-zyvor' "${TMP}/gk-ui.html" || fail "missing Zyvor brand mark class"
 grep -qi 'Built by Zyvor' "${TMP}/gk-ui.html" || fail "footer missing Built by Zyvor"
+grep -q 'api.js' "${TMP}/gk-ui.html" || fail "api.js not linked"
+grep -qi 'Image Vault\|/api/v1' "${TMP}/gk-ui.html" || fail "vault/API wiring missing from shell"
 grep -qi 'HyperSDK' "${TMP}/gk-ui.html" && fail "HyperSDK still present in UI" || true
-grep -q 'zyvor-ux' "${TMP}/gk-ui.html" && fail "old zyvor-ux overlay still linked" || true
-pass "index + Apple/KubeFlight shell"
+pass "index + Apple shell + API wiring"
 
 code="$("${CURL[@]}" -o "${TMP}/gk-login.html" -w '%{http_code}' "${BASE}/login.html")"
 [ "$code" = "200" ] || fail "login HTTP ${code}"
-grep -qi 'Built by Zyvor\|GuestKit' "${TMP}/gk-login.html" || fail "login body unexpected"
+grep -q 'api.js' "${TMP}/gk-login.html" || fail "login missing api.js"
 pass "login"
+
+code="$("${CURL[@]}" -o /dev/null -w '%{http_code}' "${BASE}/api.js")"
+[ "$code" = "200" ] || fail "api.js HTTP ${code}"
+pass "api.js"
 
 code="$("${CURL[@]}" -o /dev/null -w '%{http_code}' "${BASE}/demo-doctor.json")"
 [ "$code" = "200" ] || fail "demo-doctor.json HTTP ${code}"

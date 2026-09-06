@@ -14,10 +14,12 @@
 #   ./scripts/deploy-ui-remote.sh 212.8.248.187 sus --uninstall
 #
 # Options:
-#   --port N      Host TCP port for HTTPS
-#   --uninstall   Stop/remove the guestkit-ui service + files
-#   --dry-run     Print what would happen; make no changes
-#   --skip-smoke  Skip the smoke-ui-remote.sh step
+#   --port N           Host TCP port for HTTPS
+#   --api-upstream URL Proxy /api/* to zyvor-api (e.g. http://127.0.0.1:8080)
+#                      Also: GUESTKIT_API_UPSTREAM env
+#   --uninstall        Stop/remove the guestkit-ui service + files
+#   --dry-run          Print what would happen; make no changes
+#   --skip-smoke       Skip the smoke-ui-remote.sh step
 #
 # Port resolution (first match wins):
 #   1. --port N
@@ -47,6 +49,7 @@ UNINSTALL_MODE=false
 DRY_RUN=false
 SKIP_SMOKE=false
 PORT_FROM_CLI=""
+API_UPSTREAM_FROM_CLI=""
 POSITIONAL=()
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -59,11 +62,20 @@ while [ $# -gt 0 ]; do
             PORT_FROM_CLI="${1#*=}"
             shift
             ;;
+        --api-upstream)
+            [ $# -ge 2 ] || error "--api-upstream requires a value"
+            API_UPSTREAM_FROM_CLI="$2"
+            shift 2
+            ;;
+        --api-upstream=*)
+            API_UPSTREAM_FROM_CLI="${1#*=}"
+            shift
+            ;;
         --uninstall)  UNINSTALL_MODE=true; shift ;;
         --dry-run)    DRY_RUN=true; shift ;;
         --skip-smoke) SKIP_SMOKE=true; shift ;;
         --help|-h)
-            sed -n '2,36p' "$0" | sed 's/^# \{0,1\}//'
+            sed -n '2,40p' "$0" | sed 's/^# \{0,1\}//'
             exit 0
             ;;
         --)
@@ -118,7 +130,14 @@ fi
 
 [ -f "$REPO_DIR/deploy/ui/serve-https.py" ] || error "deploy/ui/serve-https.py missing"
 [ -f "$REPO_DIR/deploy/ui/index.html" ] || error "deploy/ui/index.html missing"
+[ -f "$REPO_DIR/deploy/ui/api.js" ] || error "deploy/ui/api.js missing"
 [ -f "$REPO_DIR/deploy/ui/demo-doctor.json" ] || error "deploy/ui/demo-doctor.json missing"
+
+if [ -n "$API_UPSTREAM_FROM_CLI" ]; then
+    GUESTKIT_API_UPSTREAM="$API_UPSTREAM_FROM_CLI"
+fi
+GUESTKIT_API_UPSTREAM="${GUESTKIT_API_UPSTREAM:-}"
+
 guestkit_ui_build_metadata "$REPO_DIR"
 DEPLOY_UI_PORT="$GUESTKIT_UI_PORT"
 DEPLOY_UI_SCHEME="https"
@@ -181,6 +200,7 @@ deploy_ui_banner "UI Remote Deploy" "${GUESTKIT_GIT_VERSION} (${GUESTKIT_GIT_COM
 deploy_ui_kv "🎯" "Target" "${USER}@${HOST}"
 deploy_ui_kv "🔐" "TLS" "built-in HTTPS (no nginx)"
 deploy_ui_kv "🌐" "Port" "$GUESTKIT_UI_PORT"
+deploy_ui_kv "🔌" "API proxy" "${GUESTKIT_API_UPSTREAM:-none}"
 echo ""
 
 if $UNINSTALL_MODE; then
@@ -222,6 +242,12 @@ info "UI sources synced to ${REMOTE_DIR}"
 
 step "Installing systemd ${SERVICE_NAME} (built-in HTTPS)"
 UNIT_TMP="$BUILD_DIR/${SERVICE_NAME}.service"
+API_ARGS=""
+API_ENV=""
+if [ -n "$GUESTKIT_API_UPSTREAM" ]; then
+    API_ARGS=" --api-upstream ${GUESTKIT_API_UPSTREAM}"
+    API_ENV="Environment=GUESTKIT_API_UPSTREAM=${GUESTKIT_API_UPSTREAM}"
+fi
 cat > "$UNIT_TMP" <<EOF
 [Unit]
 Description=GuestKit UI (built-in HTTPS)
@@ -230,7 +256,8 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=${REMOTE_DIR}/ui
-ExecStart=/usr/bin/python3 ${REMOTE_DIR}/ui/serve-https.py --port ${GUESTKIT_UI_PORT} --dir ${REMOTE_DIR}/ui
+${API_ENV}
+ExecStart=/usr/bin/python3 ${REMOTE_DIR}/ui/serve-https.py --port ${GUESTKIT_UI_PORT} --dir ${REMOTE_DIR}/ui${API_ARGS}
 Restart=on-failure
 RestartSec=3
 
