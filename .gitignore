@@ -35,3 +35,7 @@ wheels/
 
 # Local presentation exports
 presentations/
+
+# Deploy state (no secrets)
+.deploy-last
+.deploy-ui-last
