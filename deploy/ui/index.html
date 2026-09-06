@@ -30,7 +30,9 @@ h1{font-size:clamp(46px,7vw,82px);line-height:.98;letter-spacing:-.055em;margin:
 .btn{border:0;border-radius:999px;padding:12px 20px;font:600 15px inherit;cursor:pointer;transition:.2s}
 .primary{background:var(--blue);color:#fff}
 .secondary{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.danger{background:var(--red);color:#fff}
 .btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.55;cursor:default;transform:none}
+.btn.sm{padding:8px 14px;font-size:13px;border-radius:12px}
 .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
 .card{background:var(--card);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.7);box-shadow:var(--shadow);border-radius:30px;padding:28px}
 .card h2{font-size:24px;letter-spacing:-.03em;margin:0 0 6px}
@@ -38,7 +40,7 @@ h1{font-size:clamp(46px,7vw,82px);line-height:.98;letter-spacing:-.055em;margin:
 .drop{border:1.5px dashed #c7c7cc;border-radius:20px;padding:22px;text-align:center;background:rgba(255,255,255,.5);cursor:pointer}
 .drop strong{display:block;margin-bottom:5px}.drop span{color:var(--muted);font-size:13px}
 .rowctl{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 8px;align-items:center}
-select,input[type=url],input[type=text]{border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:14px inherit;background:#fff;color:var(--ink);outline:none}
+select,input[type=url],input[type=text],input[type=search]{border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:14px inherit;background:#fff;color:var(--ink);outline:none}
 select{min-width:140px}
 .vmlist{margin-top:14px;max-height:220px;overflow:auto;border:1px solid var(--line);border-radius:16px}
 .vmrow{display:flex;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px}
@@ -69,7 +71,27 @@ select{min-width:140px}
 .footer{text-align:center;color:var(--muted);padding:55px 0 10px;font-size:13px}
 textarea{width:100%;height:180px;resize:vertical;border:1px solid var(--line);border-radius:18px;padding:16px;background:#111113;color:#f5f5f7;font:12.5px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;outline:none}
 .hidden{display:none!important}
-@media(max-width:850px){.grid,.detailgrid,.ops,.chips{grid-template-columns:1fr}.hero{padding-top:62px}.score{font-size:78px}}
+.workspace-right{min-height:520px;display:flex;flex-direction:column}
+.panel-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px}
+.ptab{border:0;background:transparent;padding:8px 10px;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;color:var(--muted)}
+.ptab.on{background:#1d1d1f;color:#fff}
+.panel{flex:1;min-height:0}
+.filterbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.list{max-height:340px;overflow:auto;border:1px solid var(--line);border-radius:14px}
+.list .item{padding:10px 12px;border-bottom:1px solid var(--line);font-size:13px;cursor:default}
+.list .item:last-child{border-bottom:0}
+.list .item.clickable{cursor:pointer}.list .item.clickable:hover{background:rgba(0,0,0,.035)}
+.list .item .meta{color:var(--muted);font-size:12px;margin-top:3px}
+.kv{display:grid;grid-template-columns:140px 1fr;gap:8px 12px;font-size:13px}
+.kv dt{color:var(--muted)}.kv dd{margin:0;font-weight:600;word-break:break-word}
+.crumb{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;margin-bottom:10px}
+.crumb button{border:0;background:#e9e9ed;padding:4px 8px;border-radius:8px;cursor:pointer;font:inherit}
+.pre{white-space:pre-wrap;word-break:break-word;background:#111113;color:#f5f5f7;border-radius:14px;padding:14px;font:12px/1.5 ui-monospace,Menlo,monospace;max-height:280px;overflow:auto}
+.assure-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.assure-pane{border:1px solid var(--line);border-radius:16px;padding:14px;background:rgba(255,255,255,.5)}
+.assure-pane h4{margin:0 0 8px;font-size:14px}
+.assure-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+@media(max-width:850px){.grid,.detailgrid,.ops,.chips,.assure-grid{grid-template-columns:1fr}.hero{padding-top:62px}.score{font-size:78px}.kv{grid-template-columns:1fr}}
 </style>
 </head><body>
 <div class="nav"><div class="navin">
@@ -87,7 +109,7 @@ textarea{width:100%;height:180px;resize:vertical;border:1px solid var(--line);bo
 <section class="hero">
   <div class="eyebrow">Offline VM intelligence</div>
   <h1>Know if it will boot.<br>Before you power on.</h1>
-  <p>Import a disk into the vault, run doctor over the API, plan migration, and emit a Passport — wired to zyvor-api.</p>
+  <p>Import a disk into the vault, inspect inventory, run doctor, preview repairs, and browse the guest filesystem — wired to zyvor-api.</p>
   <div class="actions">
     <button class="btn primary" type="button" onclick="document.getElementById('file').click()">Import a disk</button>
     <button class="btn secondary" type="button" onclick="loadOfflineDemo()">Try offline demo</button>
@@ -131,21 +153,36 @@ textarea{width:100%;height:180px;resize:vertical;border:1px solid var(--line);bo
         <button class="btn primary" type="button" data-act="doctor">Doctor</button>
         <button class="btn secondary" type="button" data-act="plan">Migration plan</button>
         <button class="btn secondary" type="button" data-act="passport">Passport</button>
-        <button class="btn secondary" type="button" data-act="repair">Repair plan</button>
+        <button class="btn secondary" type="button" data-act="repair">Repair preview</button>
+        <button class="btn secondary" type="button" data-act="profile">Profiles</button>
         <button class="btn secondary" type="button" data-act="provision">Provision YAML</button>
+        <button class="btn secondary" type="button" data-act="explore">Browse files</button>
       </div>
     </div>
     <div id="offlineOps" class="hidden">
-      <textarea id="report" spellcheck="false" placeholder='Paste guestkit doctor --format json'></textarea>
-      <button class="btn primary" type="button" id="scoreOfflineBtn" style="width:100%;margin-top:12px;border-radius:14px">Score pasted report</button>
+      <textarea id="report" spellcheck="false" placeholder='Paste guestkit doctor --format json or inspect JSON'></textarea>
+      <button class="btn primary" type="button" id="scoreOfflineBtn" style="width:100%;margin-top:12px;border-radius:14px">Render pasted JSON</button>
     </div>
     <div class="statusline" id="status">Ready.</div>
   </div>
 
-  <div class="card">
-    <h2>Boot readiness</h2>
-    <p class="sub">Evidence from <code style="font:inherit">POST /api/v1/vms/:id/doctor</code> (or offline JSON).</p>
-    <div id="result"><div class="empty">Import a disk and run Doctor.</div></div>
+  <div class="card workspace-right">
+    <h2 id="panelTitle">Detail workspace</h2>
+    <p class="sub" id="panelSub">Run Inspect or Doctor on a vault image to fill these panes.</p>
+    <div class="panel-tabs" id="panelTabs">
+      <button class="ptab on" type="button" data-panel="summary">Summary</button>
+      <button class="ptab" type="button" data-panel="packages">Packages</button>
+      <button class="ptab" type="button" data-panel="services">Services</button>
+      <button class="ptab" type="button" data-panel="users">Users</button>
+      <button class="ptab" type="button" data-panel="network">Network</button>
+      <button class="ptab" type="button" data-panel="storage">Storage</button>
+      <button class="ptab" type="button" data-panel="kernel">Kernel</button>
+      <button class="ptab" type="button" data-panel="security">Security</button>
+      <button class="ptab" type="button" data-panel="assurance">Assurance</button>
+      <button class="ptab" type="button" data-panel="profiles">Profiles</button>
+      <button class="ptab" type="button" data-panel="files">Files</button>
+    </div>
+    <div class="panel" id="panelBody"><div class="empty">Import a disk and run Inspect.</div></div>
   </div>
 </section>
 
@@ -161,10 +198,20 @@ textarea{width:100%;height:180px;resize:vertical;border:1px solid var(--line);bo
 <script>
 const A=window.GuestKitAPI;
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const state={vms:[],selected:null,mode:'api',apiOk:false,lastJob:null,lastPlan:null,lastPass:null,lastYaml:null};
+const state={
+  vms:[],selected:null,mode:'api',apiOk:false,panel:'summary',
+  inspect:null,doctor:null,plan:null,repair:null,passport:null,yaml:null,profile:null,
+  explore:{path:'/',entries:[],preview:null},
+  filter:'',sevFilter:'all',
+};
 
 function setStatus(msg){document.getElementById('status').textContent=msg}
 function target(){return document.getElementById('target').value||'kubevirt'}
+function setPanel(name){
+  state.panel=name;
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.toggle('on',t.dataset.panel===name));
+  renderPanel();
+}
 
 function setApiPill(ok,text){
   const p=document.getElementById('apiPill');
@@ -227,18 +274,284 @@ async function refreshVault(){
   }catch(e){setStatus('Vault list failed: '+e.message)}
 }
 
-function renderDoctorView(d){
-  if(d.score==null){
-    document.getElementById('result').innerHTML=`<div class="empty">${esc(d.decision||'No score in result')}</div>`;
-    return;
+function filterInput(placeholder){
+  return `<div class="filterbar"><input type="search" id="panelFilter" placeholder="${esc(placeholder)}" value="${esc(state.filter)}" style="flex:1;min-width:160px"></div>`;
+}
+function bindFilter(){
+  const el=document.getElementById('panelFilter');
+  if(!el) return;
+  el.oninput=()=>{state.filter=el.value;renderPanel()};
+}
+function matchFilter(text){
+  const q=state.filter.trim().toLowerCase();
+  if(!q) return true;
+  return String(text||'').toLowerCase().includes(q);
+}
+
+function renderSummary(){
+  const i=state.inspect;
+  if(!i) return `<div class="empty">Run Inspect to populate Summary.</div>`;
+  const os=i.os||{};
+  return `${filterInput('Filter summary…')}<dl class="kv">
+    <dt>OS</dt><dd>${esc(os.product_name||os.distro||os.name||'—')}</dd>
+    <dt>Version</dt><dd>${esc(os.product_version||os.version||'—')}</dd>
+    <dt>Hostname</dt><dd>${esc(os.hostname||'—')}</dd>
+    <dt>Arch</dt><dd>${esc(os.arch||os.architecture||'—')}</dd>
+    <dt>Init</dt><dd>${esc(os.init_system||'—')}</dd>
+    <dt>Packages</dt><dd>${esc(i.packages.count)}</dd>
+    <dt>Services</dt><dd>${esc(i.services.count)}</dd>
+    <dt>Users</dt><dd>${esc(i.users.length)}</dd>
+  </dl>`;
+}
+
+function pkgName(p){return typeof p==='string'?p:(p.name||p.package||JSON.stringify(p))}
+function svcName(s){return typeof s==='string'?s:(s.name||s.unit||s.service||JSON.stringify(s))}
+function userName(u){return typeof u==='string'?u:(u.name||u.username||u.login||JSON.stringify(u))}
+
+function renderList(items, labelFn, empty){
+  const filtered=items.filter(x=>matchFilter(labelFn(x)));
+  if(!filtered.length) return `<div class="empty">${esc(empty)}</div>`;
+  return `<div class="list">${filtered.map(x=>{
+    const label=labelFn(x);
+    const meta=typeof x==='object'&&x?(x.version||x.state||x.shell||x.uid||''):'';
+    return `<div class="item"><b>${esc(label)}</b>${meta?`<div class="meta">${esc(meta)}</div>`:''}</div>`;
+  }).join('')}</div>`;
+}
+
+function renderPackages(){
+  const i=state.inspect; if(!i) return `<div class="empty">Run Inspect.</div>`;
+  return `${filterInput('Search packages…')}<div class="chips" style="margin-bottom:12px"><div class="chip"><b>${esc(i.packages.count)}</b><span>packages</span></div><div class="chip"><b>${esc(i.packages.manager||'—')}</b><span>manager</span></div><div class="chip"><b>${esc(i.packages.sample.length)}</b><span>shown</span></div></div>${renderList(i.packages.sample,pkgName,'No packages in sample.')}`;
+}
+function renderServices(){
+  const i=state.inspect; if(!i) return `<div class="empty">Run Inspect.</div>`;
+  const items=[...i.services.sample,...i.services.units];
+  return `${filterInput('Search services…')}<div class="chips" style="margin-bottom:12px"><div class="chip"><b>${esc(i.services.count)}</b><span>services</span></div><div class="chip"><b>${esc(items.length)}</b><span>shown</span></div><div class="chip"><b>${esc(target())}</b><span>target</span></div></div>${renderList(items,svcName,'No services in sample.')}`;
+}
+function renderUsers(){
+  const i=state.inspect; if(!i) return `<div class="empty">Run Inspect.</div>`;
+  return `${filterInput('Search users…')}${renderList(i.users,userName,'No users found.')}`;
+}
+function renderNetwork(){
+  const i=state.inspect; if(!i) return `<div class="empty">Run Inspect.</div>`;
+  const n=i.network||{};
+  const ifaces=n.interfaces||n.nics||n.sample||[];
+  const dns=n.dns||n.nameservers||[];
+  return `${filterInput('Search network…')}<dl class="kv" style="margin-bottom:14px">
+    <dt>Hostname</dt><dd>${esc(n.hostname||i.os?.hostname||'—')}</dd>
+    <dt>DNS</dt><dd>${esc(Array.isArray(dns)?dns.join(', '):JSON.stringify(dns)||'—')}</dd>
+  </dl>${renderList(Array.isArray(ifaces)?ifaces:[],x=>typeof x==='string'?x:(x.name||x.device||JSON.stringify(x)),'No interfaces.')}`;
+}
+function renderStorage(){
+  const i=state.inspect; if(!i) return `<div class="empty">Run Inspect.</div>`;
+  const s=i.storage||{};
+  const mounts=s.mounts||s.filesystems||s.volumes||[];
+  const mp=i.mountpoints;
+  return `${filterInput('Search storage…')}<dl class="kv" style="margin-bottom:14px">
+    <dt>Mountpoints</dt><dd>${esc(mp.count??(Array.isArray(mounts)?mounts.length:'—'))}</dd>
+  </dl>${renderList(Array.isArray(mounts)?mounts:[],x=>typeof x==='string'?x:(x.mount||x.path||x.device||JSON.stringify(x)),'No storage details in sample.')}`;
+}
+function renderKernel(){
+  const i=state.inspect; if(!i) return `<div class="empty">Run Inspect.</div>`;
+  const k=i.kernels||{};
+  const kernels=k.kernels||k.versions||k.sample||(typeof k==='object'?Object.keys(k).filter(x=>x!=='count'):[]);
+  const mods=i.kernel_modules;
+  const modList=mods.modules||mods.sample||[];
+  return `${filterInput('Search kernel…')}<div class="section"><h4 style="margin:0 0 8px">Kernels</h4>${renderList(Array.isArray(kernels)?kernels:[],x=>typeof x==='string'?x:(x.version||x.name||JSON.stringify(x)),'No kernels.')}</div>
+  <div class="section"><h4 style="margin:0 0 8px">Modules (sample)</h4>${renderList(Array.isArray(modList)?modList:[],x=>typeof x==='string'?x:(x.name||JSON.stringify(x)),'No modules.')}</div>`;
+}
+function renderSecurity(){
+  const i=state.inspect; if(!i) return `<div class="empty">Run Inspect.</div>`;
+  const s=i.security||{};
+  const fw=i.firewall||s.firewall||{};
+  const ssh=i.ssh||s.ssh||{};
+  return `<dl class="kv">
+    <dt>SELinux</dt><dd>${esc(s.selinux||s.selinux_status||'—')}</dd>
+    <dt>AppArmor</dt><dd>${esc(s.apparmor||s.apparmor_status||'—')}</dd>
+    <dt>Firewall</dt><dd>${esc(fw.enabled ?? fw.status ?? JSON.stringify(fw) ?? '—')}</dd>
+    <dt>SSH</dt><dd>${esc(ssh.enabled??ssh.status??(ssh.keys?ssh.keys.length+' keys':'—'))}</dd>
+  </dl>`;
+}
+
+function renderAssurance(){
+  const d=state.doctor;
+  let html='';
+  if(!d||d.score==null){
+    html+=`<div class="empty" style="padding:24px 10px">Run Doctor for a boot score.</div>`;
+  }else{
+    const cls=String(d.decision).startsWith('SAFE')?'safe':String(d.decision).startsWith('REVIEW')?'review':'stop';
+    const top=d.findings.slice(0,7);
+    html+=`<div class="scorewrap"><div class="score ${cls}">${d.score}</div><div class="decision ${cls}">${esc(d.decision)}</div></div>
+    <div class="chips"><div class="chip"><b>${top.filter(f=>['critical','high'].includes(String(f.severity).toLowerCase())).length}</b><span>high-risk</span></div><div class="chip"><b>${top.length}</b><span>findings shown</span></div><div class="chip"><b>${esc(target())}</b><span>target</span></div></div>
+    <div class="section">${top.map(f=>`<div class="finding"><div class="sev ${esc(String(f.severity).toLowerCase())}">${esc(f.severity)}</div><div><b>${esc(f.title)}</b><p>${esc(f.detail)}</p>${f.fix?`<p><strong>Fix:</strong> ${esc(f.fix)}</p>`:''}</div></div>`).join('')||'<div class="empty">No findings.</div>'}</div>`;
   }
-  const cls=String(d.decision).startsWith('SAFE')?'safe':String(d.decision).startsWith('REVIEW')?'review':'stop';
-  const top=d.findings.slice(0,7);
-  document.getElementById('result').innerHTML=`<div class="scorewrap"><div class="score ${cls}">${d.score}</div><div class="decision ${cls}">${esc(d.decision)}</div></div><div class="chips"><div class="chip"><b>${top.filter(f=>['critical','high'].includes(String(f.severity).toLowerCase())).length}</b><span>high-risk</span></div><div class="chip"><b>${top.length}</b><span>findings shown</span></div><div class="chip"><b>${esc(target())}</b><span>target</span></div></div><div class="section">${top.map(f=>`<div class="finding"><div class="sev ${esc(String(f.severity).toLowerCase())}">${esc(f.severity)}</div><div><b>${esc(f.title)}</b><p>${esc(f.detail)}</p>${f.fix?`<p><strong>Fix:</strong> ${esc(f.fix)}</p>`:''}</div></div>`).join('')||'<div class="empty">No findings.</div>'}</div>`;
-  document.getElementById('details').style.display='grid';
-  document.getElementById('blockers').innerHTML=top.filter(f=>['critical','high'].includes(String(f.severity).toLowerCase())).map(f=>`<div class="row"><span>${esc(f.title)}</span><span>${esc(f.severity)}</span></div>`).join('')||'<div class="empty">No critical blockers.</div>';
-  document.getElementById('planOut').innerHTML=state.lastPlan?`<div class="row"><span>Plan job</span><span>ready</span></div><div class="row"><span>Notes</span><span>${esc(JSON.stringify(state.lastPlan).slice(0,80))}…</span></div>`:'<div class="empty">Run migration plan.</div>';
-  document.getElementById('passOut').innerHTML=state.lastYaml?`<div class="row"><span>Provision</span><span>YAML ready</span></div>`:(state.lastPass?`<div class="row"><span>Passport</span><span>ready</span></div>`:'<div class="empty">Run passport / provision.</div>');
+  const plan=state.plan;
+  const repair=state.repair;
+  html+=`<div class="assure-grid">
+    <div class="assure-pane"><h4>Migration plan</h4>
+      ${plan?`<div class="row"><span>Score</span><span>${esc(plan.score??'—')}</span></div>
+        <div class="row"><span>Changes</span><span>${esc(plan.changes.length)}</span></div>
+        <div class="list" style="max-height:140px;margin-top:8px">${(plan.changes.slice(0,12).map(c=>`<div class="item">${esc(typeof c==='string'?c:(c.title||c.description||JSON.stringify(c)))}</div>`).join('')||'<div class="item">No required changes.</div>')}</div>
+        <div class="assure-actions"><button class="btn sm secondary" type="button" id="dlPlanBtn">Download plan JSON</button></div>`
+        :'<div class="empty" style="padding:16px">Run Migration plan.</div>'}
+    </div>
+    <div class="assure-pane"><h4>Repair plan</h4>
+      ${repair?`<div class="row"><span>Mode</span><span>${repair.dry_run?'dry-run':'apply'}</span></div>
+        <div class="row"><span>Ops</span><span>${esc(repair.operations.length)}</span></div>
+        <div class="list" style="max-height:140px;margin-top:8px">${(repair.operations.slice(0,12).map(o=>`<div class="item">${esc(typeof o==='string'?o:(o.title||o.op||o.name||JSON.stringify(o)))}</div>`).join('')||'<div class="item">No operations.</div>')}</div>
+        <div class="assure-actions">
+          <button class="btn sm secondary" type="button" id="dlRepairBtn">Download repair JSON</button>
+          <button class="btn sm danger" type="button" id="applyRepairBtn">Apply repair</button>
+        </div>`
+        :'<div class="empty" style="padding:16px">Run Repair preview.</div>'}
+    </div>
+    <div class="assure-pane"><h4>Passport</h4>
+      ${state.passport?`<div class="row"><span>Status</span><span>ready</span></div>
+        <div class="assure-actions"><button class="btn sm secondary" type="button" id="dlPassBtn">Download passport</button></div>`
+        :'<div class="empty" style="padding:16px">Run Passport.</div>'}
+    </div>
+    <div class="assure-pane"><h4>Provision</h4>
+      ${state.yaml?`<div class="row"><span>YAML</span><span>${esc(String(state.yaml).length)} chars</span></div>
+        <div class="assure-actions"><button class="btn sm secondary" type="button" id="dlYamlBtn">Download YAML</button></div>`
+        :'<div class="empty" style="padding:16px">Run Provision YAML.</div>'}
+    </div>
+  </div>`;
+  return html;
+}
+
+function bindAssuranceActions(){
+  const dlPlan=document.getElementById('dlPlanBtn');
+  if(dlPlan) dlPlan.onclick=()=>A.downloadJson('migration-plan.json', state.plan?.raw||state.plan);
+  const dlRepair=document.getElementById('dlRepairBtn');
+  if(dlRepair) dlRepair.onclick=()=>A.downloadJson('repair-plan.json', state.repair?.raw||state.repair);
+  const dlPass=document.getElementById('dlPassBtn');
+  if(dlPass) dlPass.onclick=()=>A.downloadJson('passport.json', state.passport);
+  const dlYaml=document.getElementById('dlYamlBtn');
+  if(dlYaml) dlYaml.onclick=()=>A.downloadText('provision.yaml', state.yaml, 'text/yaml');
+  const applyBtn=document.getElementById('applyRepairBtn');
+  if(applyBtn) applyBtn.onclick=()=>applyRepair();
+}
+
+function renderProfiles(){
+  const p=state.profile;
+  if(!p) return `<div class="empty">Run Profiles to load findings.</div>`;
+  const sev=state.sevFilter;
+  let findings=p.findings;
+  if(sev!=='all') findings=findings.filter(f=>String(f.severity).toLowerCase()===sev);
+  findings=findings.filter(f=>matchFilter(f.title+' '+f.detail+' '+f.profile));
+  return `<div class="filterbar">
+    <input type="search" id="panelFilter" placeholder="Search findings…" value="${esc(state.filter)}" style="flex:1;min-width:160px">
+    <select id="sevFilter"><option value="all">all</option><option value="critical">critical</option><option value="high">high</option><option value="medium">medium</option><option value="low">low</option><option value="info">info</option></select>
+    <button class="btn sm secondary" type="button" id="dlProfileBtn">Download</button>
+  </div>
+  <div class="chips" style="margin-bottom:12px"><div class="chip"><b>${esc(p.findings.length)}</b><span>findings</span></div><div class="chip"><b>${esc(findings.length)}</b><span>shown</span></div><div class="chip"><b>${esc((p.profiles||[]).length||'—')}</b><span>profiles</span></div></div>
+  ${findings.map(f=>`<div class="finding"><div class="sev ${esc(f.severity)}">${esc(f.severity)}</div><div><b>${esc(f.title)}</b><p>${esc(f.detail)}</p>${f.fix?`<p><strong>Fix:</strong> ${esc(f.fix)}</p>`:''}${f.profile?`<p class="meta">${esc(f.profile)}</p>`:''}</div></div>`).join('')||'<div class="empty">No findings for this filter.</div>'}`;
+}
+
+function bindProfileActions(){
+  bindFilter();
+  const sev=document.getElementById('sevFilter');
+  if(sev){sev.value=state.sevFilter;sev.onchange=()=>{state.sevFilter=sev.value;renderPanel()}}
+  const dl=document.getElementById('dlProfileBtn');
+  if(dl) dl.onclick=()=>A.downloadJson('profile.json', state.profile?.raw||state.profile);
+}
+
+function renderFiles(){
+  const ex=state.explore;
+  const parts=ex.path==='/'?['/']:['/',...ex.path.replace(/^\//,'').split('/')];
+  let acc='';
+  const crumbs=parts.map((part,idx)=>{
+    if(idx===0) return `<button type="button" data-path="/">/</button>`;
+    acc+='/'+part;
+    return `<button type="button" data-path="${esc(acc)}">${esc(part)}</button>`;
+  }).join('<span style="color:var(--muted)">/</span>');
+  const entries=(ex.entries||[]).filter(e=>matchFilter(e.name||e.path));
+  return `<div class="crumb">${crumbs}</div>
+    ${filterInput('Filter entries…')}
+    <div class="assure-actions" style="margin:0 0 10px">
+      <button class="btn sm secondary" type="button" id="refreshExploreBtn">Refresh</button>
+      <button class="btn sm secondary" type="button" id="upExploreBtn" ${ex.path==='/'?'disabled':''}>Up</button>
+    </div>
+    <div class="list" style="max-height:220px">${entries.map(e=>`<div class="item clickable" data-path="${esc(e.path)}" data-dir="${e.is_dir?1:0}" data-file="${e.is_file?1:0}"><b>${esc(e.name)}</b><div class="meta">${e.is_dir?'directory':(e.is_file?'file':'entry')}</div></div>`).join('')||'<div class="item">Empty directory (or run Browse files).</div>'}</div>
+    ${ex.preview?`<div class="section"><h4 style="margin:0 0 8px">${esc(ex.preview.path)}${ex.preview.truncated?' (truncated)':''}</h4><pre class="pre">${esc(ex.preview.content)}</pre></div>`:''}`;
+}
+
+function bindFilesActions(){
+  bindFilter();
+  document.querySelectorAll('.crumb button').forEach(btn=>{
+    btn.onclick=()=>exploreLs(btn.dataset.path);
+  });
+  document.querySelectorAll('.list .item.clickable').forEach(item=>{
+    item.onclick=()=>{
+      if(item.dataset.dir==='1') exploreLs(item.dataset.path);
+      else if(item.dataset.file==='1') exploreCat(item.dataset.path);
+    };
+  });
+  const refresh=document.getElementById('refreshExploreBtn');
+  if(refresh) refresh.onclick=()=>exploreLs(state.explore.path);
+  const up=document.getElementById('upExploreBtn');
+  if(up) up.onclick=()=>{
+    if(state.explore.path==='/') return;
+    const parent=state.explore.path.replace(/\/[^/]+$/,'')||'/';
+    exploreLs(parent);
+  };
+}
+
+function updateSideCards(){
+  const details=document.getElementById('details');
+  const has=state.doctor||state.plan||state.passport||state.yaml||state.repair;
+  details.style.display=has?'grid':'none';
+  if(!has) return;
+  const top=(state.doctor?.findings||[]).filter(f=>['critical','high'].includes(String(f.severity).toLowerCase()));
+  document.getElementById('blockers').innerHTML=top.map(f=>`<div class="row"><span>${esc(f.title)}</span><span>${esc(f.severity)}</span></div>`).join('')||'<div class="empty">No critical blockers.</div>';
+  document.getElementById('planOut').innerHTML=state.plan
+    ?`<div class="row"><span>Changes</span><span>${esc(state.plan.changes.length)}</span></div><div class="row"><span>Ops</span><span>${esc(state.plan.operations.length)}</span></div>`
+    :(state.repair?`<div class="row"><span>Repair ops</span><span>${esc(state.repair.operations.length)}</span></div>`:'<div class="empty">Run migration plan.</div>');
+  document.getElementById('passOut').innerHTML=state.yaml
+    ?`<div class="row"><span>Provision</span><span>YAML ready</span></div>`
+    :(state.passport?`<div class="row"><span>Passport</span><span>ready</span></div>`:'<div class="empty">Run passport / provision.</div>');
+}
+
+function renderPanel(){
+  const body=document.getElementById('panelBody');
+  const titles={
+    summary:['Summary','OS identity and inventory counts from inspect.'],
+    packages:['Packages','Package manager sample from the guest disk.'],
+    services:['Services','Enabled services / units from inspect.'],
+    users:['Users','Accounts discovered on the offline disk.'],
+    network:['Network','Interfaces and DNS from inspect.'],
+    storage:['Storage','Mounts and storage inventory.'],
+    kernel:['Kernel','Installed kernels and module sample.'],
+    security:['Security','SELinux / AppArmor / firewall / SSH posture.'],
+    assurance:['Assurance','Doctor score, migration plan, repair preview & apply.'],
+    profiles:['Profiles / Issues','Security and compliance profile findings.'],
+    files:['Files','Read-only guest filesystem browser.'],
+  };
+  const t=titles[state.panel]||titles.summary;
+  document.getElementById('panelTitle').textContent=t[0];
+  document.getElementById('panelSub').textContent=t[1];
+  const map={
+    summary:renderSummary,packages:renderPackages,services:renderServices,users:renderUsers,
+    network:renderNetwork,storage:renderStorage,kernel:renderKernel,security:renderSecurity,
+    assurance:renderAssurance,profiles:renderProfiles,files:renderFiles,
+  };
+  body.innerHTML=(map[state.panel]||renderSummary)();
+  if(state.panel==='assurance') bindAssuranceActions();
+  else if(state.panel==='profiles') bindProfileActions();
+  else if(state.panel==='files') bindFilesActions();
+  else bindFilter();
+  updateSideCards();
+}
+
+function applyInspect(view){
+  if(!view) return;
+  state.inspect=view;
+  if(state.panel==='assurance'||state.panel==='profiles'||state.panel==='files') return;
+  renderPanel();
+}
+
+function applyDoctor(view){
+  state.doctor=view;
+  setPanel('assurance');
 }
 
 async function runAssure(act){
@@ -247,51 +560,118 @@ async function runAssure(act){
   if(!vm){setStatus('Select a vault image first');return}
   const id=vm.id||vm.vm_id;
   const t=target();
-  const paths={
-    inspect:`/vms/${id}/inspect`,
-    doctor:A.doctorPath(id,t,true),
-    plan:A.planPath(id,t),
-    passport:A.passportPath(id,t),
-    repair:`/vms/${id}/repair-plan`,
-  };
   try{
     if(act==='provision'){
       setStatus('Generating provision YAML…');
       const data=await A.api(A.provisionPath(id,false),{method:'POST'});
-      state.lastYaml=data.data?.yaml||data.data;
-      document.getElementById('details').style.display='grid';
-      document.getElementById('passOut').innerHTML=`<div class="row"><span>YAML</span><span>${(state.lastYaml||'').length} chars</span></div>`;
-      document.getElementById('result').innerHTML=`<div class="empty">Provision YAML generated (${(state.lastYaml||'').length} bytes). Copy from browser console if needed.</div>`;
-      console.log('GuestKit provision YAML:\n', state.lastYaml);
-      setStatus('Provision YAML ready (also logged to console)');
+      state.yaml=data.data?.yaml||data.data;
+      setPanel('assurance');
+      setStatus('Provision YAML ready');
       return;
     }
+    if(act==='explore'){
+      setPanel('files');
+      await exploreLs(state.explore.path||'/');
+      return;
+    }
+    if(act==='repair'){
+      setStatus('Running repair preview (dry-run)…');
+      const job=await A.enqueueAndPoll(A.repairPath(id,true),'repair',{
+        onTick:({status,live})=>setStatus(`repair: ${status}${live.message?' — '+live.message:''}`),
+      });
+      state.repair=A.extractRepairView(job.result||job.data);
+      setPanel('assurance');
+      setStatus(`Repair preview — ${state.repair.operations.length} op(s)`);
+      return;
+    }
+    if(act==='profile'){
+      setStatus('Running profiles…');
+      const job=await A.enqueueAndPoll(A.profilePath(id),'profile',{
+        body:{profiles:['security','compliance','hardening','migration']},
+        onTick:({status,live})=>setStatus(`profile: ${status}${live.message?' — '+live.message:''}`),
+      });
+      state.profile=A.extractProfileView(job.result||job.data);
+      setPanel('profiles');
+      setStatus(`Profiles complete — ${state.profile.findings.length} finding(s)`);
+      return;
+    }
+    const paths={
+      inspect:`/vms/${id}/inspect`,
+      doctor:A.doctorPath(id,t,true),
+      plan:A.planPath(id,t),
+      passport:A.passportPath(id,t),
+    };
     setStatus(`Running ${act}…`);
     const job=await A.enqueueAndPoll(paths[act], act, {
       onTick:({status,live})=>setStatus(`${act}: ${status}${live.message?' — '+live.message:''}`),
     });
-    state.lastJob=job;
-    if(act==='doctor'){
-      const view=A.extractDoctorView(job.result||job.data);
-      renderDoctorView(view);
-      setStatus(`Doctor complete — score ${view.score ?? 'n/a'}`);
+    if(act==='inspect'){
+      const view=A.extractInspectView(job.result||job.data);
+      applyInspect(view);
+      setPanel('summary');
+      setStatus(view?'Inspect complete':'Inspect returned no inventory payload');
+    }else if(act==='doctor'){
+      applyDoctor(A.extractDoctorView(job.result||job.data));
+      setStatus(`Doctor complete — score ${state.doctor.score ?? 'n/a'}`);
     }else if(act==='plan'){
-      state.lastPlan=job.result||job.data;
-      document.getElementById('details').style.display='grid';
-      document.getElementById('planOut').innerHTML=`<div class="row"><span>Status</span><span>completed</span></div><div class="row"><span>Payload</span><span>see console</span></div>`;
-      console.log('migration-plan', state.lastPlan);
+      state.plan=A.extractPlanView(job.result||job.data);
+      setPanel('assurance');
       setStatus('Migration plan complete');
     }else if(act==='passport'){
-      state.lastPass=job.result||job.data;
-      document.getElementById('details').style.display='grid';
-      document.getElementById('passOut').innerHTML=`<div class="row"><span>Passport</span><span>completed</span></div>`;
-      console.log('passport', state.lastPass);
+      state.passport=A.unwrapJobData(job.result||job.data);
+      setPanel('assurance');
       setStatus('Passport complete');
-    }else{
-      setStatus(`${act} complete`);
-      console.log(act, job.result||job.data);
     }
   }catch(e){setStatus(act+' failed: '+e.message)}
+}
+
+async function applyRepair(){
+  if(!state.apiOk||!state.selected){setStatus('Select a vault image first');return}
+  if(!state.repair){setStatus('Run Repair preview first');return}
+  if(!confirm('Apply repair plan to the vault disk? This mutates the image. Continue?')) return;
+  const id=state.selected.id||state.selected.vm_id;
+  try{
+    setStatus('Applying repair…');
+    const job=await A.enqueueAndPoll(A.repairPath(id,false),'repair-apply',{
+      onTick:({status,live})=>setStatus(`repair-apply: ${status}${live.message?' — '+live.message:''}`),
+    });
+    state.repair=A.extractRepairView(job.result||job.data);
+    state.repair.dry_run=false;
+    setPanel('assurance');
+    setStatus('Repair apply complete');
+  }catch(e){setStatus('Repair apply failed: '+e.message)}
+}
+
+async function exploreLs(path){
+  if(!state.apiOk||!state.selected){setStatus('Select a vault image first');return}
+  const id=state.selected.id||state.selected.vm_id;
+  try{
+    setStatus(`Listing ${path}…`);
+    const job=await A.enqueueAndPoll(A.explorePath(id),'explore-ls',{
+      body:{action:'ls',path},
+      onTick:({status})=>setStatus(`explore: ${status}`),
+    });
+    const view=A.extractExploreView(job.result||job.data);
+    state.explore={path:view.path||path,entries:view.entries,preview:state.explore.preview};
+    setPanel('files');
+    setStatus(`Listed ${view.entries.length} entr${view.entries.length===1?'y':'ies'}`);
+  }catch(e){setStatus('Explore failed: '+e.message)}
+}
+
+async function exploreCat(path){
+  if(!state.apiOk||!state.selected) return;
+  const id=state.selected.id||state.selected.vm_id;
+  try{
+    setStatus(`Reading ${path}…`);
+    const job=await A.enqueueAndPoll(A.explorePath(id),'explore-cat',{
+      body:{action:'cat',path},
+      onTick:({status})=>setStatus(`explore: ${status}`),
+    });
+    const view=A.extractExploreView(job.result||job.data);
+    state.explore.preview={path:view.path,content:view.content,truncated:view.truncated};
+    renderPanel();
+    setStatus(`Loaded ${path}`);
+  }catch(e){setStatus('Read failed: '+e.message)}
 }
 
 async function uploadFile(file){
@@ -311,23 +691,37 @@ async function loadOfflineDemo(){
   state.mode='offline';
   document.getElementById('apiOps').classList.add('hidden');
   document.getElementById('offlineOps').classList.remove('hidden');
+  try{
+    const inspect=await fetch('demo-inspect.json').then(r=>r.json());
+    state.inspect=A.extractInspectView({inspect})||A.extractInspectView(inspect);
+  }catch(_){ /* optional */ }
   const d=await fetch('demo-doctor.json').then(r=>r.json());
   document.getElementById('report').value=JSON.stringify(d,null,2);
   scoreOffline();
+  if(state.inspect&&state.doctor?.score==null) setPanel('summary');
   document.querySelector('#workspace').scrollIntoView();
 }
 
 function scoreOffline(){
   try{
     const raw=JSON.parse(document.getElementById('report').value);
+    const inspect=A.extractInspectView(raw.inspect?raw:{inspect:raw})||A.extractInspectView(raw);
+    if(inspect&&(inspect.os||inspect.packages.sample.length||inspect.users.length)){
+      state.inspect=inspect;
+    }
     const view=A.extractDoctorView(raw);
     if(view.score==null && raw.score!=null){
       view.score=Math.round(Number(raw.score));
       view.decision=raw.decision||view.decision;
       view.findings=(raw.findings||[]).map(f=>({severity:f.severity,title:f.title,detail:f.detail||'',fix:f.fix||''}));
     }
-    renderDoctorView(view);
-    setStatus('Offline score rendered');
+    if(view.score!=null){
+      state.doctor=view;
+      setPanel('assurance');
+    }else if(state.inspect){
+      setPanel('summary');
+    }
+    setStatus('Offline JSON rendered');
   }catch(e){setStatus('Invalid JSON: '+e.message)}
 }
 
@@ -357,7 +751,9 @@ document.querySelectorAll('.tab').forEach(btn=>{
   };
 });
 document.querySelectorAll('[data-act]').forEach(btn=>btn.onclick=()=>runAssure(btn.dataset.act));
+document.querySelectorAll('.ptab').forEach(btn=>btn.onclick=()=>setPanel(btn.dataset.panel));
 
+renderPanel();
 probeApi();
 </script>
 </body></html>

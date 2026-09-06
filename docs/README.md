@@ -8,6 +8,7 @@ Offline VM intelligence and migration assurance
 |------|----------|
 | Getting started | [getting-started.md](user-guides/getting-started.md) |
 | Run from GHCR (Docker/Helm) | [guides/DOCKER.md](guides/DOCKER.md#published-images-ghcr) |
+| Web Image Vault (OSS UI) | [customer/using-the-dashboard.md](customer/using-the-dashboard.md) |
 | CLI guide | [cli-guide.md](user-guides/cli-guide.md) |
 | Migration assurance | [migration-assurance.md](features/migration-assurance.md) |
 | **QEMU / VirtIO runtime** | [qemu-runtime.md](features/qemu-runtime.md) |

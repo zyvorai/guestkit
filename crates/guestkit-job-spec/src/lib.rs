@@ -40,6 +40,7 @@ pub mod operations {
     pub const GUESTKIT_MIGRATE_PLAN: &str = "guestkit.migrate-plan";
     pub const GUESTKIT_REPAIR: &str = "guestkit.repair";
     pub const GUESTKIT_PASSPORT: &str = "guestkit.passport";
+    pub const GUESTKIT_EXPLORE: &str = "guestkit.explore";
 
     /// hyper2kvm operations (future)
     pub const HYPER2KVM_CONVERT: &str = "hyper2kvm.convert";

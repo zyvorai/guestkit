@@ -58,7 +58,11 @@ Product: [zyvor.dev/guestkit](https://zyvor.dev/guestkit?utm_source=github&utm_m
 | Capability | Open source (`zyvor-ui`) | Enterprise Image Vault |
 | --- | --- | --- |
 | Vault screen under SSO / RBAC | Lab / self-secured | ✅ |
-| Inspect · doctor · repair-plan · migration-plan | ✅ | ✅ + evidence pane |
+| Inspect inventory tabs (OS/packages/services/users/network/…) | ✅ | ✅ + evidence pane |
+| Doctor · migration-plan · passport · provision YAML | ✅ | ✅ |
+| Repair plan preview + gated apply | ✅ | ✅ |
+| Profiles / Issues | ✅ `POST …/profile` | ✅ |
+| Read-only Files browse (`guestkit.explore`) | ✅ | ✅ |
 | Attach / register `disk_path` (sources) | ✅ | ✅ |
 | Batch doctor | ✅ | ✅ Multi-select + API |
 | Launch / provision YAML (KubeVirt) | ✅ | ✅ |

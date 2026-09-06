@@ -1,0 +1,55 @@
+{
+  "source": "guestkit.inspect",
+  "operating_system": {
+    "product_name": "Ubuntu 22.04.4 LTS",
+    "distro": "ubuntu",
+    "product_version": "22.04",
+    "hostname": "demo-vm",
+    "arch": "x86_64",
+    "init_system": "systemd"
+  },
+  "packages": {
+    "count": 428,
+    "manager": "dpkg",
+    "sample": [
+      {"name": "openssh-server", "version": "1:8.9p1-3"},
+      {"name": "nginx", "version": "1.18.0-6"},
+      {"name": "qemu-guest-agent", "version": "1:6.2+dfsg-2"}
+    ]
+  },
+  "services": {
+    "count": 42,
+    "sample": ["ssh.service", "nginx.service", "cron.service"]
+  },
+  "users": [
+    {"name": "root", "uid": 0, "shell": "/bin/bash"},
+    {"name": "ubuntu", "uid": 1000, "shell": "/bin/bash"}
+  ],
+  "network": {
+    "hostname": "demo-vm",
+    "dns": ["1.1.1.1", "8.8.8.8"],
+    "interfaces": [
+      {"name": "eth0", "addresses": ["10.0.0.12/24"]},
+      {"name": "lo", "addresses": ["127.0.0.1/8"]}
+    ]
+  },
+  "storage": {
+    "mounts": [
+      {"mount": "/", "device": "/dev/vda1", "fstype": "ext4"},
+      {"mount": "/boot", "device": "/dev/vda2", "fstype": "ext4"}
+    ]
+  },
+  "mountpoints": {"count": 2},
+  "kernels": {
+    "versions": ["5.15.0-105-generic"]
+  },
+  "kernel_modules": {
+    "sample": ["virtio_net", "virtio_blk", "ext4"]
+  },
+  "security": {
+    "selinux": "disabled",
+    "apparmor": "enabled"
+  },
+  "firewall": {"status": "ufw inactive"},
+  "ssh": {"enabled": true}
+}

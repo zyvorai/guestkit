@@ -9,6 +9,7 @@
 pub mod agent;
 pub mod convert;
 pub mod doctor;
+pub mod explore;
 pub mod inspect;
 pub mod migrate_plan;
 pub mod passport;
@@ -18,6 +19,7 @@ pub mod repair;
 pub use agent::{AgentCallHandler, AgentDoctorHandler, AgentEvidenceHandler, AgentFixHandler};
 pub use convert::ConvertHandler;
 pub use doctor::DoctorHandler;
+pub use explore::ExploreHandler;
 pub use inspect::InspectHandler;
 pub use migrate_plan::MigratePlanHandler;
 pub use passport::PassportHandler;

@@ -9,7 +9,7 @@ use crate::{
     Worker, WorkerConfig, HandlerRegistry,
     handlers::{
         AgentCallHandler, AgentDoctorHandler, AgentEvidenceHandler, AgentFixHandler, ConvertHandler, DoctorHandler,
-        EchoHandler, InspectHandler,
+        EchoHandler, ExploreHandler, InspectHandler,
         MigratePlanHandler, PassportHandler, ProfileHandler, RepairHandler,
     },
     transport::file::{FileTransport, FileTransportConfig},
@@ -64,6 +64,7 @@ pub async fn run_daemon(args: DaemonArgs) -> Result<()> {
     registry.register(Arc::new(MigratePlanHandler));
     registry.register(Arc::new(PassportHandler));
     registry.register(Arc::new(RepairHandler));
+    registry.register(Arc::new(ExploreHandler));
     registry.register(Arc::new(ConvertHandler));
     registry.register(Arc::new(AgentEvidenceHandler));
     registry.register(Arc::new(AgentDoctorHandler));
@@ -83,6 +84,7 @@ pub async fn run_daemon(args: DaemonArgs) -> Result<()> {
         .with_operation("guestkit.migrate-plan")
         .with_operation("guestkit.passport")
         .with_operation("guestkit.repair")
+        .with_operation("guestkit.explore")
         .with_operation("guestkit.agent.evidence")
         .with_operation("guestkit.agent.doctor")
         .with_operation("guestkit.agent.call")

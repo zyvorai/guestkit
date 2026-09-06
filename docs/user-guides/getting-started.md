@@ -169,6 +169,15 @@ Run the whole web stack from prebuilt GHCR images (no build):
 docker compose -f deploy/docker-compose.ghcr.yml up -d   # → http://localhost:8088
 ```
 
+The OSS Image Vault UI renders **inspect inventory tabs** (Summary → Security), **Assurance** (doctor / plan / passport / repair preview+apply), **Profiles**, and **Files** browse — see [Using the Dashboard](../customer/using-the-dashboard.md).
+
+Lab HTTPS UI (static `deploy/ui` + built-in TLS, optional API proxy):
+
+```bash
+./scripts/deploy-ui-remote.sh <host> <user> --port 27173 \
+  --api-upstream http://127.0.0.1:8080
+```
+
 See [Docker → Published images](../guides/DOCKER.md#published-images-ghcr) for tags, Helm, and auth options.
 
 ## Integration with h2kvm

@@ -141,7 +141,13 @@ function pollJob(jobId, { intervalMs = 2000, timeoutMs = 300000, onTick } = {}) 
 }
 
 async function enqueueAndPoll(path, action, opts) {
-  const data = await api(path, { method: 'POST' });
+  const method = opts?.method || 'POST';
+  const headers = opts?.body ? { 'Content-Type': 'application/json' } : {};
+  const data = await api(path, {
+    method,
+    headers,
+    body: opts?.body ? JSON.stringify(opts.body) : undefined,
+  });
   const jobId = data.data?.job_id || data.data?.id;
   if (!jobId) throw new Error(`No job id from ${action}`);
   return pollJob(jobId, opts);
@@ -162,9 +168,26 @@ function passportPath(vmId, target) {
 function provisionPath(vmId, apply = false) {
   return `/vms/${vmId}/provision?apply=${apply ? 'true' : 'false'}`;
 }
+function repairPath(vmId, dryRun = true) {
+  const q = new URLSearchParams({ dry_run: String(!!dryRun), fix: 'boot' });
+  return `/vms/${vmId}/repair-plan?${q}`;
+}
+function profilePath(vmId) {
+  return `/vms/${vmId}/profile`;
+}
+function explorePath(vmId) {
+  return `/vms/${vmId}/explore`;
+}
+
+function unwrapJobData(result) {
+  if (!result) return {};
+  if (result.data && typeof result.data === 'object') return result.data;
+  if (result.result?.data && typeof result.result.data === 'object') return result.result.data;
+  if (result.result && typeof result.result === 'object') return result.result;
+  return result;
+}
 
 function extractDoctorView(result) {
-  // Worker wraps doctor JSON under result.data (sometimes result.result / boot_report).
   const payload =
     result?.data?.bootability ? result.data :
     result?.result?.data?.bootability ? result.result.data :
@@ -214,6 +237,145 @@ function extractDoctorView(result) {
   };
 }
 
+function extractInspectView(result) {
+  const root = unwrapJobData(result);
+  const inspect = root.inspect || root;
+  if (!inspect || typeof inspect !== 'object') return null;
+  if (!inspect.operating_system && !inspect.packages && !inspect.network && !inspect.source) {
+    // Might be a doctor payload mistaken for inspect
+    if (inspect.bootability || inspect.score != null) return null;
+  }
+  const os = inspect.operating_system || {};
+  const packages = inspect.packages || {};
+  const services = inspect.services || {};
+  const users = inspect.users || {};
+  const network = inspect.network || {};
+  const storage = inspect.storage || {};
+  const kernels = inspect.kernels || {};
+  const security = inspect.security || {};
+  const pkgSample = packages.sample || packages.packages || [];
+  const svcSample = services.sample || services.enabled_services || [];
+  const unitSample = (inspect.systemd_units && inspect.systemd_units.sample) || [];
+  const userList = Array.isArray(users)
+    ? users
+    : (users.users || users.accounts || users.sample || []);
+  return {
+    os,
+    packages: {
+      count: packages.count ?? (Array.isArray(pkgSample) ? pkgSample.length : 0),
+      manager: packages.manager || '',
+      sample: Array.isArray(pkgSample) ? pkgSample : [],
+    },
+    services: {
+      count: services.count ?? (Array.isArray(svcSample) ? svcSample.length : 0),
+      sample: Array.isArray(svcSample) ? svcSample : [],
+      units: Array.isArray(unitSample) ? unitSample : [],
+    },
+    users: Array.isArray(userList) ? userList : [],
+    network,
+    storage,
+    kernels,
+    kernel_modules: inspect.kernel_modules || {},
+    security,
+    firewall: inspect.firewall || {},
+    ssh: inspect.ssh || {},
+    mountpoints: inspect.mountpoints || {},
+    raw: inspect,
+  };
+}
+
+function extractPlanView(result) {
+  const data = unwrapJobData(result);
+  const changes =
+    data.required_changes ||
+    data.changes ||
+    data.migration?.required_changes ||
+    data.plan?.required_changes ||
+    [];
+  const ops =
+    data.operations ||
+    data.fix_plan?.operations ||
+    data.plan?.operations ||
+    data.ops ||
+    [];
+  const score = data.score ?? data.migration_score ?? data.migration?.score;
+  return {
+    score: score != null ? Number(score) : null,
+    target: data.target || '',
+    changes: Array.isArray(changes) ? changes : [],
+    operations: Array.isArray(ops) ? ops : [],
+    raw: data,
+  };
+}
+
+function extractRepairView(result) {
+  const data = unwrapJobData(result);
+  const ops =
+    data.operations ||
+    data.plan?.operations ||
+    data.fix_plan?.operations ||
+    data.steps ||
+    [];
+  return {
+    dry_run: data.dry_run !== false,
+    operations: Array.isArray(ops) ? ops : [],
+    summary: data.summary || data.message || '',
+    raw: data,
+  };
+}
+
+function extractProfileView(result) {
+  const data = unwrapJobData(result);
+  const findings = data.findings || data.issues || [];
+  const normalized = (Array.isArray(findings) ? findings : []).map((f) => ({
+    severity: String(f.severity || f.level || 'info').toLowerCase(),
+    title: f.title || f.item || 'Finding',
+    detail: f.description || f.detail || f.message || '',
+    fix: f.remediation || f.fix || '',
+    profile: (f.references && f.references[0]) || f.profile || data.profile_name || '',
+  }));
+  return {
+    findings: normalized,
+    profiles: data.profiles || [],
+    summary: data.summary || {},
+    raw: data,
+  };
+}
+
+function extractExploreView(result) {
+  const data = unwrapJobData(result);
+  return {
+    action: data.action || 'ls',
+    path: data.path || '/',
+    entries: Array.isArray(data.entries) ? data.entries : [],
+    content: data.content || '',
+    truncated: !!data.truncated,
+    size: data.size,
+    exists: data.exists,
+    is_dir: data.is_dir,
+    is_file: data.is_file,
+    raw: data,
+  };
+}
+
+function downloadJson(filename, obj) {
+  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function downloadText(filename, text, mime = 'text/plain') {
+  const blob = new Blob([String(text ?? '')], { type: mime });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
 window.GuestKitAPI = {
   API_BASE,
   getAuthToken,
@@ -233,5 +395,16 @@ window.GuestKitAPI = {
   planPath,
   passportPath,
   provisionPath,
+  repairPath,
+  profilePath,
+  explorePath,
+  unwrapJobData,
   extractDoctorView,
+  extractInspectView,
+  extractPlanView,
+  extractRepairView,
+  extractProfileView,
+  extractExploreView,
+  downloadJson,
+  downloadText,
 };

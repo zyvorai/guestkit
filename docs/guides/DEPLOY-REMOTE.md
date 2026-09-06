@@ -7,6 +7,10 @@ Deploy GuestKit to a Linux VM or bare-metal host over SSH, using the same workfl
 > `docker compose` or Helm instead of building from source. See
 > [Docker → Published images](DOCKER.md#published-images-ghcr). This SSH workflow
 > builds the **CLI binary** from source on the host.
+>
+> **Lab web UI only:** ship static `deploy/ui` with built-in HTTPS via
+> `./scripts/deploy-ui-remote.sh <host> <user> --port 27173 --api-upstream http://127.0.0.1:8080`.
+> Dashboard guide: [Using the Dashboard](../customer/using-the-dashboard.md).
 
 ## Quick start
 

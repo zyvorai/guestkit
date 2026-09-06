@@ -10,7 +10,7 @@ Offline VM intelligence and migration assurance — **Rust control plane** with 
 | **Pure Rust parsing** | ✅ Partition tables, FS signatures, evidence schema, boot engine, assurance APIs |
 | **In-process QCOW2 file read** | Partial — format detection + selective reads; full cluster walk defers to **qemu-nbd** |
 | **File access inside guests** | Via **loop devices / qemu-nbd** + host mount (`src/guestfs/`), not in-process ext4/NTFS parsers |
-| **Web UI** | ✅ Shipped — `deploy/ui/`, GHCR `zyvor-ui` |
+| **Web UI** | ✅ Shipped — `deploy/ui/` (inventory + Assurance + Profiles + Files), GHCR `zyvor-ui` |
 
 **Host dependencies (Linux):** `losetup`, `qemu-nbd` (for QCOW2/VMDK), kernel `nbd`/`loop` modules, optional `qemu-img` for format conversion.
 
@@ -34,7 +34,9 @@ Offline VM intelligence and migration assurance — **Rust control plane** with 
 
 Parallel platform runtime (same repo):
   zyvor-api (Axum) → Redis job queue → guestkit-worker (privileged)
+    jobs: inspect · doctor · migrate-plan · passport · repair · profile · explore · convert · agent.*
   PostgreSQL · KubeVirt client · guest-agent mTLS · PacketWolf hooks
+  UI: deploy/ui (static) proxies /api → zyvor-api; optional serve-https.py lab TLS
 ```
 
 ## Repository layout

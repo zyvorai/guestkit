@@ -74,7 +74,7 @@ fn summarize_inspection(full: &serde_json::Value) -> serde_json::Value {
         let sample: Vec<serde_json::Value> = packages
             .get("packages")
             .and_then(|p| p.as_array())
-            .map(|arr| arr.iter().take(30).cloned().collect())
+            .map(|arr| arr.iter().take(200).cloned().collect())
             .unwrap_or_default();
         out["packages"] = serde_json::json!({
             "count": packages.get("count").cloned().unwrap_or(serde_json::json!(0)),
@@ -86,7 +86,7 @@ fn summarize_inspection(full: &serde_json::Value) -> serde_json::Value {
         let sample: Vec<serde_json::Value> = services
             .get("enabled_services")
             .and_then(|p| p.as_array())
-            .map(|arr| arr.iter().take(20).cloned().collect())
+            .map(|arr| arr.iter().take(100).cloned().collect())
             .unwrap_or_default();
         out["services"] = serde_json::json!({
             "count": services.get("count").cloned().unwrap_or(serde_json::json!(0)),

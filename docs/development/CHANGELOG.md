@@ -7,12 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Web Image Vault TUI parity** — OSS `deploy/ui` renders inspect inventory tabs, Assurance (doctor / migration plan / passport / repair preview + gated apply), Profiles/Issues, and read-only Files browse (`guestkit.explore`). Docs: [using-the-dashboard.md](../customer/using-the-dashboard.md).
+- **`POST /api/v1/vms/:id/profile`** and **`POST /api/v1/vms/:id/explore`** — enqueue existing/new worker ops; repair-plan accepts `dry_run` query (default true).
+- **OpenAPI** documents profile, explore, and repair `dry_run`.
+
 ### Changed
 - **Suite positioning** — GuestKit certifies/repairs disks; **FluxVM** runs and
   manages VMs (network, cloud-init, TTL) and is the host-local **libvirt/virsh
   replacement**. `guestkit vm` stays a minimal lab/CI smoke path. Docs:
   [vm-runtime.md](../features/vm-runtime.md),
   [virsh-to-guestkit.md](../user-guides/virsh-to-guestkit.md).
+- **Inspect worker summary** — larger package/service samples (200/100) for UI lists.
 
 ### Fixed
 - **open-vm-tools false positive** — detect OSS `open-vm-tools` separately from

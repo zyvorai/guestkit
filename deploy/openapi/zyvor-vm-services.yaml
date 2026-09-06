@@ -91,7 +91,7 @@ paths:
           description: Job enqueued
   /vms/{id}/repair-plan:
     post:
-      summary: Enqueue repair plan job (dry-run default)
+      summary: Enqueue repair plan job (dry-run default; set dry_run=false to apply)
       parameters:
         - in: path
           name: id
@@ -99,6 +99,68 @@ paths:
           schema:
             type: string
             format: uuid
+        - in: query
+          name: dry_run
+          schema:
+            type: boolean
+            default: true
+        - in: query
+          name: fix
+          schema:
+            type: string
+            default: boot
+      responses:
+        '200':
+          description: Job enqueued
+  /vms/{id}/profile:
+    post:
+      summary: Enqueue security/compliance profile job
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                profiles:
+                  type: array
+                  items:
+                    type: string
+                  default: [security, compliance, hardening, migration]
+      responses:
+        '200':
+          description: Job enqueued
+  /vms/{id}/explore:
+    post:
+      summary: Enqueue read-only guest filesystem explore (ls|stat|cat)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: [ls, stat, cat]
+                  default: ls
+                path:
+                  type: string
+                  default: /
       responses:
         '200':
           description: Job enqueued

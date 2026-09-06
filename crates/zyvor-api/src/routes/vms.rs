@@ -266,6 +266,7 @@ pub async fn passport_vm(
 pub async fn repair_plan_vm(
     State(state): State<AppState>,
     Path(id): Path<Uuid>,
+    Query(query): Query<RepairQuery>,
 ) -> ApiResult<Json<ApiResponse<JobEnqueueResponse>>> {
     let vm = load_vm(&state, id).await?;
     let resp = submit_vm_job(
@@ -274,8 +275,111 @@ pub async fn repair_plan_vm(
         "guestkit.repair",
         "guestkit.repair.v1",
         serde_json::json!({
-            "fix": "boot",
-            "dry_run": true,
+            "fix": query.fix,
+            "dry_run": query.dry_run,
+        }),
+    )
+    .await?;
+    Ok(Json(ApiResponse::ok(resp)))
+}
+
+#[derive(Debug, Deserialize)]
+pub struct RepairQuery {
+    #[serde(default = "default_true")]
+    pub dry_run: bool,
+    #[serde(default = "default_fix_boot")]
+    pub fix: String,
+}
+
+fn default_true() -> bool {
+    true
+}
+
+fn default_fix_boot() -> String {
+    "boot".to_string()
+}
+
+#[derive(Debug, Deserialize)]
+pub struct ProfileRequest {
+    #[serde(default = "default_profiles")]
+    pub profiles: Vec<String>,
+}
+
+fn default_profiles() -> Vec<String> {
+    vec![
+        "security".into(),
+        "compliance".into(),
+        "hardening".into(),
+        "migration".into(),
+    ]
+}
+
+pub async fn profile_vm(
+    State(state): State<AppState>,
+    Path(id): Path<Uuid>,
+    body: Option<Json<ProfileRequest>>,
+) -> ApiResult<Json<ApiResponse<JobEnqueueResponse>>> {
+    let vm = load_vm(&state, id).await?;
+    let profiles = body
+        .map(|Json(b)| b.profiles)
+        .unwrap_or_else(default_profiles);
+    let profiles = if profiles.is_empty() {
+        default_profiles()
+    } else {
+        profiles
+    };
+    let resp = submit_vm_job(
+        &state,
+        &vm,
+        "guestkit.profile",
+        "guestkit.profile.v1",
+        serde_json::json!({
+            "profiles": profiles,
+            "options": {
+                "include_remediation": true
+            }
+        }),
+    )
+    .await?;
+    Ok(Json(ApiResponse::ok(resp)))
+}
+
+#[derive(Debug, Deserialize)]
+pub struct ExploreRequest {
+    #[serde(default = "default_explore_action")]
+    pub action: String,
+    #[serde(default = "default_explore_path")]
+    pub path: String,
+}
+
+fn default_explore_action() -> String {
+    "ls".into()
+}
+
+fn default_explore_path() -> String {
+    "/".into()
+}
+
+pub async fn explore_vm(
+    State(state): State<AppState>,
+    Path(id): Path<Uuid>,
+    Json(body): Json<ExploreRequest>,
+) -> ApiResult<Json<ApiResponse<JobEnqueueResponse>>> {
+    let action = body.action.to_lowercase();
+    if !matches!(action.as_str(), "ls" | "stat" | "cat") {
+        return Err(ApiError::bad_request(
+            "action must be one of: ls, stat, cat",
+        ));
+    }
+    let vm = load_vm(&state, id).await?;
+    let resp = submit_vm_job(
+        &state,
+        &vm,
+        "guestkit.explore",
+        "guestkit.explore.v1",
+        serde_json::json!({
+            "action": action,
+            "path": body.path,
         }),
     )
     .await?;

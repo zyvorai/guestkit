@@ -9,6 +9,6 @@ pub mod guestkit;
 pub use echo::EchoHandler;
 pub use guestkit::{
     AgentCallHandler, AgentDoctorHandler, AgentEvidenceHandler, AgentFixHandler, ConvertHandler, DoctorHandler,
-    InspectHandler, MigratePlanHandler, PassportHandler,
+    ExploreHandler, InspectHandler, MigratePlanHandler, PassportHandler,
     ProfileHandler, RepairHandler,
 };
