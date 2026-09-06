@@ -5,7 +5,7 @@ members = [".", "crates/guestkit-agent-protocol", "crates/guestkit-job-spec", "c
 
 [package]
 name = "guestkit"
-version = "1.2.1"
+version = "1.2.2"
 edition = "2021"
 authors = ["ZyvorAI Labs Private Limited <info@zyvor.dev>"]
 license = "Apache-2.0"

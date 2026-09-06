@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-09-06
+
 ### Added
 - **Web Image Vault TUI parity** — OSS `deploy/ui` detail workspace: inspect inventory tabs, Assurance (plan/passport/repair preview + gated apply), Profiles, and Files browse.
 - **API / worker** — `POST /api/v1/vms/:id/profile`, `POST /api/v1/vms/:id/explore` (`guestkit.explore` ls/stat/cat), repair `dry_run` query; larger inspect samples.

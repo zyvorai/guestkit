@@ -20,7 +20,7 @@ PROJECT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 # shellcheck source=lib/zyvor-company-accept.sh
 source "${SCRIPT_DIR}/lib/zyvor-company-accept.sh"
 require_zyvor_company_accept "${PROJECT_DIR}"
-VERSION="1.1.0"
+VERSION="1.2.2"
 REMOTE_DIR=""
 DEPLOY_PROFILE="full"
 DEPLOY_LOG="${GUESTKIT_DEPLOY_LOG:-${HOME}/.guestkit/deploy-$(date +%Y%m%d-%H%M%S).log}"
