@@ -53,9 +53,6 @@ EOF
   if [[ -f "${STAGE}/LICENSE.txt" ]]; then
     echo "  LICENSE.txt             cat LICENSE.txt — software license"
   fi
-  if [[ -f "${STAGE}/ZYVOR-COMPANY-TERMS.md" ]]; then
-    echo "  ZYVOR-COMPANY-TERMS.md  Zyvor distribution terms (install prompts ACCEPT)"
-  fi
   if [[ -f "${STAGE}/LEGAL-INDEX.txt" ]]; then
     echo "  LEGAL-INDEX.txt         index of all legal files"
   fi

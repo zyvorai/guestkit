@@ -14,9 +14,6 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
-# shellcheck source=lib/zyvor-company-accept.sh
-source "${SCRIPT_DIR}/lib/zyvor-company-accept.sh"
-require_zyvor_company_accept "${REPO_DIR}"
 
 FETCH=false
 REUSE_BUILD=false

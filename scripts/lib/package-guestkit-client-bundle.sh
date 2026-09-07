@@ -29,7 +29,7 @@ package_guestkit_client_bundle() {
     sed 's#")/\.\.#")#' "${build_dir}/scripts/selftest.sh" > "${stage}/test-selftest.sh"
     chmod +x "${stage}/test-selftest.sh"
     chmod +x "${lib}/copy-zyvor-legal-to-bundle.sh"
-    "${lib}/copy-zyvor-legal-to-bundle.sh" "${stage}" "${build_dir}" --with-accept
+    "${lib}/copy-zyvor-legal-to-bundle.sh" "${stage}" "${build_dir}"
 
     cat > "${stage}/guestkit.env.example" <<'ENV_EOF'
 # Optional — copy to guestkit.env
@@ -68,7 +68,7 @@ GuestKit — install guide
 
 HOST FIRST (Linux — offline disk inspection, not Kubernetes)
   1. tar xzf guestkit-*-linux-amd64.tar.gz && cd guestkit-*-linux-amd64
-  2. Read LICENSE (Apache 2.0) and ZYVOR-COMPANY-TERMS.md — ./install.sh prompts ACCEPT
+  2. Read LICENSE (Apache 2.0)
   3. ./install.sh
   4. ./test-host.sh
   5. ./test-selftest.sh --quick
@@ -96,7 +96,6 @@ NOT KUBERNETES — inspects offline VM disk images on this Linux host.
 FILES
   LICENSE               Apache-2.0 (source code — ZyvorAI Labs Private Limited)
   NOTICE                Copyright and attribution (Apache 2.0)
-  ZYVOR-COMPANY-TERMS.md  Zyvor distribution terms (read before install)
   LEGAL-INDEX.txt
   guestkit              Main CLI binary
   guestctl              Symlink to guestkit (same CLI)
@@ -121,7 +120,7 @@ README_EOF
     for req in HELP.txt START_HERE.txt install.sh uninstall.sh README.txt QUICKSTART.txt \
         HOST_SETUP.txt PREREQUISITES.txt install-client-deps.sh test-host.sh test-package.sh \
         test-selftest.sh guestkit guestctl guestkit.env.example \
-        LEGAL-INDEX.txt ZYVOR-COMPANY-TERMS.md LICENSE; do
+        LEGAL-INDEX.txt LICENSE; do
         if [[ ! -e "${stage}/${req}" ]]; then
             echo "package_guestkit_client_bundle: bundle missing ${req}" >&2
             return 1

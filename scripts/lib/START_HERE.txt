@@ -25,8 +25,6 @@
 
   cat LICENSE              software license (required reading)
   cat LEGAL-INDEX.txt      full list of legal files in this bundle
-  cat ZYVOR-COMPANY-TERMS.md   (if present) Zyvor distribution terms
-  ./install.sh will prompt you to accept before continuing.
 
   ──────────────────────────────────────────────────────────────
   IMPORTANT

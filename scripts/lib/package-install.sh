@@ -5,15 +5,6 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 cd "$ROOT"
 export PKG_INSTALL_ROOT="${ROOT}"
-if [[ -f "${ROOT}/.package-lib/zyvor-company-accept.sh" ]]; then
-  # shellcheck source=/dev/null
-  source "${ROOT}/.package-lib/zyvor-company-accept.sh"
-  require_zyvor_company_accept "${ROOT}"
-elif [[ -f "${ROOT}/ZYVOR-COMPANY-TERMS.md" ]] && [[ -f "${ROOT}/../scripts/lib/zyvor-company-accept.sh" ]]; then
-  # shellcheck source=/dev/null
-  source "${ROOT}/../scripts/lib/zyvor-company-accept.sh"
-  require_zyvor_company_accept "${ROOT}"
-fi
 # shellcheck source=/dev/null
 [[ -f "${ROOT}/.package-lib/package-ui.sh" ]] && source "${ROOT}/.package-lib/package-ui.sh"
 

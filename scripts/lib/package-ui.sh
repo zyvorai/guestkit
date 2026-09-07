@@ -224,10 +224,6 @@ pkg_license_help_text() {
         echo "  LICENSE.txt             cat LICENSE.txt — software license"
         any=1
     fi
-    if [[ -f "${root}/ZYVOR-COMPANY-TERMS.md" ]]; then
-        echo "  ZYVOR-COMPANY-TERMS.md  Zyvor distribution (install prompts ACCEPT)"
-        any=1
-    fi
     if [[ -f "${root}/LEGAL-INDEX.txt" ]]; then
         echo "  LEGAL-INDEX.txt         index of all legal files"
         any=1

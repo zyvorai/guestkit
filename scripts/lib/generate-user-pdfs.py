@@ -271,13 +271,11 @@ def legal_doc_links_html(stage: Path) -> str:
   items = [
     ("LICENSE", "LICENSE — software license"),
     ("LICENSE.txt", "LICENSE.txt — software license"),
-    ("ZYVOR-COMPANY-TERMS.md", "Zyvor distribution terms"),
     ("LEGAL-INDEX.txt", "Legal file index"),
   ]
   icons = {
     "LICENSE": "⚖️",
     "LICENSE.txt": "⚖️",
-    "ZYVOR-COMPANY-TERMS.md": "📜",
     "LEGAL-INDEX.txt": "📋",
   }
   for name, label in items:
@@ -515,7 +513,7 @@ def write_index(out_dir: Path, names: list[str], product: str) -> None:
             "     START_HERE.txt · HELP.txt · QUICKSTART.txt · README.txt",
             "",
             "  ⚖️  License & legal (bundle root)",
-            "     LICENSE · LEGAL-INDEX.txt · ZYVOR-COMPANY-TERMS.md (if present)",
+            "     LICENSE · LEGAL-INDEX.txt",
             "",
             "  🎨  Branding: docs/zyvor-logo.png",
             "",
