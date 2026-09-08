@@ -14,26 +14,26 @@ use std::io::Write;
 use std::path::{Path, PathBuf};
 
 impl Guestfs {
-    /// Find the root mountpoint (internal helper)
+    /// Find the host path where guest `/` is mounted.
     ///
-    /// Uses a deterministic selection: checks common root device names first,
-    /// then falls back to the mountpoint with the shortest path (most likely root).
+    /// Prefer the shortest recorded host mountpoint: guest `/` is mounted at
+    /// `mount_root` itself, while `/boot`, `/boot/efi`, etc. are longer paths
+    /// under it. Do **not** prefer well-known names like `/dev/sda1` —
+    /// Rocky/RHEL GenericCloud often puts root on `/dev/sda4` and EFI on
+    /// `/dev/sda2`; treating sda2 as root made uploads resolve under the
+    /// EFI vfat mount (`…/boot/efi/etc/…`) and fail with ENOENT.
     pub(crate) fn find_root_mountpoint(&self) -> Result<&str> {
-        // Try well-known root device names first
-        let well_known = [
-            "/dev/sda1",
-            "/dev/sda2",
-            "/dev/vda1",
-            "/dev/hda1",
-            "/dev/xvda1",
-        ];
-        for dev in &well_known {
-            if let Some(mp) = self.mounted.get(*dev) {
+        if let Some(root) = &self.mount_root {
+            let root_s = root.to_string_lossy();
+            if let Some(mp) = self
+                .mounted
+                .values()
+                .find(|mp| mp.as_str() == root_s.as_ref())
+            {
                 return Ok(mp.as_str());
             }
         }
 
-        // Fall back to the mountpoint with the shortest path (deterministic, likely root)
         self.mounted
             .values()
             .min_by_key(|mp| mp.len())
