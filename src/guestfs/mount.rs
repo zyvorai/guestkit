@@ -278,6 +278,11 @@ impl Guestfs {
     /// "Read-only file system" — `mkdir` for that never-before-created
     /// directory ran against a root still mounted read-only from
     /// inspection.
+    ///
+    /// XFS roots (Rocky/RHEL GenericCloud) are inspected with
+    /// `ro,norecovery,nouuid`. The kernel rejects `remount,rw` on a
+    /// `norecovery` mount ("mount point not mounted or bad option"). In
+    /// that case unmount and remount fresh read-write with `nouuid`.
     fn remount_rw(&mut self, mountable: &str) -> Result<()> {
         let resolved = self.resolve_mountable(mountable)?;
         let mountpoint = self.mounted.get(&resolved).cloned().ok_or_else(|| {
@@ -286,6 +291,36 @@ impl Guestfs {
             ))
         })?;
 
+        if self.exec_remount_rw(&mountpoint).is_ok() {
+            return Ok(());
+        }
+
+        // Capture the host block device before tearing down the RO mount.
+        let device = match self.host_source_for_mountpoint(&mountpoint) {
+            Ok(d) => d,
+            Err(_) => {
+                let (_m, device_partition, _mp) =
+                    self.prepare_mount_device_only(&resolved, &mountpoint)?;
+                device_partition
+            }
+        };
+
+        let fs_type = self.vfs_type(&resolved).unwrap_or_else(|_| "auto".to_string());
+
+        self.exec_umount_path(&mountpoint)?;
+        self.mounted.remove(&resolved);
+
+        let opts = if fs_type == "xfs" {
+            "rw,nouuid"
+        } else {
+            "rw"
+        };
+        self.exec_mount_with_opts(&device, &mountpoint, opts)?;
+        self.record_mount(&resolved, std::path::Path::new(&mountpoint));
+        Ok(())
+    }
+
+    fn exec_remount_rw(&self, mountpoint: &str) -> Result<()> {
         let mut cmd = if need_sudo() {
             let mut sudo_cmd = Command::new("sudo");
             sudo_cmd.arg("mount");
@@ -296,7 +331,7 @@ impl Guestfs {
 
         let output = cmd
             .args(["-o", "remount,rw"])
-            .arg(&mountpoint)
+            .arg(mountpoint)
             .output()
             .map_err(|e| Error::CommandFailed(format!("Failed to execute mount: {}", e)))?;
 
@@ -307,7 +342,122 @@ impl Guestfs {
                 mountpoint, stderr
             )));
         }
+        Ok(())
+    }
 
+    fn host_source_for_mountpoint(&self, mountpoint: &str) -> Result<std::path::PathBuf> {
+        let output = Command::new("findmnt")
+            .args(["-n", "-o", "SOURCE", "--target", mountpoint])
+            .output()
+            .map_err(|e| Error::CommandFailed(format!("findmnt failed: {e}")))?;
+        if !output.status.success() {
+            return Err(Error::CommandFailed(format!(
+                "findmnt --target {mountpoint} failed: {}",
+                String::from_utf8_lossy(&output.stderr)
+            )));
+        }
+        let src = String::from_utf8_lossy(&output.stdout).trim().to_string();
+        if src.is_empty() {
+            return Err(Error::CommandFailed(format!(
+                "findmnt returned empty SOURCE for {mountpoint}"
+            )));
+        }
+        Ok(std::path::PathBuf::from(src))
+    }
+
+    /// Resolve guest device → host block path without touching the
+    /// already-mounted map (used by remount_rw fallback after umount).
+    fn prepare_mount_device_only(
+        &self,
+        mountable: &str,
+        host_mountpoint: &str,
+    ) -> Result<(String, std::path::PathBuf, std::path::PathBuf)> {
+        let mountable = mountable.to_string();
+        let device_partition = if mountable.starts_with("/dev/mapper/")
+            || (mountable.starts_with("/dev/") && mountable.matches('/').count() >= 3)
+        {
+            std::path::PathBuf::from(&mountable)
+        } else {
+            let partition_num = self.parse_device_name(&mountable)?;
+            if let Some(loop_dev) = &self.loop_device {
+                if partition_num > 0 {
+                    loop_dev.partition_path(partition_num).ok_or_else(|| {
+                        Error::InvalidState("Loop device not connected".to_string())
+                    })?
+                } else {
+                    loop_dev
+                        .device_path()
+                        .ok_or_else(|| {
+                            Error::InvalidState("Loop device not connected".to_string())
+                        })?
+                        .to_path_buf()
+                }
+            } else if let Some(nbd) = &self.nbd_device {
+                if partition_num > 0 {
+                    nbd.partition_path(partition_num)
+                } else {
+                    nbd.device_path().to_path_buf()
+                }
+            } else {
+                return Err(Error::InvalidState(
+                    "No block device available (neither loop nor NBD)".to_string(),
+                ));
+            }
+        };
+        Ok((
+            mountable,
+            device_partition,
+            std::path::PathBuf::from(host_mountpoint),
+        ))
+    }
+
+    fn exec_umount_path(&self, mountpoint: &str) -> Result<()> {
+        let mut cmd = if need_sudo() {
+            let mut sudo_cmd = Command::new("sudo");
+            sudo_cmd.arg("umount");
+            sudo_cmd
+        } else {
+            Command::new("umount")
+        };
+        let output = cmd
+            .arg(mountpoint)
+            .output()
+            .map_err(|e| Error::CommandFailed(format!("Failed to execute umount: {e}")))?;
+        if !output.status.success() {
+            let stderr = String::from_utf8_lossy(&output.stderr).to_string();
+            return Err(Error::CommandFailed(format!(
+                "umount {mountpoint} failed: {stderr}"
+            )));
+        }
+        Ok(())
+    }
+
+    fn exec_mount_with_opts(
+        &self,
+        device: &std::path::Path,
+        mountpoint: &str,
+        opts: &str,
+    ) -> Result<()> {
+        let mut cmd = if need_sudo() {
+            let mut sudo_cmd = Command::new("sudo");
+            sudo_cmd.arg("mount");
+            sudo_cmd
+        } else {
+            Command::new("mount")
+        };
+        let output = cmd
+            .args(["-o", opts])
+            .arg(device)
+            .arg(mountpoint)
+            .output()
+            .map_err(|e| Error::CommandFailed(format!("Failed to execute mount: {e}")))?;
+        if !output.status.success() {
+            let stderr = String::from_utf8_lossy(&output.stderr).to_string();
+            return Err(Error::CommandFailed(format!(
+                "mount -o {opts} {} at {mountpoint} failed: {stderr}",
+                device.display()
+            )));
+        }
         Ok(())
     }
 
