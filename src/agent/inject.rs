@@ -244,26 +244,26 @@ pub fn inject_windows_agent(
             "inject_windows_agent: image root {root} is not Windows (use inject_agent_into_image)"
         );
     }
-    if let Ok(mountpoints) = g.inspect_get_mountpoints(&root) {
-        let mut mounts: Vec<_> = mountpoints.into_iter().collect();
-        mounts.sort_by_key(|(m, _)| m.len());
-        for (mount, device) in &mounts {
-            // Windows disks left by a force-off or fast-startup carry a dirty
-            // NTFS flag; ntfs-3g then mounts read-only and the upload/hive write
-            // fails. Clear it with ntfsfix so the volume mounts read-write.
-            if g.vfs_type(device).ok().as_deref() == Some("ntfs") {
-                if let Err(e) = g.ntfsfix_opts(device, false, true) {
-                    if verbose {
-                        println!("  ntfsfix {device}: {e} (continuing)");
-                    }
-                }
+
+    // Do **not** call inspect_get_mountpoints here: it mount_ro()'s the Windows
+    // root to hunt for /etc/fstab and leaves it mounted. The follow-up mount()
+    // then hits remount_rw, which is fragile on NTFS (dirty volumes / kernel
+    // ntfs3) and used to leave C: read-only — mkdir_p was ignored and upload
+    // failed with ENOENT for /guestkit/guestkitd.exe. Mount RW directly.
+    let _ = g.umount_all();
+    if g.vfs_type(&root).ok().as_deref() == Some("ntfs") {
+        if let Err(e) = g.ntfsfix_opts(&root, false, true) {
+            if verbose {
+                println!("  ntfsfix {root}: {e} (continuing)");
             }
-            let _ = g.mount(device, mount);
         }
     }
+    g.mount(&root, "/")
+        .with_context(|| format!("mount {root} read-write at /"))?;
 
     // 1. Copy the agent binary into C:\guestkit\.
-    let _ = g.mkdir_p(WIN_AGENT_DIR);
+    g.mkdir_p(WIN_AGENT_DIR)
+        .context("creating C:\\guestkit on the Windows volume")?;
     g.upload(
         binary
             .to_str()
