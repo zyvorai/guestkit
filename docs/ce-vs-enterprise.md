@@ -1,7 +1,7 @@
 # Open source vs Enterprise (Zyvor)
 
-**GuestKit (this repo)** is the full Apache-2.0 **offline disk engine**.  
-**GuestKit Enterprise** is Zyvor’s commercial **migration control plane** — every Command Center screen below — calling the **same** `guestkit doctor` evidence. Not a forked binary. Not a feature hostage.
+**GuestKit (this repo)** is the full Apache-2.0 **offline disk engine** — free for personal, lab, and commercial production use (no license key).  
+**GuestKit Enterprise** is Zyvor’s commercial **migration control plane** — every Command Center screen below — calling the **same** `guestkit doctor` evidence. Not a forked binary. Not a feature hostage. Enterprise support, SLAs, and the control plane are licensed separately.
 
 Product: [zyvor.dev/guestkit](https://zyvor.dev/guestkit?utm_source=github&utm_medium=guestkit) · [Book a demo](https://zyvor.dev/contact?utm_source=github&utm_medium=guestkit&intent=demo) · [sales@zyvor.dev](mailto:sales@zyvor.dev)
 

@@ -346,14 +346,14 @@ open http://localhost:8088
 <tr>
 <td width="50%" valign="top">
 
-### Open source — free forever
-**This repo** · Apache-2.0
+### Open source — free under Apache-2.0
+**This repo** · personal, lab, and commercial production
 
 - Full offline **doctor**, migrate-plan, repair, fleet, policy  
 - CLI · TUI · Python · self-hosted web/workers  
 - GitHub Action Passport gate  
 - Free `zyvor-ui` Image Vault dock  
-- Best for labs, CI, and small fleets  
+- Best for labs, CI, small fleets, and production without Enterprise extras  
 
 </td>
 <td width="50%" valign="top">
@@ -451,4 +451,14 @@ See [CONTRIBUTING](docs/development/CONTRIBUTING.md) and CI under `.github/workf
 
 ## License
 
-[Apache-2.0](LICENSE) · additional notes in `docs/legal/` where applicable.
+### Open source (Apache-2.0)
+
+This repository is licensed under the [Apache License, Version 2.0](LICENSE).
+You may use, modify, and run it for personal, lab, and commercial production
+use at no charge, subject to Apache-2.0 (preserve notices / NOTICE where required).
+See [NOTICE](NOTICE) and `docs/legal/` where applicable.
+
+### Enterprise
+
+Production support, SLAs, and Zyvor Enterprise products are licensed separately.
+Contact [sales@zyvor.dev](mailto:sales@zyvor.dev) or see [zyvor.dev](https://zyvor.dev).
