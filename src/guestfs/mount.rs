@@ -305,16 +305,14 @@ impl Guestfs {
             }
         };
 
-        let fs_type = self.vfs_type(&resolved).unwrap_or_else(|_| "auto".to_string());
+        let fs_type = self
+            .vfs_type(&resolved)
+            .unwrap_or_else(|_| "auto".to_string());
 
         self.exec_umount_path(&mountpoint)?;
         self.mounted.remove(&resolved);
 
-        let opts = if fs_type == "xfs" {
-            "rw,nouuid"
-        } else {
-            "rw"
-        };
+        let opts = if fs_type == "xfs" { "rw,nouuid" } else { "rw" };
         self.exec_mount_with_opts(&device, &mountpoint, opts)?;
         self.record_mount(&resolved, std::path::Path::new(&mountpoint));
         Ok(())
