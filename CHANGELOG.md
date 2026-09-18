@@ -7,9 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.3] - 2026-09-18
+
+### Fixed
+- **Serial console without `grubby`** — Photon and other guests have no `grubby`. Kernel console args are written into the bootloader the guest already uses (grub2, BLS, syslinux, extlinux, zipl) instead of failing first-boot with exit 127.
+- **XFS remount** — pick a valid remount option set after `norecovery` inspect mounts.
+- **Guest root resolution** — path resolve uses the real guest `/`, not `sda1`/`sda2`.
+- **Windows agent inject** — mount the Windows root read-write for offline `guestkitd` inject.
+
 ### Changed
 - **PyPI** — Python distribution is `zyvor-guestkit`, owned by [pypi.org/user/zyvor](https://pypi.org/user/zyvor/). `hypersdk-guestkit` is retired. Import name stays `guestkit`.
 - **GHCR registry** — container images publish/pull from `ghcr.io/zyvorai/{zyvor-ui,zyvor-api,guestkit-worker}` (was `ghcr.io/hypersdk`).
+- **Docs** — customer wording is now users; CE vs Enterprise licensing is spelled out; docs site is Docusaurus.
+
+### Removed
+- Zyvor company terms and the distribution acceptance gate.
 
 ## [1.2.2] - 2026-09-06
 

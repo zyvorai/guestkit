@@ -17,7 +17,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
-VERSION="1.2.2"
+VERSION="1.2.3"
 REMOTE_DIR=""
 DEPLOY_PROFILE="full"
 DEPLOY_LOG="${GUESTKIT_DEPLOY_LOG:-${HOME}/.guestkit/deploy-$(date +%Y%m%d-%H%M%S).log}"

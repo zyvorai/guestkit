@@ -7,93 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.3] - 2026-09-18
+
+### Fixed
+- **Serial console without `grubby`** — Photon and other guests have no `grubby`. Kernel console args are written into the bootloader the guest already uses (grub2, BLS, syslinux, extlinux, zipl) instead of failing first-boot with exit 127.
+- **XFS remount** — pick a valid remount option set after `norecovery` inspect mounts.
+- **Guest root resolution** — path resolve uses the real guest `/`, not `sda1`/`sda2`.
+- **Windows agent inject** — mount the Windows root read-write for offline `guestkitd` inject.
+
 ### Changed
 - **PyPI** — Python distribution is `zyvor-guestkit`, owned by [pypi.org/user/zyvor](https://pypi.org/user/zyvor/). `hypersdk-guestkit` is retired. Import name stays `guestkit`. Wheel artifact: `zyvor_guestkit-*.whl`.
 - **GHCR registry** — container images publish/pull from `ghcr.io/zyvorai/{zyvor-ui,zyvor-api,guestkit-worker}` (was `ghcr.io/hypersdk`).
-- **Suite positioning** — GuestKit certifies/repairs disks; **FluxVM** runs and
-  manages VMs (network, cloud-init, TTL) and is the host-local **libvirt/virsh
-  replacement**. `guestkit vm` stays a minimal lab/CI smoke path. Docs:
-  [vm-runtime.md](../features/vm-runtime.md),
-  [virsh-to-guestkit.md](../user-guides/virsh-to-guestkit.md).
+- **Docs** — customer wording is now users; CE vs Enterprise licensing is spelled out; docs site is Docusaurus.
 
-### Fixed
-- **open-vm-tools false positive** — detect OSS `open-vm-tools` separately from
-  proprietary `vmware-tools` so BOOT-006/BOOT-010/MIG-G-005 no longer warn on
-  Ubuntu cloud images that ship `vmware-toolbox-cmd` via open-vm-tools.
-- **`guestkit vm` runtime dirs** — deploy writes `/etc/tmpfiles.d/guestkit.conf`
-  so `/run/guestkit/vms` is recreated owned by the deploy user after reboot.
-- **BOOT-003 false positive on Ubuntu cloud images** — mount `/boot` and
-  `/boot/efi` from fstab (`LABEL=`/`UUID=`/`PARTUUID=`). Previously only the
-  rootfs was mounted, so a separate BOOT partition looked empty and passport
-  handoff hard-blocked a bootable disk.
-- **`guestkit gate --image`** — when the disk directory is not writable (e.g.
-  `/var/lib/libvirt/images`), write the temporary passport under `$TMPDIR`
-  instead of failing with Permission denied.
-
-### Added
-- **`guestkit vm`** — GuestKit-native local QEMU lifecycle (`define` / `plan` /
-  `start` / `list` / `status` / `shutdown` / `destroy` / `undefine`) with
-  assurance gate and QMP day-2 ops. No libvirt XML. Docs:
-  [vm-runtime.md](../features/vm-runtime.md).
-- **Remote deploy** installs `virtctl-guestkit`, `kubectl-guestkit`, and
-  `guestkit-qemu` alongside `guestkit`, and seeds `/var/lib/guestkit/vms` +
-  `/run/guestkit/vms` for `guestkit vm`.
-- **`virtctl-guestkit guestfs`** — drop-in for `virtctl guestfs`. Creates a
-  short-lived GuestKit pod on a PVC (`/disk` or `/dev/vda`), no libguestfs
-  appliance. Also `inspect` / `doctor --vm` / `rescue`. Uses `kubectl` (no new
-  crate deps). Docs: [virtctl-guestkit.md](../features/virtctl-guestkit.md).
-- **Cutover bundle** — `gate`, `selinux-relabel`, `sysprep`, `bitlocker`,
-  `cloud-profile`, `policy rego`, `virtio-initramfs`, `agent-sign`;
-  virtctl `resolve`/`gate` (hostDisk only).
-- **Cloud cutover profiles** — `guestkit cloud-profile aws|azure|gcp|openstack`
-  and `policy check -b aws`. cloud-init + boot-score rules, no cloud API calls.
-- **`guestkit policy rego`** — in-process `deny[msg]` subset (+ optional `opa eval`).
-  Example: `policies/cutover.rego`.
-- **`guestkit cloud-init`** — offline datasource pin (`aws`/`azure`/`gcp`/`openstack`/`nocloud`)
-  plus optional NoCloud user-data/meta-data seed. Also
-  `plan generate -p cloud-init-aws`. Closes the migrate-plan "reconfigure
-  datasource" item with a real FileWrite plan.
-- **`guestkit sbom-diff`** — compare SPDX, CycloneDX, or GuestKit inventory
-  JSON; `--fail-on-drift` for CI. `forensic-diff` accepts `--sbom-old/--sbom-new`.
-- **Passport Action extras** — optional rescue dry-run (`--export-plan`), SPDX
-  emit, and `passport handoff` in the composite `action.yml`. New
-  `.github/actions/rescue-dry-run`.
-- **`guestkit img`** — qemu-img info/check/snapshot/resize/rebase/commit with
-  GuestKit JSON errors (`GUESTKIT_QEMU_IMG` override).
-- **`guestkit domain-disks`** — parse libvirt XML or KubeVirt VM/VMI YAML for
-  disk sources (replaces `virsh dumpxml | grep source`).
-- **`guestkit virtio-win list|plan`** — resolve a virtio-win tree
-  (`--tree` / `$GUESTKIT_VIRTIO_WIN`) and emit the `migrate-repair --apply` hint.
-- **`guestkit firstboot`** — cutover attestation JSON: offline doctor + live
-  QGA ping + virtio plan + domain disks; `--fail-below` for CI.
-- **`guestkit fleet quarantine`** — hold disks below `--threshold` (default 80)
-  out of the conversion wave; `--fail` for CI.
-- **`guestkit passport handoff`** — verify a Cutover Passport and write
-  `*.handoff.yaml` for `h2kvmctl --passport`. Refused passports do not convert.
-- **`virtctl-guestkit` / `kubectl-guestkit` plugin** — `virtctl guestkit doctor|passport|handoff`
-  wraps the GuestKit CLI so OpenShift/KubeVirt operators never touch virsh.
-- **QEMU/VirtIO runtime** (`src/qemu/`, `guestkit-qemu` binary) — turns GuestKit
-  evidence + boot assurance into a declarative `QemuVm` plan and launches QEMU
-  only when blockers/score/UEFI firmware gates pass (`plan` / `run` / `qmp`).
-  Safe argv construction (no shell), VirtIO block/SCSI/net/balloon/rng/vsock/GPU,
-  OVMF/AAVMF, user/TAP/bridge networking (host TAP/bridge provisioning stays
-  outside GuestKit). Docs: [qemu-runtime.md](../features/qemu-runtime.md).
-- **`guestkit qga`** — drop-in for `virsh qemu-agent-command`; speaks the QGA
-  unix socket directly (auto-discovers libvirt / KubeVirt sockets). Docs:
-  [virsh-to-guestkit.md](../user-guides/virsh-to-guestkit.md).
-
-### Changed
-- **Dump `virsh` from the live GuestKit path.** `zyvor-api` no longer
-  `kubectl exec`s `virsh qemu-agent-command` inside virt-launcher. It
-  discovers the QGA unix socket and speaks the QGA wire format through
-  `guestkit qga` / python / perl / socat / nc. `virsh` is an explicit
-  opt-in via `GUESTKIT_ALLOW_VIRSH=1`.
-- Docs and MIG-L-009 no longer tell operators to use `virsh console`
-  or `virsh qemu-agent-command`.
-
-### Fixed
-- **`guestkit qga_client`**: import `std::os::unix::fs::FileTypeExt` so
-  `is_socket()` compiles on Unix.
+### Removed
+- Zyvor company terms and the distribution acceptance gate.
 
 ## [1.2.2] - 2026-09-06
 
