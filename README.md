@@ -8,7 +8,7 @@
 <p align="center">
   <a href="https://github.com/zyvorai/guestkit/actions/workflows/ci.yml"><img src="https://github.com/zyvorai/guestkit/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://crates.io/crates/guestkit"><img src="https://img.shields.io/crates/v/guestkit.svg" alt="crates.io"></a>
-  <a href="https://pypi.org/project/hypersdk-guestkit/"><img src="https://img.shields.io/pypi/v/hypersdk-guestkit.svg" alt="PyPI"></a>
+  <a href="https://pypi.org/project/zyvor-guestkit/"><img src="https://img.shields.io/pypi/v/zyvor-guestkit.svg" alt="PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache-2.0"></a>
   <a href="https://github.com/orgs/zyvorai/packages"><img src="https://img.shields.io/badge/GHCR-zyvorai-black?logo=github" alt="GHCR"></a>
 </p>
@@ -200,10 +200,10 @@ Host needs: Linux with `qemu-img`, `losetup`, and `qemu-nbd` (mount/repair may n
 
 ### Python (v1.1.0+)
 
-Same assurance engine as the CLI — on **[PyPI](https://pypi.org/project/hypersdk-guestkit/1.1.0/)** and used by **h2kvm** offline fixer:
+Same assurance engine as the CLI — on **[PyPI](https://pypi.org/project/zyvor-guestkit/)** and used by **h2kvm** offline fixer:
 
 ```bash
-pip install "hypersdk-guestkit>=1.1.0"
+pip install "zyvor-guestkit>=1.1.0"
 ```
 
 ```python
@@ -245,7 +245,7 @@ GuestKit provides **offline disk intelligence**; [h2kvm](https://github.com/zyvo
 
 ```bash
 # GuestKit from PyPI; h2kvm from GitHub Release
-pip install "hypersdk-guestkit>=1.1.0"
+pip install "zyvor-guestkit>=1.1.0"
 pip install https://github.com/zyvorai/h2kvm/releases/download/v1.1.0/h2kvm-1.1.0-py3-none-any.whl
 
 # Pre-flight
@@ -315,7 +315,7 @@ virtctl-guestkit guestfs -n ns pvc
 - **Optional AI** (`--features ai`) — read-only tool-calling over the offline evidence snapshot; MCP server via `--features mcp`
 - **KubeVirt** boot-inspect hooks and Guest Control Fabric
 - **Web console** + worker on GHCR · Helm under `deploy/helm/zyvor`
-- **Python:** `pip install hypersdk-guestkit` → `import guestkit` + `run_doctor` / `run_migrate_repair` (v1.1.0+)
+- **Python:** `pip install zyvor-guestkit` → `import guestkit` + `run_doctor` / `run_migrate_repair` (v1.1.0+)
 
 ---
 
@@ -410,7 +410,7 @@ Try the control plane before you buy — same packaging pattern as Veyron:
 | **CLI / TUI** | `guestkit` · `guestctl` — doctor, passport, fleet, rescue |
 | **QEMU runtime** | `guestkit-qemu` — assured plan/run + QMP ([qemu-runtime.md](docs/features/qemu-runtime.md)) |
 | **Agent / QGA** | Linux + Windows · `agent-inject` / `agent-proxy` / **`guestkit qga`** ([virsh-to-guestkit.md](docs/user-guides/virsh-to-guestkit.md)) |
-| **Python** | [hypersdk-guestkit](https://pypi.org/project/hypersdk-guestkit/) — `run_doctor`, `run_migrate_repair` (v1.1.0+) |
+| **Python** | [zyvor-guestkit](https://pypi.org/project/zyvor-guestkit/) — `run_doctor`, `run_migrate_repair` (v1.1.0+) |
 | **h2kvm** | [hyper2kvm-integration.md](docs/features/hyper2kvm-integration.md) — convert/deploy partner |
 | **FluxVM** | [zyvorai/fluxvm](https://github.com/zyvorai/fluxvm) — run/manage certified qcow2s (network, TTL) |
 | **K8s** | KubeVirt hooks · `k8s/` |

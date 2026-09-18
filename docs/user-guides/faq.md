@@ -113,7 +113,7 @@ sudo cp target/release/guestkit target/release/guestctl \
 
 **Python bindings:**
 ```bash
-pip install hypersdk-guestkit
+pip install zyvor-guestkit
 ```
 
 ### What binaries does GuestKit install?

@@ -14,11 +14,11 @@ Programmatic access to GuestKit offline disk intelligence — assurance scoring 
 
 - Doc id: `python-bindings`
 - Nav: **Interfaces → Python Bindings**
-- Primary interface: `pip install hypersdk-guestkit` (PyPI) or `maturin develop --features python-bindings`
+- Primary interface: `pip install zyvor-guestkit` (PyPI) or `maturin develop --features python-bindings`
 
 ## Operate from Python (v1.1.0+)
 
-1. `pip install "hypersdk-guestkit>=1.1.0"` ([PyPI](https://pypi.org/project/hypersdk-guestkit/1.1.0/)). For local builds: `maturin build --release --features python-bindings`.
+1. `pip install "zyvor-guestkit>=1.1.0"` ([PyPI](https://pypi.org/project/zyvor-guestkit/)). For local builds: `maturin build --release --features python-bindings`.
 2. `import guestkit`.
 3. **Assurance:** `guestkit.run_doctor("disk.qcow2", target="kvm", explain=True)`.
 4. **Repair (dry-run):** `guestkit.run_migrate_repair("disk.qcow2", apply=False)`.

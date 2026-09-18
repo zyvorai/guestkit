@@ -464,7 +464,7 @@
   },
   "python-bindings": {
     "title": "Python Bindings",
-    "how": "`pip install hypersdk-guestkit` or `maturin develop --features python-bindings`",
+    "how": "`pip install zyvor-guestkit` or `maturin develop --features python-bindings`",
     "actions": [
       "`from guestkit import Guestfs`",
       "`add_drive_ro` \u2192 `launch` \u2192 `inspect_os`",

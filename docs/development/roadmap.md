@@ -9,7 +9,7 @@ High-level direction for GuestKit / GuestCtl. Full release notes are in [CHANGEL
   [qemu-runtime.md](../features/qemu-runtime.md). Dump `virsh` from the live QGA
   path (`guestkit qga`, zyvor-api socket ladder) — [virsh-to-guestkit.md](../user-guides/virsh-to-guestkit.md)
 - **v1.1.0** — Python assurance bindings (`run_doctor` / `run_migrate_repair`,
-  PyPI `hypersdk-guestkit`), h2kvm offline fixer integration
+  PyPI `zyvor-guestkit`), h2kvm offline fixer integration
 - **v1.0.0** — GitHub Action for the Passport CI gate (`action.yml`,
   dogfooded by `passport-gate-demo.yml`); CI reliability pass (missing
   `libsystemd-dev`/`libhivex-dev` on Linux runners, loop/NBD device

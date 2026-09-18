@@ -3,7 +3,7 @@
 This directory contains **legacy and reference** integration utilities. For new projects, install the native Python module:
 
 ```bash
-pip install "hypersdk-guestkit>=1.1.0"
+pip install "zyvor-guestkit>=1.1.0"
 ```
 
 ## Recommended integration (v1.1.0+)
@@ -30,7 +30,7 @@ h2kvm uses the same calls through `h2kvm.core.guestkit_client`. See [hyper2kvm-i
 
 | Approach | When to use |
 |----------|-------------|
-| **`pip install hypersdk-guestkit`** + `run_*` APIs | **Default** — h2kvm, CI, automation |
+| **`pip install zyvor-guestkit`** + `run_*` APIs | **Default** — h2kvm, CI, automation |
 | **GuestKit CLI** subprocess | Shell scripts, Passport CI gate, no Python |
 | **`guestkit_wrapper.py`** (this dir) | Legacy hyper2kvm code paths only |
 | **Direct Rust / `cargo install guestkit`** | Ops workstations, TUI, fleet tools |
@@ -76,7 +76,7 @@ Prefer `import guestkit` for new code. The wrapper remains for backward compatib
 # GuestKit CLI
 GUESTKIT_ZYVOR_ACCEPT=1 ./scripts/deploy-remote.sh HOST user --quick --key
 
-# h2kvm (pip installs hypersdk-guestkit>=1.1.0 from PyPI)
+# h2kvm (pip installs zyvor-guestkit>=1.1.0 from PyPI)
 cd /path/to/h2kvm
 ./scripts/deploy-remote.sh HOST user --keep-sources
 ```

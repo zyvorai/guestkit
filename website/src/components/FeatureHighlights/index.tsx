@@ -43,7 +43,7 @@ const FeatureList: FeatureItem[] = [
   {
     title: 'Python bindings + GitHub Action',
     description:
-      'Same assurance engine on PyPI (hypersdk-guestkit) for scripting, plus a zyvorai/guestkit@v1 GitHub Action for CI gating with no CLI install step.',
+      'Same assurance engine on PyPI (zyvor-guestkit) for scripting, plus a zyvorai/guestkit@v1 GitHub Action for CI gating with no CLI install step.',
     to: '/docs/user-guides/python-bindings',
   },
 ];

@@ -1,11 +1,13 @@
 # Publishing GuestKit
 
-## PyPI (`hypersdk-guestkit`)
+## PyPI (`zyvor-guestkit`)
 
-The Python distribution is published as **`hypersdk-guestkit`** (PyPI project owned by the `hypersdk` account).
+The Python distribution is **`zyvor-guestkit`**, owned by the [zyvor](https://pypi.org/user/zyvor/) account. Do not publish to `hypersdk-guestkit`. The import name stays `guestkit`.
+
+`PYPI_API_TOKEN` must be an API token from that account (https://pypi.org/manage/account/token/). The first upload creates the project; the old `hypersdk` token cannot.
 
 ```bash
-pip install hypersdk-guestkit
+pip install zyvor-guestkit
 ```
 
 CI workflow: **Build and Publish Python Wheels** — requires GitHub secret `PYPI_API_TOKEN`.

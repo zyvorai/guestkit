@@ -3,7 +3,7 @@ requires = ["maturin>=1.0,<2.0"]
 build-backend = "maturin"
 
 [project]
-name = "hypersdk-guestkit"
+name = "zyvor-guestkit"
 dynamic = ["version"]
 description = "Pure Rust VM disk toolkit with beautiful output, Windows registry parsing, and VM migration support - Python bindings"
 readme = "README.md"

@@ -187,7 +187,7 @@ h2kvm (formerly hyper2kvm) uses GuestKit as its default offline inspect/repair b
 ### Python (recommended)
 
 ```bash
-pip install "hypersdk-guestkit>=1.1.0"
+pip install "zyvor-guestkit>=1.1.0"
 ```
 
 ```python
@@ -249,7 +249,7 @@ RUST_LOG=debug cargo test -- --nocapture
 ## Next Steps
 
 1. **Assurance workflow** — `guestkit doctor` → `migrate-plan` → `migrate-repair`
-2. **Python automation** — `pip install hypersdk-guestkit`; see [python-bindings.md](python-bindings.md)
+2. **Python automation** — `pip install zyvor-guestkit`; see [python-bindings.md](python-bindings.md)
 3. **h2kvm pipeline** — [hyper2kvm-integration.md](../features/hyper2kvm-integration.md)
 4. **CI gate** — GitHub Action + Passport verify
 5. **Fleet ops** — `guestkit fleet analyze` / `watch`

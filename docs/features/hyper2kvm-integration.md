@@ -8,7 +8,7 @@ GuestKit provides **offline disk intelligence**; [h2kvm](https://github.com/zyvo
 |-------|-----------|------|
 | Assurance | GuestKit CLI or Python | Doctor, migrate-plan, migrate-repair |
 | Conversion | h2kvm (`h2kvmctl`) | VMDK/OVA → qcow2, flatten, libvirt/KubeVirt deploy |
-| Python binding | `hypersdk-guestkit` | Native `run_*` functions — **no subprocess wrapper required** |
+| Python binding | `zyvor-guestkit` | Native `run_*` functions — **no subprocess wrapper required** |
 | Day-2 | Zeus OS / Axiom | Post-cutover operations |
 
 ## Python integration (preferred)
@@ -46,7 +46,7 @@ guestkit_client.migrate_repair(path, target="kvm", apply=True)
 ### Install on migration hosts
 
 ```bash
-pip install 'hypersdk-guestkit>=1.1.0'
+pip install 'zyvor-guestkit>=1.1.0'
 # h2kvm 1.1.0 — GitHub Release wheel (PyPI pending)
 pip install https://github.com/zyvorai/h2kvm/releases/download/v1.1.0/h2kvm-1.1.0-py3-none-any.whl
 # or: cd h2kvm && pip install '.[full]'
@@ -59,7 +59,7 @@ cd guestkit
 pip install maturin
 PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1 maturin build \
   --release --features python-bindings --out dist
-pip install dist/hypersdk_guestkit-*.whl
+pip install dist/zyvor_guestkit-*.whl
 ```
 
 ## CLI integration (CI gates, passports)
@@ -124,7 +124,7 @@ See [DEPLOY-REMOTE.md](../guides/DEPLOY-REMOTE.md) (GuestKit) and [h2kvm deploy-
 
 ## Legacy subprocess wrapper
 
-The `integration/python/guestkit_wrapper.py` subprocess wrapper remains for older integrations. **New code should use `pip install hypersdk-guestkit` and import `guestkit` directly.**
+The `integration/python/guestkit_wrapper.py` subprocess wrapper remains for older integrations. **New code should use `pip install zyvor-guestkit` and import `guestkit` directly.**
 
 ## Validated lab workflow (Ubuntu 24.04)
 

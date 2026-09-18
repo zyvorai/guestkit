@@ -2,8 +2,8 @@
 
 Python bindings for GuestKit — pure-Rust offline disk inspection, assurance scoring, and migration repair.
 
-**PyPI package:** [`hypersdk-guestkit`](https://pypi.org/project/hypersdk-guestkit/)  
-**Wheel filename:** `hypersdk_guestkit-*.whl` (underscore, not hyphen)
+**PyPI package:** [`zyvor-guestkit`](https://pypi.org/project/zyvor-guestkit/)  
+**Wheel filename:** `zyvor_guestkit-*.whl` (underscore, not hyphen)
 
 ## Table of Contents
 
@@ -26,7 +26,7 @@ Python bindings for GuestKit — pure-Rust offline disk inspection, assurance sc
 ### PyPI
 
 ```bash
-pip install "hypersdk-guestkit>=1.1.0"
+pip install "zyvor-guestkit>=1.1.0"
 ```
 
 ### Verify
@@ -144,7 +144,7 @@ PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1 maturin develop --features python-bindings
 # Release wheel
 PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1 maturin build \
   --release --features python-bindings --out dist
-pip install dist/hypersdk_guestkit-*.whl
+pip install dist/zyvor_guestkit-*.whl
 ```
 
 On Python 3.13+, set `PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1` until PyO3 stable ABI catches up.
