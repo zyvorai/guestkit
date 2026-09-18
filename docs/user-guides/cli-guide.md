@@ -1,4 +1,4 @@
-# CLI reference (v1.1.0+)
+# CLI reference (v1.2.4)
 
 `guestkit` and `guestctl` share the same command surface. The separate
 **`guestkit-qemu`** binary plans and launches QEMU from the same assurance
@@ -36,6 +36,7 @@ guestkit qga --execute guest-ping
 | File explorer | [EXPLORE-QUICKSTART.md](../features/explore/EXPLORE-QUICKSTART.md) |
 | Cloud disk sources | [cloud-disk-sources.md](../guides/cloud-disk-sources.md) |
 | Python API | [python-bindings.md](python-bindings.md) |
+| Serial console without grubby | [img-firstboot.md](img-firstboot.md#serial-console-without-grubby) |
 | FAQ | [faq.md](faq.md) |
 | Troubleshooting | [troubleshooting.md](troubleshooting.md) |
 

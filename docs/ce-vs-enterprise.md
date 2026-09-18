@@ -19,7 +19,7 @@ Product: [zyvor.dev/guestkit](https://zyvor.dev/guestkit?utm_source=github&utm_m
 | Who it is for | Engineers, CI, labs, small fleets | Platform / SRE / migration leads · 50–10,000+ VMs |
 | Success metric | Disk score & Passport JSON | Estate readiness % · wave completion · audit |
 | Support | GitHub Issues | **SLA** · workshops · hypervisor exit programs |
-| Platform pipeline | Pair with [hyper2kvm](https://github.com/hypersdk/hyper2kvm) | HyperSDK → hyper2kvm → GuestKit → **Zeus OS** → PacketWolf |
+| Platform pipeline | Pair with [hyper2kvm](https://github.com/zyvorai/h2kvm) | HyperSDK → hyper2kvm → GuestKit → **Zeus OS** → PacketWolf |
 
 ### Offline engine (shared)
 

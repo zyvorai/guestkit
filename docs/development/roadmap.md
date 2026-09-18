@@ -4,12 +4,11 @@ High-level direction for GuestKit / GuestCtl. Full release notes are in [CHANGEL
 
 ## Shipped (recent)
 
-- **Unreleased** — GuestKit-assured QEMU/VirtIO runtime (`guestkit-qemu plan|run|qmp`,
-  `src/qemu/`) — evidence → boot gate → QEMU argv + QMP day-2 control; see
-  [qemu-runtime.md](../features/qemu-runtime.md). Dump `virsh` from the live QGA
-  path (`guestkit qga`, zyvor-api socket ladder) — [virsh-to-guestkit.md](../user-guides/virsh-to-guestkit.md)
-- **v1.1.0** — Python assurance bindings (`run_doctor` / `run_migrate_repair`,
-  PyPI `zyvor-guestkit`), h2kvm offline fixer integration
+- **v1.2.4** — Docs: GitHub Release install, `zyvor-guestkit` on PyPI, GHCR pins, serial console without `grubby`.
+- **v1.2.3** — Serial console without `grubby` (grub2, BLS, syslinux, extlinux, zipl). XFS remount, real guest `/` resolution, Windows root mounted read-write for offline `guestkitd` inject. Python package is [`zyvor-guestkit`](https://pypi.org/project/zyvor-guestkit/) on the [zyvor](https://pypi.org/user/zyvor/) account. GHCR is `ghcr.io/zyvorai`.
+- **v1.2.2** — Web Image Vault TUI parity (inspect, Assurance, Profiles, Files) and `POST /api/v1/vms/:id/profile` / `explore`.
+- **v1.2.0** — GuestKit-assured QEMU/VirtIO runtime (`guestkit-qemu plan|run|qmp`) — evidence → boot gate → QEMU argv + QMP day-2 control; see [qemu-runtime.md](../features/qemu-runtime.md). Dump `virsh` from the live QGA path (`guestkit qga`) — [virsh-to-guestkit.md](../user-guides/virsh-to-guestkit.md).
+- **v1.1.0** — Python assurance bindings (`run_doctor` / `run_migrate_repair`), h2kvm offline fixer integration. The PyPI name is now `zyvor-guestkit` (was `hypersdk-guestkit`).
 - **v1.0.0** — GitHub Action for the Passport CI gate (`action.yml`,
   dogfooded by `passport-gate-demo.yml`); CI reliability pass (missing
   `libsystemd-dev`/`libhivex-dev` on Linux runners, loop/NBD device

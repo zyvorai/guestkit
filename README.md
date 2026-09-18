@@ -171,7 +171,8 @@ Recorded live against real deployments — no staged screenshots.
 <a id="quick-start"></a>
 
 ```bash
-cargo install guestkit          # guestkit + guestctl + guestkit-qemu
+# v1.2.4 GitHub Release — crates.io `guestkit` is still 0.3.2
+curl -fsSL -O https://github.com/zyvorai/guestkit/releases/download/v1.2.4/guestkit-1.2.4-linux-amd64.tar.gz
 
 guestkit doctor vm.qcow2 --target proxmox --explain
 guestkit migrate-plan vm.vmdk --target kvm --export plan.yaml
@@ -203,7 +204,7 @@ Host needs: Linux with `qemu-img`, `losetup`, and `qemu-nbd` (mount/repair may n
 Same assurance engine as the CLI — on **[PyPI](https://pypi.org/project/zyvor-guestkit/)** and used by **h2kvm** offline fixer:
 
 ```bash
-pip install "zyvor-guestkit>=1.1.0"
+pip install zyvor-guestkit
 ```
 
 ```python
@@ -245,7 +246,7 @@ GuestKit provides **offline disk intelligence**; [h2kvm](https://github.com/zyvo
 
 ```bash
 # GuestKit from PyPI; h2kvm from GitHub Release
-pip install "zyvor-guestkit>=1.1.0"
+pip install zyvor-guestkit
 pip install https://github.com/zyvorai/h2kvm/releases/download/v1.1.0/h2kvm-1.1.0-py3-none-any.whl
 
 # Pre-flight

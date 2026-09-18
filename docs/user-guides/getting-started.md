@@ -13,7 +13,7 @@
 - 💾 **Smart LVM Cleanup** - Automatic volume group management
 - 🔄 **Loop Device Primary** - Built-in support for RAW/IMG/ISO
 
-Designed to work seamlessly with [hyper2kvm](https://github.com/ssahani/hyper2kvm) and VM migration workflows.
+Designed to work seamlessly with [h2kvm](https://github.com/zyvorai/h2kvm) and VM migration workflows.
 
 ## Building
 
@@ -187,7 +187,7 @@ h2kvm (formerly hyper2kvm) uses GuestKit as its default offline inspect/repair b
 ### Python (recommended)
 
 ```bash
-pip install "zyvor-guestkit>=1.1.0"
+pip install zyvor-guestkit
 ```
 
 ```python

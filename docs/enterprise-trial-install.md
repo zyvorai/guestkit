@@ -2,7 +2,7 @@
 
 Try the **commercial control plane** (Command Center, Migration Factory, Passport Authority, Image Vault, SSO/RBAC) before you buy.
 
-This is **not** the Apache-2.0 offline CLI in this repo (`cargo install guestkit` stays free forever).  
+This is **not** the Apache-2.0 offline CLI in this repo (that CLI stays free).  
 The evaluation package is a self-contained compiled binary attached to this repository — no source, no Node.js required.
 
 **Download:** [Latest Enterprise trial release](https://github.com/zyvorai/guestkit/releases?q=enterprise-trial) · tag `v*-enterprise-trial`

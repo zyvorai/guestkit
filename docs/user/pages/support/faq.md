@@ -19,7 +19,7 @@ FAQ — Support surface.
 ## Operate from CLI / TUI (UX)
 
 1. Reference answers; commands embedded.
-2. Install: `cargo install guestkit`.
+2. Install: [v1.2.4 GitHub Release](https://github.com/zyvorai/guestkit/releases/tag/v1.2.4). Do not `cargo install guestkit` (crates.io is 0.3.2).
 3. Not legacy appliance tooling — use GuestKit stack.
 4. Passport vs virt-v2v: certify then convert.
 5. Extract/list/rescue examples as in FAQ.

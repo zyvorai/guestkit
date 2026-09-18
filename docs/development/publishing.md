@@ -21,17 +21,17 @@ twine upload dist/*
 
 ## crates.io (`guestkit`)
 
-Workflow: **Release** → job `publish-crate`.
+The Rust crate name stays **`guestkit`**. That crate is owned by the crates.io user `ssahani`. The newest version there is **0.3.2**. `cargo install guestkit` does not install v1.2.4.
 
-Add repository secret:
+`CARGO_TOKEN` is a token for the `zyvorai` account. That account can publish only after `ssahani` adds it and the invite is accepted:
 
-| Secret | Purpose |
-|--------|---------|
-| `CARGO_TOKEN` | crates.io API token with publish scope |
+```bash
+cargo owner --add zyvorai guestkit
+```
 
-Create token at https://crates.io/settings/tokens
+`guestkit-agent-protocol` 0.1.0 is already published by `zyvorai`. The main crate depends on it. Until an owner publishes `guestkit` 1.2.4, install the [GitHub Release](https://github.com/zyvorai/guestkit/releases/tag/v1.2.4) binaries instead of crates.io.
 
-Re-run the Release workflow on tag `v*` after adding the secret.
+Workflow: **Release** → job `publish-crate`. Token: https://crates.io/settings/tokens
 
 ## GitHub release assets
 

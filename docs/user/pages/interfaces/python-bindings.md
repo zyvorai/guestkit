@@ -18,7 +18,7 @@ Programmatic access to GuestKit offline disk intelligence — assurance scoring 
 
 ## Operate from Python (v1.1.0+)
 
-1. `pip install "zyvor-guestkit>=1.1.0"` ([PyPI](https://pypi.org/project/zyvor-guestkit/)). For local builds: `maturin build --release --features python-bindings`.
+1. `pip install zyvor-guestkit` ([PyPI](https://pypi.org/project/zyvor-guestkit/)). For local builds: `maturin build --release --features python-bindings`.
 2. `import guestkit`.
 3. **Assurance:** `guestkit.run_doctor("disk.qcow2", target="kvm", explain=True)`.
 4. **Repair (dry-run):** `guestkit.run_migrate_repair("disk.qcow2", apply=False)`.

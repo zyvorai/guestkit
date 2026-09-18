@@ -46,7 +46,7 @@ guestkit_client.migrate_repair(path, target="kvm", apply=True)
 ### Install on migration hosts
 
 ```bash
-pip install 'zyvor-guestkit>=1.1.0'
+pip install zyvor-guestkit
 # h2kvm 1.1.0 — GitHub Release wheel (PyPI pending)
 pip install https://github.com/zyvorai/h2kvm/releases/download/v1.1.0/h2kvm-1.1.0-py3-none-any.whl
 # or: cd h2kvm && pip install '.[full]'

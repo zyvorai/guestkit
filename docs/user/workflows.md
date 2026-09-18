@@ -4,7 +4,7 @@ End-to-end GuestKit jobs. Prefer CLI; optional TUI / web where noted.
 
 ## First-hour assurance
 
-1. Install CLI (`cargo install guestkit` or release binary); confirm `qemu-img`
+1. Install CLI (GitHub Release v1.2.4; crates.io `guestkit` is still 0.3.2); confirm `qemu-img`
 2. [Doctor](pages/assurance/doctor.md) — `guestkit doctor IMAGE --target kvm --explain`
 3. [Migration Plan](pages/assurance/migrate-plan.md) — export a FixPlan YAML
 4. Optional: [TUI](pages/interfaces/tui.md) — `guestctl tui IMAGE`

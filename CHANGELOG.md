@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.4] - 2026-09-18
+
+### Changed
+- **Docs** — install instructions use the GitHub Release and `pip install zyvor-guestkit`. GHCR examples pin `v1.2.4`. Serial console without `grubby` is documented. crates.io `guestkit` is still 0.3.2.
+
 ## [1.2.3] - 2026-09-18
 
 ### Fixed

@@ -19,7 +19,7 @@ Getting Started — Onboarding surface.
 ## Operate from CLI / TUI (UX)
 
 1. CLI first-hour; optional web `:8088`.
-2. Install: `cargo install guestkit` or release binary.
+2. Install: [v1.2.4 GitHub Release](https://github.com/zyvorai/guestkit/releases/tag/v1.2.4). crates.io `guestkit` is still 0.3.2.
 3. Confirm deps: `qemu-img --version`.
 4. `guestkit doctor vm.qcow2 --target kvm --explain`.
 5. `guestkit migrate-plan vm.vmdk --target kvm --export plan.yaml`.

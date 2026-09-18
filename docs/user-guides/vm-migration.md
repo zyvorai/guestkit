@@ -15,7 +15,7 @@ guestkit v0.3.1+ provides powerful VM migration capabilities through:
 
 | From | To | Status | Notes |
 |------|-----|--------|-------|
-| Hyper-V | KVM | ✅ Full | Primary use case with [hyper2kvm](https://github.com/ssahani/hyper2kvm) |
+| Hyper-V | KVM | ✅ Full | Primary use case with [hyper2kvm](https://github.com/zyvorai/h2kvm) |
 | VMware | KVM | ✅ Full | VMDK to QCOW2 conversion supported |
 | VirtualBox | KVM | ✅ Full | VDI to QCOW2 conversion supported |
 | Physical | KVM (P2V) | ✅ Full | Raw disk imaging supported |

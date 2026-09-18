@@ -20,8 +20,8 @@ Eval web (optional): `http://<host>:8088` — change default admin password imme
 ## Install sketch
 
 ```bash
-cargo install guestkit
-# or: download the release binary for your OS
+curl -fsSL -O https://github.com/zyvorai/guestkit/releases/download/v1.2.4/guestkit-1.2.4-linux-amd64.tar.gz
+# crates.io `guestkit` is still 0.3.2 — do not cargo install it for this release
 qemu-img --version
 guestkit version
 guestkit doctor /path/to/disk.qcow2 --target kvm --explain

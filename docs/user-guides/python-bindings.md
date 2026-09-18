@@ -26,7 +26,7 @@ Python bindings for GuestKit — pure-Rust offline disk inspection, assurance sc
 ### PyPI
 
 ```bash
-pip install "zyvor-guestkit>=1.1.0"
+pip install zyvor-guestkit
 ```
 
 ### Verify

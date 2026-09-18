@@ -29,6 +29,6 @@ Operational docs for platform / migration / SRE teams who gate cutovers with **G
 ## Pin
 
 ```text
-CLI:     cargo install guestkit   # or distro/package pin
+CLI:     GitHub Release v1.2.4   # crates.io guestkit is still 0.3.2
 Worker:  ghcr.io/zyvorai/guestkit-worker   # pin digest/tag in compose/Helm
 ```

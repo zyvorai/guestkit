@@ -63,3 +63,9 @@ guestkit firstboot win.qcow2 \
 - `--fail-below` is set and there is no score, or the score is below N, or blockers exist
 - a virtio-win tree was found but critical drivers are missing
 - `--socket` was given (or a socket was discovered) and `guest-ping` failed
+
+## Serial console without grubby
+
+Photon and many other guests do not ship `grubby`. A repair command that used to be `grubby --update-kernel=ALL --args=console=ttyS0,115200 console=tty0` no longer fails with exit 127.
+
+When `grubby` is absent, GuestKit writes `console=ttyS0,115200 console=tty0` into the bootloader the guest already uses: grub2 (`/etc/default/grub` and `grub.cfg`), BLS / systemd-boot, syslinux, extlinux, or zipl. If `grubby` is installed, that binary is still used.

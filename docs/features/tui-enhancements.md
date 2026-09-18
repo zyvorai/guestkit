@@ -197,7 +197,7 @@ guestkit tui vm.qcow2
 
 Or install and run:
 ```bash
-cargo install guestkit
+curl -fsSL -O https://github.com/zyvorai/guestkit/releases/download/v1.2.4/guestkit-1.2.4-linux-amd64.tar.gz
 guestkit tui vm.qcow2
 ```
 

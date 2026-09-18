@@ -28,7 +28,7 @@ Operator cheat sheets (cutover cookbook, day-0/rescue, Passport, env vars): **[G
 | [Industry use cases](INDUSTRY_USE_CASES.md) | Real-world scenarios, PM/TA view, Zyvor product stack |
 | [Fix plans](features/fix-plans.md) | Offline patch workflow |
 | [Export formats](features/export-formats.md) | JSON, YAML, HTML, PDF |
-| [Python bindings](user-guides/python-bindings.md) | Assurance APIs + Guestfs handle (v1.1.0+) |
+| [Python bindings](user-guides/python-bindings.md) | `pip install zyvor-guestkit` (v1.2.4). Import stays `guestkit`. |
 | [h2kvm integration](features/hyper2kvm-integration.md) | Convert/deploy pipeline with h2kvm |
 | [Handoff / quarantine](user-guides/handoff-quarantine.md) | Passport → h2kvmctl job, fleet quarantine, virtctl plugin |
 | [VM migration](user-guides/vm-migration.md) | End-to-end migration handoff |

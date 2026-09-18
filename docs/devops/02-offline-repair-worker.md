@@ -15,7 +15,7 @@
 | Optional | `guestkit` from crates.io / package; or GHCR worker image |
 
 ```bash
-cargo install guestkit          # guestkit + guestctl
+curl -fsSL -O https://github.com/zyvorai/guestkit/releases/download/v1.2.4/guestkit-1.2.4-linux-amd64.tar.gz  # not crates.io 0.3.2
 guestkit --help
 guestctl tui --help
 ```
