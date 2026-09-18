@@ -10,7 +10,7 @@
   <a href="https://crates.io/crates/guestkit"><img src="https://img.shields.io/crates/v/guestkit.svg" alt="crates.io"></a>
   <a href="https://pypi.org/project/hypersdk-guestkit/"><img src="https://img.shields.io/pypi/v/hypersdk-guestkit.svg" alt="PyPI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache-2.0"></a>
-  <a href="https://github.com/orgs/hypersdk/packages"><img src="https://img.shields.io/badge/GHCR-hypersdk-black?logo=github" alt="GHCR"></a>
+  <a href="https://github.com/orgs/zyvorai/packages"><img src="https://img.shields.io/badge/GHCR-zyvorai-black?logo=github" alt="GHCR"></a>
 </p>
 
 <p align="center">

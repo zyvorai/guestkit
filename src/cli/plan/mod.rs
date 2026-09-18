@@ -32,6 +32,8 @@ pub mod package_fetch;
 pub mod package_stage;
 #[cfg(not(target_os = "windows"))]
 pub mod preview;
+#[cfg(not(target_os = "windows"))]
+pub mod serial_console;
 pub mod types;
 
 #[cfg(feature = "agent")]

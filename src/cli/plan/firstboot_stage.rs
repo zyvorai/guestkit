@@ -79,6 +79,12 @@ pub fn apply_or_stage_command(g: &mut crate::guestfs::Guestfs, ce: &CommandExec)
         }
     }
 
+    // Photon and other guests have no grubby. Write the bootloader files
+    // instead of chrooting a missing binary (exit 127) or staging it.
+    if crate::cli::plan::serial_console::is_grubby_serial(&ce.command) {
+        return crate::cli::plan::serial_console::apply_serial_console(g);
+    }
+
     // Try immediate chroot (works for simple file tools; often fails for systemctl).
     let args = match shell_words(&ce.command) {
         Ok(a) if !a.is_empty() => a,
