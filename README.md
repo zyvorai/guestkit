@@ -213,6 +213,7 @@ import guestkit
 guestkit.run_doctor("vm.qcow2", target="kvm", explain=True)
 guestkit.run_migrate_repair("vm.qcow2", target="kvm", apply=False)  # dry-run
 guestkit.run_migrate_repair("vm.qcow2", target="kvm", apply=True)   # apply fixes
+# Optional inject_json= (hostname, network, users, first-boot). CLI has no inject flag.
 ```
 
 See [python-bindings.md](docs/user-guides/python-bindings.md) and [examples/python/assurance_doctor.py](examples/python/assurance_doctor.py).

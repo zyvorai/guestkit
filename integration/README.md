@@ -11,16 +11,19 @@ pip install zyvor-guestkit
 h2kvm delegates offline repair to GuestKit via PyO3 — **no subprocess wrapper required**:
 
 ```python
+import json
 import guestkit
 
 # Assurance before convert
 report = guestkit.run_doctor("source.vmdk", target="kvm", explain=True)
 
-# Apply offline fixes during migration
+# Apply offline fixes during migration. inject_json is optional;
+# omit it and repair is unchanged. Schema: docs/user-guides/python-bindings.md
 result = guestkit.run_migrate_repair(
     "/var/lib/h2kvm/demo/ubuntu-test/ubuntu-test.qcow2",
     target="kvm",
     apply=True,
+    inject_json=json.dumps({"hostname": "ubuntu-test"}),
 )
 ```
 

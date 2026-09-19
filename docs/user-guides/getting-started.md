@@ -195,9 +195,10 @@ import guestkit
 
 guestkit.run_doctor("source.vmdk", target="kvm", explain=True)
 guestkit.run_migrate_repair("out.qcow2", target="kvm", apply=True)
+# inject_json= adds hostname, network files, users, and first-boot on the same call.
 ```
 
-h2kvm wraps the same calls in `h2kvm.core.guestkit_client`.
+h2kvm wraps the same calls in `h2kvm.core.guestkit_client`. Inject and the post-boot `live_fix_commands` / `run_live_plan` helpers are documented in [python-bindings.md](python-bindings.md).
 
 ### CLI handoff
 

@@ -71,7 +71,7 @@ guestkit inspect vm.qcow2 --cache
 ### Is guestkit production-ready?
 
 **Yes.** GuestKit v1.2.4 is production-ready with:
-- Python assurance bindings (`run_doctor`, `run_migrate_repair`) for h2kvm integration
+- Python assurance bindings (`run_doctor`, `run_migrate_repair`, optional `inject_json`) for h2kvm integration
 - Comprehensive test suite with CI/CD
 - Used in [h2kvm](https://github.com/zyvorai/h2kvm) for production VM migrations
 - Pure Rust for memory safety

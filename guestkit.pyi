@@ -556,4 +556,24 @@ def run_migrate_repair(
     include_destructive: bool = False,
     virtio_win: Optional[str] = None,
     verbose: bool = False,
-) -> Dict[str, Any]: ...
+    inject_json: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Hypervisor-aware offline repair.
+
+    ``inject_json`` is a JSON object string (hostname, network files, users,
+    services, first-boot, cloud-init, AD rejoin, KMS, RDP). Omitted, empty,
+    or ``"null"`` adds nothing. Invalid JSON raises ``ValueError``.
+    """
+    ...
+
+def live_fix_commands(
+    update_grub: bool = True,
+    regen_initramfs: bool = True,
+    remove_vmware_tools: bool = False,
+) -> List[str]:
+    """Shell commands to run on a booted guest (initramfs, GRUB, open-vm-tools)."""
+    ...
+
+def run_live_plan(commands: List[str], dry_run: bool = False) -> Dict[str, Any]:
+    """Run ``commands`` on this machine. Does not SSH. ``dry_run=False`` executes."""
+    ...

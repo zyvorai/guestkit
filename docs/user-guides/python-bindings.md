@@ -10,6 +10,8 @@ Python bindings for GuestKit — pure-Rust offline disk inspection, assurance sc
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Assurance APIs (v1.1.0+)](#assurance-apis-v110)
+- [Inject payload](#inject-payload)
+- [Live guest fix](#live-guest-fix)
 - [Guestfs Handle API](#guestfs-handle-api)
 - [h2kvm Integration](#h2kvm-integration)
 - [Build from Source](#build-from-source)
@@ -57,6 +59,8 @@ result = guestkit.run_migrate_repair("vm.qcow2", target="kvm", apply=True)
 print(result["message"], result["applied"])
 ```
 
+Inject (hostname, network, users, first-boot) is an extra argument on the same call. See [Inject payload](#inject-payload).
+
 ## Assurance APIs (v1.1.0+)
 
 These map 1:1 to CLI commands and are the primary integration surface for **h2kvm** and CI pipelines.
@@ -67,7 +71,11 @@ These map 1:1 to CLI commands and are the primary integration surface for **h2kv
 | `run_boot_inspect(image, target="kvm")` | boot-inspect | `os_release`, `fstab_valid`, `bootloader`, `message` |
 | `run_migrate_plan(image, target="kvm")` | `guestkit migrate-plan` | `migration_score`, `bootability`, `fix_plan` |
 | `run_repair_plan(image, dry_run=True)` | `guestkit repair --fix boot` | `before_score`, `after_score`, `fix_plan`, `applied` |
-| `run_migrate_repair(image, apply=False)` | `guestkit migrate-repair` | `dry_run`, `applied`, `assessment_score`, `fix_plan`, `notes` |
+| `run_migrate_repair(image, apply=False, inject_json=None)` | `guestkit migrate-repair` | `dry_run`, `applied`, `assessment_score`, `fix_plan`, `notes` |
+| `live_fix_commands(...)` | — (run on the booted guest) | `list[str]` of shell commands |
+| `run_live_plan(commands, dry_run=False)` | live plan executor | apply result dict |
+
+`inject_json`, `live_fix_commands`, and `run_live_plan` are Python-only. `guestkit migrate-repair` does not take an inject payload.
 
 ### Parameters
 
@@ -79,6 +87,92 @@ These map 1:1 to CLI commands and are the primary integration surface for **h2kv
 - `include_destructive=False` — skip destructive fix steps unless explicitly enabled
 - `virtio_win="/path/to/virtio-win.iso"` — Windows VirtIO driver ISO path
 - `verbose=True` — include detailed notes in response
+- `inject_json` — JSON object (as a string) of extra offline work. Omitted, `""`, or `"null"` is a no-op. Invalid JSON raises `ValueError`.
+
+### Inject payload
+
+h2kvm used to mount the image again after repair to write hostname, network files, users, and first-boot scripts. Pass that work as `inject_json`. GuestKit appends it to the repair plan and writes it on the offline disk. An empty payload adds no operations.
+
+| Field | What it stages |
+|-------|----------------|
+| `hostname` | `/etc/hostname` |
+| `network_files` | `[{ "path", "content" }]`. `path` must be absolute. |
+| `users` | Linux: script under `/usr/local/sbin/h2kvm-user-<name>`, run in the guest during apply. Windows: PowerShell staged at `/Windows/Temp/h2kvm-user-<name>.ps1` only (not RunOnce) |
+| `services` | Enable the named unit offline (a wants symlink). Does not start it |
+| `firstboot` | Script under `/usr/local/sbin/h2kvm-firstboot-N`, then the same chroot-or-first-boot path as Linux users |
+| `cloud_init_user_data` | `/var/lib/cloud/seed/nocloud/user-data` |
+| `ad_rejoin` | Windows `Add-Computer` script plus a RunOnce key. Domain join password is **not** stored; first boot calls `Get-Credential`. |
+| `license_kms` | `slmgr /skms` and `/ato` on first boot |
+| `enable_rdp` | Clears `fDenyTSConnections` |
+
+Linux user and first-boot commands are applied in the guest chroot when that works. If the chroot command fails, they are appended to `guestkit-firstboot-live.service` and run on the next boot.
+
+Linux user fields: `name`, `password_hash` (`chpasswd -e`, preferred), `password` (plaintext `chpasswd`), `groups`, `ssh_keys`. Windows users use `password`. Names with `/`, spaces, or newlines are skipped. A Windows user script is only written to disk; schedule it yourself, or use `firstboot` / `ad_rejoin` when you need RunOnce.
+
+```python
+import json
+import guestkit
+
+payload = {
+    "hostname": "app-01",
+    "network_files": [
+        {
+            "path": "/etc/netplan/01-netcfg.yaml",
+            "content": "network:\n  version: 2\n  ethernets:\n    eth0:\n      dhcp4: true\n",
+        }
+    ],
+    "users": [
+        {
+            "name": "migrate",
+            "password_hash": "$6$rounds=656000$...",
+            "groups": ["sudo"],
+            "ssh_keys": ["ssh-ed25519 AAAA... migrate@lab"],
+            "os": "linux",
+        }
+    ],
+    "services": ["ssh"],
+    "firstboot": ["#!/bin/sh\nsystemctl restart systemd-networkd || true\n"],
+}
+
+result = guestkit.run_migrate_repair(
+    "vm.qcow2",
+    target="kvm",
+    apply=False,  # preview the inject ops in fix_plan first
+    inject_json=json.dumps(payload),
+)
+```
+
+Windows rejoin and license reactivation use the same argument:
+
+```python
+payload = {
+    "ad_rejoin": {
+        "domain": "corp.example",
+        "ou": "OU=Servers,DC=corp,DC=example",
+        "username": "join-account",
+    },
+    "license_kms": "kms.corp.example",
+    "enable_rdp": True,
+    "users": [{"name": "breakglass", "password": "change-me", "os": "windows"}],
+}
+```
+
+### Live guest fix
+
+Offline repair cannot regenerate the initramfs or rewrite GRUB the way a running guest can. `live_fix_commands` returns the shell lines to run **on the guest** (over SSH, or locally if Python is already inside the guest):
+
+```python
+cmds = guestkit.live_fix_commands(
+    update_grub=True,          # default
+    regen_initramfs=True,      # default
+    remove_vmware_tools=False, # default; set True to purge open-vm-tools
+)
+# cmds is a list of shell strings. Run them yourself, or:
+guestkit.run_live_plan(cmds, dry_run=True)
+guestkit.run_live_plan(cmds, dry_run=False)
+```
+
+`run_live_plan` executes on **this machine** through the live plan executor. It does not SSH. Each command expects exit code 0 and times out after 300 seconds. `dry_run=False` is the default.
 
 ### Example: CI gate in Python
 

@@ -6,7 +6,7 @@ GuestKit provides **offline disk intelligence**; [h2kvm](https://github.com/zyvo
 
 | Layer | Component | Role |
 |-------|-----------|------|
-| Assurance | GuestKit CLI or Python | Doctor, migrate-plan, migrate-repair |
+| Assurance | GuestKit CLI or Python | Doctor, migrate-plan, migrate-repair, optional `inject_json` |
 | Conversion | h2kvm (`h2kvmctl`) | VMDK/OVA → qcow2, flatten, libvirt/KubeVirt deploy |
 | Python binding | `zyvor-guestkit` | Native `run_*` functions — **no subprocess wrapper required** |
 | Day-2 | Zeus OS / Axiom | Post-cutover operations |
@@ -16,6 +16,7 @@ GuestKit provides **offline disk intelligence**; [h2kvm](https://github.com/zyvo
 Since **v1.1.0**, h2kvm delegates offline repair to GuestKit via PyO3 bindings:
 
 ```python
+import json
 import guestkit
 
 # Dry-run — see what would change
@@ -27,14 +28,33 @@ plan = guestkit.run_migrate_repair(
 )
 print(plan["fix_plan"], plan["assessment_score"])
 
-# Apply fstab / GRUB / initramfs fixes offline
+# Apply fstab / GRUB / initramfs fixes offline, plus the payload h2kvm
+# used to write in a second mount (hostname, netplan, users, first-boot).
 result = guestkit.run_migrate_repair(
     "/var/lib/h2kvm/demo/ubuntu-test/ubuntu-test.qcow2",
     target="kvm",
     apply=True,
+    inject_json=json.dumps({
+        "hostname": "ubuntu-test",
+        "network_files": [
+            {"path": "/etc/netplan/01-netcfg.yaml", "content": "network:\n  version: 2\n"}
+        ],
+    }),
 )
 print(result["message"], result["applied"])
 ```
+
+`inject_json` is optional. Omit it, pass `""`, or pass `"null"` and repair behaves as before. GuestKit writes the extra files on the offline disk; h2kvm does not mount the image again. There is no CLI flag for this — `guestkit migrate-repair` stays assessment and boot repair only.
+
+After the guest boots, initramfs and GRUB still have to be refreshed on the running system:
+
+```python
+cmds = guestkit.live_fix_commands(remove_vmware_tools=True)
+# Run cmds over SSH, or on the guest itself:
+guestkit.run_live_plan(cmds, dry_run=False)
+```
+
+`run_live_plan` executes on the machine where Python is running. It does not open an SSH session.
 
 h2kvm wraps the same calls in `h2kvm.core.guestkit_client`:
 
@@ -118,7 +138,9 @@ See [DEPLOY-REMOTE.md](../guides/DEPLOY-REMOTE.md) (GuestKit) and [h2kvm deploy-
 | `run_boot_inspect(image, target="kvm")` | `os_release`, `fstab_valid`, `bootloader`, `message` |
 | `run_migrate_plan(image, target="kvm")` | `migration_score`, `bootability`, `fix_plan` |
 | `run_repair_plan(image, dry_run=True)` | `before_score`, `after_score`, `fix_plan`, `applied` |
-| `run_migrate_repair(image, apply=False)` | `dry_run`, `applied`, `assessment_score`, `fix_plan`, `notes` |
+| `run_migrate_repair(image, apply=False, inject_json=None)` | `dry_run`, `applied`, `assessment_score`, `fix_plan`, `notes` |
+| `live_fix_commands(update_grub=True, regen_initramfs=True, remove_vmware_tools=False)` | `list[str]` |
+| `run_live_plan(commands, dry_run=False)` | live apply result (runs on this machine) |
 
 `bootability` includes `score`, `confidence`, `blockers[]`, `warnings[]`, `checks[]`.
 
@@ -130,7 +152,7 @@ The `integration/python/guestkit_wrapper.py` subprocess wrapper remains for olde
 
 1. Download osboxes.org VMDK (SourceForge 7z archive)
 2. `demo-libvirt.sh ubuntu2404.vmdk ubuntu-test` on h2kvm host
-3. GuestKit `run_migrate_repair` applies 4+ operations during offline fix
+3. GuestKit `run_migrate_repair` applies the offline fix, including any `inject_json` payload
 4. Output qcow2 → libvirt domain `ubuntu-test` (credentials: osboxes / osboxes.org)
 
 ## Assured local QEMU smoke-test

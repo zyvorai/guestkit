@@ -23,9 +23,11 @@ Programmatic access to GuestKit offline disk intelligence — assurance scoring 
 3. **Assurance:** `guestkit.run_doctor("disk.qcow2", target="kvm", explain=True)`.
 4. **Repair (dry-run):** `guestkit.run_migrate_repair("disk.qcow2", apply=False)`.
 5. **Repair (apply):** `guestkit.run_migrate_repair("disk.qcow2", apply=True)`.
-6. **Low-level inspect:** `from guestkit import Guestfs` → `add_drive_ro` → `launch` → `inspect_os`.
-7. **Empty / fail:** Import error → wrong package or missing wheel; launch fail → NBD/sudo.
-8. **Success:** Bootability score + fix plan JSON; or distro/hostname from Guestfs handle.
+6. **Inject (optional):** pass `inject_json=json.dumps({...})` on that same call. Fields: `hostname`, `network_files`, `users`, `services`, `firstboot`, `cloud_init_user_data`, `ad_rejoin`, `license_kms`, `enable_rdp`. Omitted or `"null"` adds nothing. No CLI flag for this.
+7. **Live fix (booted guest):** `cmds = guestkit.live_fix_commands()` then run them over SSH, or `guestkit.run_live_plan(cmds, dry_run=True)` on the machine where Python is running.
+8. **Low-level inspect:** `from guestkit import Guestfs` → `add_drive_ro` → `launch` → `inspect_os`.
+9. **Empty / fail:** Import error → wrong package or missing wheel; launch fail → NBD/sudo; bad `inject_json` → `ValueError`.
+10. **Success:** Bootability score + fix plan JSON (inject ops use ids `inject-NNN`); or distro/hostname from Guestfs handle.
 
 Host needs Linux + `qemu-img` / `losetup` / `qemu-nbd`; mount/repair often need root.
 

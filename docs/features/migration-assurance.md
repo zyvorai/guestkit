@@ -342,12 +342,20 @@ h2kvmctl local --vmdk source.vmdk --to-output out.qcow2 --backend guestkit
 Same assurance engine as CLI — used by **h2kvm** offline fixer:
 
 ```python
+import json
 import guestkit
 
 report = guestkit.run_doctor("source.vmdk", target="kvm", explain=True)
 plan = guestkit.run_migrate_plan("source.vmdk", target="kvm", export_fix_plan=True)
-guestkit.run_migrate_repair("source.qcow2", target="kvm", apply=True)
+guestkit.run_migrate_repair(
+    "source.qcow2",
+    target="kvm",
+    apply=True,
+    inject_json=json.dumps({"hostname": "app-01"}),
+)
 ```
+
+`inject_json` is Python-only (hostname, network files, users, services, first-boot, cloud-init, AD rejoin, KMS, RDP). The CLI `migrate-repair` command does not accept it. After boot, `live_fix_commands()` returns the initramfs/GRUB shell lines to run on the guest.
 
 See [python-bindings.md](../user-guides/python-bindings.md) and [hyper2kvm-integration.md](hyper2kvm-integration.md).
 
