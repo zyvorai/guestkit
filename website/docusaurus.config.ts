@@ -17,6 +17,10 @@ const config: Config = {
   organizationName: 'zyvorai',
   projectName: 'guestkit',
 
+  // Serve the repo's existing screenshot/social assets in place instead of
+  // duplicating them into static/, so the README and this site share one copy.
+  staticDirectories: ['static', '../docs/social', '../docs/img'],
+
   onBrokenLinks: 'warn',
 
   markdown: {
@@ -50,6 +54,7 @@ const config: Config = {
   ],
 
   themeConfig: {
+    image: 'guestkit-share-card.png',
     colorMode: {
       respectPrefersColorScheme: true,
     },

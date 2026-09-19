@@ -1,30 +1,97 @@
 # GuestKit
 
-<p align="center">
-  <strong>Offline VM intelligence. Migration assurance you can prove.</strong><br/>
-  Score boot readiness <em>before</em> power-on · repair disks offline · certify cutover with a Passport
-</p>
+[![CI](https://github.com/zyvorai/guestkit/actions/workflows/ci.yml/badge.svg)](https://github.com/zyvorai/guestkit/actions/workflows/ci.yml)
+[![crates.io](https://img.shields.io/crates/v/guestkit.svg)](https://crates.io/crates/guestkit)
+[![PyPI](https://img.shields.io/pypi/v/zyvor-guestkit.svg)](https://pypi.org/project/zyvor-guestkit/)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![GHCR](https://img.shields.io/badge/GHCR-zyvorai-black?logo=github)](https://github.com/orgs/zyvorai/packages)
 
-<p align="center">
-  <a href="https://github.com/zyvorai/guestkit/actions/workflows/ci.yml"><img src="https://github.com/zyvorai/guestkit/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://crates.io/crates/guestkit"><img src="https://img.shields.io/crates/v/guestkit.svg" alt="crates.io"></a>
-  <a href="https://pypi.org/project/zyvor-guestkit/"><img src="https://img.shields.io/pypi/v/zyvor-guestkit.svg" alt="PyPI"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache-2.0"></a>
-  <a href="https://github.com/orgs/zyvorai/packages"><img src="https://img.shields.io/badge/GHCR-zyvorai-black?logo=github" alt="GHCR"></a>
-</p>
+![GuestKit — offline VM intelligence and migration assurance](docs/social/guestkit-share-card.png)
 
-<p align="center">
-  <a href="https://zyvor.dev/guestkit?utm_source=github&utm_medium=guestkit"><b>Product</b></a> ·
-  <a href="#see-it-in-action"><b>Demos</b></a> ·
-  <a href="#who-does-what-users"><b>Suite path</b></a> ·
-  <a href="#quick-start"><b>Quick start</b></a> ·
-  <a href="#h2kvm-integration"><b>h2kvm</b></a> ·
-  <a href="https://github.com/zyvorai/fluxvm"><b>FluxVM</b></a> ·
-  <a href="https://github.com/zyvorai/guestkit/wiki"><b>Wiki</b></a> ·
-  <a href="docs/ce-vs-enterprise.md"><b>Open source vs Enterprise</b></a> ·
-  <a href="docs/enterprise-trial-install.md"><b>30-day Enterprise trial</b></a> ·
-  <a href="https://zyvor.dev/contact?utm_source=github&utm_medium=guestkit&intent=demo"><b>Book a demo</b></a>
-</p>
+**Offline VM intelligence and migration assurance — score boot readiness before power-on, repair disks offline, and certify cutover with a Passport.**
+
+📖 **[Read the full docs](https://zyvorai.github.io/guestkit/)** — getting started, feature guides, DevOps runbooks, and the h2kvm / FluxVM hand-offs.
+
+GuestKit reads a VM disk **while the guest is off** — qcow2, VMDK, VHDX, VHD, VDI or raw — through its own pure-Rust engine (NBD or loop mount). There is no appliance daemon and no "power it on and see". It scores first-boot probability 0–100, explains the blockers, and writes a reviewable fix plan.
+
+Fixes are never implicit. Repairs go through a plan you can read, applied with backups and rollback, and the same score drives the CI gate, the signed Cutover Passport, and assured QEMU launch.
+
+![GuestKit web console — Assurance panel showing a boot score of 78 with ranked findings](docs/img/ui-00-doctor-demo.png)
+
+<sub>The bundled OSS web console rendering its offline demo data. See the [gallery](#gallery).</sub>
+
+[**Product**](https://zyvor.dev/guestkit?utm_source=github&utm_medium=guestkit) ·
+[**Wiki**](https://github.com/zyvorai/guestkit/wiki) ·
+[**FluxVM**](https://github.com/zyvorai/fluxvm) ·
+[**h2kvm**](https://github.com/zyvorai/h2kvm) ·
+[**Open source vs Enterprise**](docs/ce-vs-enterprise.md) ·
+[**30-day Enterprise trial**](docs/enterprise-trial-install.md) ·
+[**Book a demo**](https://zyvor.dev/contact?utm_source=github&utm_medium=guestkit&intent=demo)
+
+## Contents
+
+- [Gallery](#gallery)
+- [The cutover problem — solved offline](#the-cutover-problem--solved-offline)
+- [Who does what (users)](#who-does-what-users)
+- [Why teams switch](#why-teams-switch)
+- [60-second quick start](#60-second-quick-start)
+- [h2kvm integration](#h2kvm-integration)
+- [What you can do](#what-you-can-do)
+- [Run the free web stack (GHCR)](#run-the-free-web-stack-ghcr)
+- [Open source vs Enterprise](#open-source-vs-enterprise)
+- [Platform layout](#platform-layout)
+- [Repository](#repository)
+- [Prerequisites](#prerequisites)
+- [Build](#build)
+- [Documentation](#documentation)
+- [License](#license)
+
+## Gallery
+
+The web console (`deploy/ui`, image `ghcr.io/zyvorai/zyvor-ui`) — **Offline demo** mode, which renders the JSON that ships with the UI. These are captures of that demo data, not of a live deployment; regenerate them with [`scripts/capture-ui-demo.py`](scripts/capture-ui-demo.py).
+
+![Assurance — doctor score 78, REVIEW decision, and ranked findings with a fix command each](docs/img/ui-00-doctor-demo.png)
+
+![Summary — OS identity and inventory counts from inspect](docs/img/ui-01-inspect-demo.png)
+
+![Landing — Image Vault: import a disk, or try the offline demo](docs/img/ui-02-landing.png)
+
+Recorded live against real deployments — CLI, TUI, the web dashboard on a KubeVirt cluster, and the guest agent:
+
+<table>
+<tr>
+<td width="50%" align="center">
+<a href="https://www.youtube.com/watch?v=lLEBQoFceIs">
+<img src="https://i.ytimg.com/vi/lLEBQoFceIs/maxresdefault.jpg" alt="GuestKit CLI and TUI demo" width="100%">
+<br><b>▶ CLI &amp; TUI</b>
+</a>
+<br><sub>Offline VM intelligence, explained</sub>
+</td>
+<td width="50%" align="center">
+<a href="https://www.youtube.com/watch?v=usQX2rQIFM8">
+<img src="https://i.ytimg.com/vi/usQX2rQIFM8/maxresdefault.jpg" alt="GuestKit web dashboard overview" width="100%">
+<br><b>▶ Web Dashboard — Overview</b>
+</a>
+<br><sub>Server Image Vault, live KubeVirt cluster</sub>
+</td>
+</tr>
+<tr>
+<td width="50%" align="center">
+<a href="https://www.youtube.com/watch?v=icTLVko588A">
+<img src="https://i.ytimg.com/vi/icTLVko588A/maxresdefault.jpg" alt="GuestKit web dashboard deep dive" width="100%">
+<br><b>▶ Web Dashboard — Deep Dive</b>
+</a>
+<br><sub>Sources, live cluster, one-click intelligence</sub>
+</td>
+<td width="50%" align="center">
+<a href="https://www.youtube.com/watch?v=LYoqOye3P3I">
+<img src="docs/img/machina-guestkit-demo-thumb.jpg" alt="Machina × GuestKit live guest-agent UX" width="100%">
+<br><b>▶ Machina × GuestKit</b>
+</a>
+<br><sub>Live Linux guest agent — health, TRIM, netplan, services</sub>
+</td>
+</tr>
+</table>
 
 ---
 
@@ -49,7 +116,7 @@ GuestKit reads the disk **while the guest is off**, scores first-boot probabilit
 | | |
 |---|---|
 | **70+** commands | **6** disk formats |
-| ****0** appliance daemons | **8** migration targets |
+| **0** appliance daemons | **8** migration targets |
 | **Apache-2.0** | Used in CI, labs, and hypervisor-exit programs |
 
 **Certify with [GuestKit](https://github.com/zyvorai/guestkit) → run & manage with [FluxVM](https://github.com/zyvorai/fluxvm) → convert & deploy with [h2kvm](https://github.com/zyvorai/h2kvm) → operate on [Zeus OS](https://zyvor.dev/zeus-os).**
@@ -108,45 +175,6 @@ Docs: [VM lifecycle / suite split](docs/features/vm-runtime.md) ·
 Full map: [virsh-to-guestkit.md](docs/user-guides/virsh-to-guestkit.md).
 
 ---
-
-## See it in action
-
-<table>
-<tr>
-<td width="50%" align="center">
-<a href="https://www.youtube.com/watch?v=lLEBQoFceIs">
-<img src="https://i.ytimg.com/vi/lLEBQoFceIs/maxresdefault.jpg" alt="GuestKit CLI and TUI demo" width="100%">
-<br><b>▶ CLI &amp; TUI</b>
-</a>
-<br><sub>Offline VM intelligence, explained</sub>
-</td>
-<td width="50%" align="center">
-<a href="https://www.youtube.com/watch?v=usQX2rQIFM8">
-<img src="https://i.ytimg.com/vi/usQX2rQIFM8/maxresdefault.jpg" alt="GuestKit web dashboard overview" width="100%">
-<br><b>▶ Web Dashboard — Overview</b>
-</a>
-<br><sub>Server Image Vault, live KubeVirt cluster</sub>
-</td>
-</tr>
-<tr>
-<td width="50%" align="center">
-<a href="https://www.youtube.com/watch?v=icTLVko588A">
-<img src="https://i.ytimg.com/vi/icTLVko588A/maxresdefault.jpg" alt="GuestKit web dashboard deep dive" width="100%">
-<br><b>▶ Web Dashboard — Deep Dive</b>
-</a>
-<br><sub>Sources, live cluster, one-click intelligence</sub>
-</td>
-<td width="50%" align="center">
-<a href="https://www.youtube.com/watch?v=LYoqOye3P3I">
-<img src="docs/img/machina-guestkit-demo-thumb.jpg" alt="Machina × GuestKit live guest-agent UX" width="100%">
-<br><b>▶ Machina × GuestKit</b>
-</a>
-<br><sub>Live Linux guest agent — health, TRIM, netplan, services</sub>
-</td>
-</tr>
-</table>
-
-Recorded live against real deployments — no staged screenshots.
 
 ---
 
@@ -420,6 +448,43 @@ Try the control plane before you buy — same packaging pattern as Veyron:
 
 ---
 
+## Repository
+
+```text
+src/                      library + CLI (guestkit, guestctl, guestkit-qemu, virtctl-guestkit)
+  assurance/              doctor, migrate-plan and repair APIs
+  boot/                   bootability prediction engine
+  evidence/               normalized evidence snapshot (what every score is computed from)
+  inference/              deterministic root-cause inference
+  migration/              migration readiness assessment and repair planning
+  fleet/                  fleet clustering, drift and anomaly detection
+  disk/  guestfs/         pure-Rust disk, partition and filesystem handling
+  converters/             disk format conversion
+  storage/                local and cloud (S3 / GCS / Azure) disk sources
+  qemu/                   assured QEMU / VirtIO definitions for guestkit-qemu
+  agent/  collectors/     in-guest agent daemon, host proxy and live collectors
+  ai/                     optional evidence-grounded analysis (--features ai)
+  export/  templates/     JSON / YAML / HTML / PDF / Markdown reports
+  cli/                    command implementations
+crates/
+  guestkit-agent-protocol/  JSON-RPC types for the in-guest agent
+  guestkit-job-spec/        VM operations job protocol
+  guestkit-worker/          distributed disk-inspection worker
+  zyvor-api/                API gateway behind the web console
+  zyvor-guest-agent/        in-guest agent (Linux + Windows)
+deploy/                   web console (ui/), Helm, compose files, CRDs, OpenAPI
+k8s/                      KubeVirt boot-inspect DaemonSet manifests
+policies/                 Rego cutover policy
+examples/                 Rust, Python and job-spec examples
+tests/  integration/      unit, integration and realistic-image tests
+website/                  Docusaurus docs site (serves ../docs)
+docs/                     user guides, feature docs, DevOps runbooks, roadmap
+docs/social/              share card source (HTML) and render script
+docs/img/                 README and site screenshots
+```
+
+---
+
 ## Documentation
 
 | Goal | Document |
@@ -440,11 +505,19 @@ Try the control plane before you buy — same packaging pattern as Veyron:
 
 ---
 
-## Development
+## Prerequisites
+
+- **Running GuestKit:** Linux with `qemu-img`, `losetup` and `qemu-nbd`. Mount and repair may need root. The web console and worker run anywhere Docker does — see [Run the free web stack](#run-the-free-web-stack-ghcr).
+- **Building from source:** a stable Rust toolchain (edition 2021) and the libsystemd development headers, which the default `journal-native` feature links. Optional features (`ai`, `mcp`, `registry-write`, the Windows agent) have extra requirements — see the `Makefile` and [CONTRIBUTING](docs/development/CONTRIBUTING.md).
+- **Python bindings:** `pip install zyvor-guestkit` needs nothing else; building them yourself uses `build_python.sh`.
+
+## Build
 
 ```bash
-cargo build --release
+cargo build --release     # guestkit, guestctl, guestkit-qemu, virtctl-guestkit
 cargo test
+make check                # tests + clippy
+make install              # installs the guestkit binary (PREFIX=$HOME/.local to change the location)
 ```
 
 See [CONTRIBUTING](docs/development/CONTRIBUTING.md) and CI under `.github/workflows/`. **`docs/` and this README are authoritative.**

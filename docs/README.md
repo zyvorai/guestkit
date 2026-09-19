@@ -1,6 +1,18 @@
-# guestkit Documentation
+# GuestKit documentation
 
-Offline VM intelligence and migration assurance
+![GuestKit — offline VM intelligence and migration assurance](social/guestkit-share-card.png)
+
+**Offline VM intelligence and migration assurance.** Score boot readiness before power-on, repair disks offline, and certify cutover with a Passport.
+
+📖 Published at **[zyvorai.github.io/guestkit](https://zyvorai.github.io/guestkit/)** · source: [`docs/`](https://github.com/zyvorai/guestkit/tree/main/docs)
+
+## Product tour
+
+The OSS web console in its offline demo mode (the JSON that ships in `deploy/ui`, not a live deployment). Walkthrough: [Using the dashboard](user/using-the-dashboard.md).
+
+![Assurance — doctor score, decision and ranked findings](img/ui-00-doctor-demo.png)
+
+![Summary — OS identity and inventory counts from inspect](img/ui-01-inspect-demo.png)
 
 ## Start Here
 

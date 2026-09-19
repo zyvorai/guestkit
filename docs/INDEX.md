@@ -1,5 +1,9 @@
 # GuestKit documentation
 
+![GuestKit — offline VM intelligence and migration assurance](social/guestkit-share-card.png)
+
+Published at **[zyvorai.github.io/guestkit](https://zyvorai.github.io/guestkit/)**. The [docs home](README.md) has the product tour and a map of this folder.
+
 Operator cheat sheets (cutover cookbook, day-0/rescue, Passport, env vars): **[GitHub Wiki](https://github.com/zyvorai/guestkit/wiki)**.
 
 ## Start here
