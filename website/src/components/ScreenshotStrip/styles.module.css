@@ -1,0 +1,23 @@
+.strip {
+  padding: var(--zv-section-space) 0;
+  background: var(--ifm-color-emphasis-100);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.frame {
+  display: block;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.frame img {
+  width: 100%;
+  display: block;
+}

@@ -4,6 +4,7 @@ import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
 import FeatureHighlights from '@site/src/components/FeatureHighlights';
+import ScreenshotStrip from '@site/src/components/ScreenshotStrip';
 import Reveal from '@site/src/components/Reveal';
 
 import styles from './index.module.css';
@@ -27,6 +28,11 @@ function HomepageHeader() {
               className="button button--secondary button--lg"
               to="/docs/user-guides/getting-started">
               Get Started
+            </Link>
+            <Link
+              className="button button--outline button--lg button--secondary"
+              to="/resources">
+              Downloads
             </Link>
             <Link
               className="button button--outline button--lg button--secondary"
@@ -147,6 +153,9 @@ export default function Home(): ReactNode {
         <ProblemStatement />
         <Reveal>
           <FeatureHighlights />
+        </Reveal>
+        <Reveal>
+          <ScreenshotStrip />
         </Reveal>
         <TrustBand />
         <EnterpriseCTA />

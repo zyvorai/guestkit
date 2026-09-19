@@ -69,12 +69,19 @@ const config: Config = {
         {
           type: 'docSidebar',
           sidebarId: 'docsSidebar',
-          position: 'right',
+          position: 'left',
           label: 'Docs',
         },
+        {to: '/gallery', label: 'Gallery', position: 'left'},
+        {to: '/resources', label: 'Resources', position: 'left'},
         {
           href: 'https://github.com/zyvorai/guestkit',
           label: 'GitHub',
+          position: 'right',
+        },
+        {
+          href: 'https://zyvor.dev/guestkit?utm_source=github&utm_medium=guestkit',
+          label: 'Enterprise',
           position: 'right',
         },
       ],
@@ -88,6 +95,8 @@ const config: Config = {
             {label: 'Getting started', to: '/docs/user-guides/getting-started'},
             {label: 'Quick reference', to: '/docs/user-guides/quick-reference'},
             {label: 'Open source vs Enterprise', to: '/docs/ce-vs-enterprise'},
+            {label: 'Gallery', to: '/gallery'},
+            {label: 'Resources (downloads)', to: '/resources'},
           ],
         },
         {
