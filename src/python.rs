@@ -4290,7 +4290,7 @@ fn run_repair_plan(
 /// Generate or apply a hypervisor-aware migration repair plan.
 #[cfg(feature = "python-bindings")]
 #[pyfunction]
-#[pyo3(signature = (image, target = "kvm", apply = false, include_destructive = false, virtio_win = None, verbose = false))]
+#[pyo3(signature = (image, target = "kvm", apply = false, include_destructive = false, virtio_win = None, verbose = false, inject_json = None))]
 fn run_migrate_repair(
     py: Python<'_>,
     image: String,
@@ -4299,14 +4299,69 @@ fn run_migrate_repair(
     include_destructive: bool,
     virtio_win: Option<String>,
     verbose: bool,
+    inject_json: Option<String>,
 ) -> PyResult<Py<PyAny>> {
+    let inject = match inject_json {
+        Some(raw) if !raw.trim().is_empty() && raw.trim() != "null" => {
+            serde_json::from_str(&raw).map_err(|e| {
+                PyErr::new::<pyo3::exceptions::PyValueError, _>(format!("inject_json: {e}"))
+            })?
+        }
+        _ => crate::assurance::InjectPayload::default(),
+    };
     let options = crate::assurance::MigrateRepairOptions {
         apply,
         include_destructive,
         virtio_win_dir: virtio_win.map(PathBuf::from),
         verbose,
+        inject,
     };
     let result = crate::assurance::run_migrate_repair(Path::new(&image), target, &options)
+        .map_err(to_pyerr_generic)?;
+    serde_to_py(py, &result)
+}
+
+/// Commands a live guest fix should run. Execute them on the guest (SSH or local).
+#[cfg(feature = "python-bindings")]
+#[pyfunction]
+#[pyo3(signature = (update_grub = true, regen_initramfs = true, remove_vmware_tools = false))]
+fn live_fix_commands(
+    update_grub: bool,
+    regen_initramfs: bool,
+    remove_vmware_tools: bool,
+) -> Vec<String> {
+    crate::assurance::live_fix_commands(update_grub, regen_initramfs, remove_vmware_tools)
+}
+
+/// Apply those commands on this machine via GuestKit's live plan executor.
+#[cfg(feature = "python-bindings")]
+#[pyfunction]
+#[pyo3(signature = (commands, dry_run = false))]
+fn run_live_plan(py: Python<'_>, commands: Vec<String>, dry_run: bool) -> PyResult<Py<PyAny>> {
+    use crate::cli::plan::types::{CommandExec, FixPlan, Operation, OperationType, Priority};
+    use crate::cli::plan::LivePlanExecutor;
+
+    let mut plan = FixPlan::new("live".into(), "live-fix".into());
+    for (i, command) in commands.iter().enumerate() {
+        plan.operations.push(Operation {
+            id: format!("live-{:03}", i + 1),
+            op_type: OperationType::CommandExec(CommandExec {
+                command: command.clone(),
+                expected_exit: 0,
+                timeout: Some(300),
+                interpreter: None,
+            }),
+            priority: Priority::Medium,
+            description: command.clone(),
+            risk: Priority::Low,
+            reversible: false,
+            depends_on: vec![],
+            validation: None,
+            undo: None,
+        });
+    }
+    let result = LivePlanExecutor::for_migration(dry_run)
+        .apply(&plan)
         .map_err(to_pyerr_generic)?;
     serde_to_py(py, &result)
 }
@@ -4324,6 +4379,8 @@ fn guestkit(m: &pyo3::Bound<'_, pyo3::types::PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(run_migrate_plan, m)?)?;
     m.add_function(wrap_pyfunction!(run_repair_plan, m)?)?;
     m.add_function(wrap_pyfunction!(run_migrate_repair, m)?)?;
+    m.add_function(wrap_pyfunction!(live_fix_commands, m)?)?;
+    m.add_function(wrap_pyfunction!(run_live_plan, m)?)?;
     m.add("__version__", env!("CARGO_PKG_VERSION"))?;
     Ok(())
 }

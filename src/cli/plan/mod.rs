@@ -36,7 +36,6 @@ pub mod preview;
 pub mod serial_console;
 pub mod types;
 
-#[cfg(feature = "agent")]
 pub mod executor_live;
 pub mod topo_sort;
 
@@ -50,7 +49,6 @@ pub use apply::ApplyResult;
 pub use apply::PlanApplicator;
 #[cfg(not(target_os = "windows"))]
 pub use command::PlanCommand;
-#[cfg(feature = "agent")]
 pub use executor_live::LivePlanExecutor;
 pub use export::PlanExporter;
 #[cfg(not(target_os = "windows"))]

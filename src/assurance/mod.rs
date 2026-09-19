@@ -7,8 +7,11 @@
 
 mod copilot;
 mod handoff;
+mod inject;
 mod passport;
 mod repair_extras;
+
+pub use inject::{append_inject, live_fix_commands, AdRejoin, InjectPayload, NetworkFile, UserSpec};
 
 pub use copilot::{
     answer_copilot_question, build_evidence_digest, generate_briefing, CopilotAction,
@@ -454,6 +457,7 @@ pub struct MigrateRepairOptions {
     pub include_destructive: bool,
     pub virtio_win_dir: Option<std::path::PathBuf>,
     pub verbose: bool,
+    pub inject: InjectPayload,
 }
 
 /// Result of `run_migrate_repair`.
@@ -485,6 +489,8 @@ pub fn run_migrate_repair(
             virtio_win_dir: options.virtio_win_dir.clone(),
         },
     );
+    let mut plan = plan;
+    append_inject(&mut plan, &options.inject);
 
     if plan.operations.is_empty() {
         return Ok(MigrateRepairResult {

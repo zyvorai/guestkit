@@ -733,6 +733,16 @@ fn default_root() -> PathBuf {
     }
 }
 
+fn hex_encode(bytes: &[u8]) -> String {
+    const HEX: &[u8; 16] = b"0123456789abcdef";
+    let mut out = String::with_capacity(bytes.len() * 2);
+    for byte in bytes {
+        out.push(HEX[(byte >> 4) as usize] as char);
+        out.push(HEX[(byte & 0x0f) as usize] as char);
+    }
+    out
+}
+
 fn file_digest(path: &Path) -> Option<String> {
     use sha2::{Digest, Sha256};
     let bytes = fs::read(path).ok()?;
@@ -741,7 +751,7 @@ fn file_digest(path: &Path) -> Option<String> {
     Some(format!(
         "{} bytes, sha256:{}",
         bytes.len(),
-        hex::encode(&hasher.finalize()[..8])
+        hex_encode(&hasher.finalize()[..8])
     ))
 }
 
