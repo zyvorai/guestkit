@@ -75,10 +75,12 @@ jobs:
 
       - name: Run full test suite (no NBD skips)
         run: |
-          # --test-threads=1: find_available_device() (loop_device.rs / nbd.rs)
-          # checks a device's availability then uses it as two separate,
-          # non-atomic steps — parallel test threads can race onto the same
-          # device index otherwise. Same reason ci.yml's hosted-runner job
-          # serializes, independent of the NBD-capability question this
-          # workflow exists to answer.
+          # --test-threads=1: loop-device allocation still has a check-then-use
+          # window across parallel test threads. NBD allocate+connect is
+          # flock-serialized (see scripts/test-nbd-concurrent.sh / fluxvm#104).
           cargo test --verbose -- --test-threads=1
+
+      - name: Concurrent NBD allocate+connect
+        run: |
+          chmod +x scripts/test-nbd-concurrent.sh
+          ./scripts/test-nbd-concurrent.sh --live
