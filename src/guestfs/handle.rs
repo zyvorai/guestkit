@@ -349,14 +349,16 @@ impl Guestfs {
                 let mut nbd = NbdDevice::new()?;
                 if self.debug {
                     eprintln!(
-                        "[DEBUG] NBD device created: {}",
-                        nbd.device_path().display()
+                        "[DEBUG] Connecting NBD to image: {} (device allocated under flock)",
+                        drive.path.display()
                     );
-                    eprintln!("[DEBUG] Connecting NBD to image: {}", drive.path.display());
                 }
                 nbd.connect(&drive.path, drive.readonly)?;
                 if self.debug {
-                    eprintln!("[DEBUG] NBD connected successfully");
+                    eprintln!(
+                        "[DEBUG] NBD connected successfully on {}",
+                        nbd.device_path().display()
+                    );
                     eprintln!(
                         "[DEBUG] Opening DiskReader for NBD device: {}",
                         nbd.device_path().display()

@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Offline inject on `run_migrate_repair`** — optional `inject_json` appends hostname, network files, users, services, first-boot scripts, cloud-init user-data, Active Directory rejoin, Windows KMS reactivation, and RDP enable to the repair plan. Empty or `"null"` is a no-op. `guestkit migrate-repair` has no inject flag; h2kvm passes the JSON from Python.
 - **Live guest fix helpers** — `live_fix_commands()` returns shell lines (regenerate initramfs, update GRUB, optionally remove `open-vm-tools`). `run_live_plan(commands, dry_run=False)` runs those lines on the machine where Python is executing. It does not SSH.
 
+## [1.2.5] - 2026-09-26
+
+### Fixed
+- **Concurrent NBD allocate+connect** — `NbdDevice::connect` holds a cross-process `flock` (`/run/lock/guestkit-nbd.lock`, fallback `/tmp`) across free-device selection and `qemu-nbd -c`, and retries the next free index on failure. Fixes races where two mounts claimed the same `/dev/nbdN` (fluxvm#104: `/dev/nbd0p1 already mounted`, wrong guest-agent token). `new()` no longer claims a device index before connect.
+
 ## [1.2.4] - 2026-09-18
 
 ### Changed

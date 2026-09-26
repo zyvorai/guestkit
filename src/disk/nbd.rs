@@ -6,9 +6,13 @@
 //! This module provides NBD device management for mounting disk images
 //! as block devices. This allows filesystem access without implementing
 //! full filesystem parsers.
+//!
+//! Device selection and `qemu-nbd -c` are serialized with a cross-process
+//! `flock` so concurrent mounts never claim the same `/dev/nbdN`.
 
 use crate::core::{DiskFormat, Error, Result};
 use crate::disk::reader::DiskReader;
+use std::fs::{File, OpenOptions};
 use std::path::{Path, PathBuf};
 use std::process::{Child, Command};
 use std::thread;
@@ -23,9 +27,97 @@ fn is_debug_enabled() -> bool {
     std::env::var("GUESTKIT_DEBUG").is_ok()
 }
 
+/// Cross-process exclusive lock held for the whole choose-and-connect window.
+///
+/// Prefer `/run/lock/guestkit-nbd.lock`; fall back to `/tmp` when `/run/lock`
+/// is missing or not writable (unprivileged / container hosts).
+struct NbdAllocLock {
+    _file: File,
+}
+
+impl NbdAllocLock {
+    fn acquire() -> Result<Self> {
+        #[cfg(unix)]
+        {
+            use std::os::unix::io::AsRawFd;
+
+            let candidates = [
+                Path::new("/run/lock/guestkit-nbd.lock"),
+                Path::new("/tmp/guestkit-nbd.lock"),
+            ];
+            let mut last_err: Option<String> = None;
+
+            for path in candidates {
+                if let Some(parent) = path.parent() {
+                    if let Err(e) = std::fs::create_dir_all(parent) {
+                        last_err = Some(format!("create {}: {e}", parent.display()));
+                        continue;
+                    }
+                }
+                match OpenOptions::new()
+                    .create(true)
+                    .truncate(false)
+                    .read(true)
+                    .write(true)
+                    .open(path)
+                {
+                    Ok(file) => {
+                        let rc = unsafe { libc::flock(file.as_raw_fd(), libc::LOCK_EX) };
+                        if rc != 0 {
+                            let err = std::io::Error::last_os_error();
+                            last_err = Some(format!("flock {}: {err}", path.display()));
+                            continue;
+                        }
+                        if is_debug_enabled() {
+                            eprintln!("[DEBUG NBD] acquired alloc lock at {}", path.display());
+                        }
+                        return Ok(Self { _file: file });
+                    }
+                    Err(e) => {
+                        last_err = Some(format!("open {}: {e}", path.display()));
+                    }
+                }
+            }
+
+            Err(Error::CommandFailed(format!(
+                "Failed to acquire NBD allocation lock: {}",
+                last_err.unwrap_or_else(|| "no candidates".into())
+            )))
+        }
+
+        #[cfg(not(unix))]
+        {
+            // No flock on non-Unix; allocate without cross-process exclusion.
+            let path = std::env::temp_dir().join("guestkit-nbd.lock");
+            let file = OpenOptions::new()
+                .create(true)
+                .truncate(false)
+                .read(true)
+                .write(true)
+                .open(&path)
+                .map_err(|e| {
+                    Error::CommandFailed(format!(
+                        "Failed to create NBD alloc lock placeholder: {e}"
+                    ))
+                })?;
+            Ok(Self { _file: file })
+        }
+    }
+}
+
+impl Drop for NbdAllocLock {
+    fn drop(&mut self) {
+        #[cfg(unix)]
+        {
+            use std::os::unix::io::AsRawFd;
+            let _ = unsafe { libc::flock(self._file.as_raw_fd(), libc::LOCK_UN) };
+        }
+    }
+}
+
 /// NBD device manager
 pub struct NbdDevice {
-    /// NBD device path (e.g., /dev/nbd0)
+    /// NBD device path (e.g., /dev/nbd0). Empty until [`Self::connect`].
     device_path: PathBuf,
     /// Image path being exported
     image_path: PathBuf,
@@ -36,14 +128,20 @@ pub struct NbdDevice {
 }
 
 impl NbdDevice {
-    /// Create a new NBD device manager
+    /// Create a new NBD device manager.
     ///
-    /// This finds an available /dev/nbd* device
+    /// Ensures the NBD module/devices are available but does **not** claim a
+    /// `/dev/nbdN` index — allocation happens under flock inside [`Self::connect`].
     pub fn new() -> Result<Self> {
-        let device_path = Self::find_available_device()?;
+        Self::ensure_nbd_module()?;
+        if !(0..16).any(|i| PathBuf::from(format!("/dev/nbd{i}")).exists()) {
+            return Err(Error::NotFound(
+                "No /dev/nbd* devices found. Try: sudo modprobe nbd max_part=16".to_string(),
+            ));
+        }
 
         Ok(NbdDevice {
-            device_path,
+            device_path: PathBuf::new(),
             image_path: PathBuf::new(),
             connected: false,
             qemu_nbd_process: None,
@@ -57,6 +155,17 @@ impl NbdDevice {
             return stdout.lines().any(|line| line.starts_with("nbd "));
         }
         false
+    }
+
+    /// Load the NBD module if needed and wait for `/dev/nbd*` to appear.
+    fn ensure_nbd_module() -> Result<()> {
+        if Self::is_nbd_module_loaded() {
+            return Ok(());
+        }
+        eprintln!("NBD kernel module not loaded. Attempting to load...");
+        Self::load_nbd_module()?;
+        eprintln!("NBD module loaded successfully.");
+        Ok(())
     }
 
     /// Try to load NBD kernel module
@@ -202,44 +311,31 @@ impl NbdDevice {
         Some(fmt.to_string())
     }
 
-    /// Find an available NBD device
-    ///
-    /// KNOWN RACE (not fixed here — no NBD-capable test infra to verify a
-    /// fix against): this checks a device's availability, then the caller
-    /// connects to it, as two separate, unlocked steps — no flock or other
-    /// cross-process coordination. Two processes on the same host racing
-    /// this (e.g. two independent API requests each mounting a different
-    /// disk image at the same moment) can both pick the same device index;
-    /// one side's connect then fails outright rather than retrying a
-    /// different device. Seen in practice: `deploy/scripts/e2e-smoke.sh`
-    /// hit this via an unawaited async migrate-plan job racing a
-    /// synchronous provision call against the same image — worked around
-    /// there by serializing the two calls, not fixed at the source.
-    fn find_available_device() -> Result<PathBuf> {
-        // First, check if NBD module is loaded
-        if !Self::is_nbd_module_loaded() {
-            eprintln!("NBD kernel module not loaded. Attempting to load...");
-            Self::load_nbd_module()?;
-            eprintln!("NBD module loaded successfully.");
-        }
+    /// List free `/dev/nbd*` indices. Caller must hold [`NbdAllocLock`].
+    fn free_nbd_devices() -> Result<Vec<PathBuf>> {
+        Self::ensure_nbd_module()?;
 
-        // Try /dev/nbd0 through /dev/nbd15
+        let mut free = Vec::new();
         for i in 0..16 {
-            let device = PathBuf::from(format!("/dev/nbd{}", i));
-            if device.exists() {
-                // Check if device is actually connected
-                if !Self::is_nbd_device_in_use(&device) {
-                    return Ok(device);
-                }
+            let device = PathBuf::from(format!("/dev/nbd{i}"));
+            if device.exists() && !Self::is_nbd_device_in_use(&device) {
+                free.push(device);
             }
         }
 
-        Err(Error::NotFound(
-            "No available NBD devices found. All 16 NBD devices are in use. Try disconnecting unused devices with: for i in {0..15}; do sudo qemu-nbd --disconnect /dev/nbd$i; done".to_string()
-        ))
+        if free.is_empty() {
+            return Err(Error::NotFound(
+                "No available NBD devices found. All 16 NBD devices are in use. Try disconnecting unused devices with: for i in {0..15}; do sudo qemu-nbd --disconnect /dev/nbd$i; done".to_string()
+            ));
+        }
+        Ok(free)
     }
 
-    /// Connect disk image to NBD device
+    /// Connect disk image to an NBD device.
+    ///
+    /// Allocates a free `/dev/nbdN` and runs `qemu-nbd -c` under a process-wide
+    /// flock so concurrent callers never share the same device index
+    /// (fluxvm#104 / Keep concurrent sandbox create).
     ///
     /// # Arguments
     ///
@@ -272,54 +368,61 @@ impl NbdDevice {
             )));
         }
 
-        // Check if the device is already in use (stale connection from previous run)
-        if Self::is_nbd_device_in_use(&self.device_path) {
-            eprintln!(
-                "Warning: NBD device {} is already in use. Attempting to disconnect...",
-                self.device_path.display()
-            );
+        let format = Self::detect_image_format(image_path);
+        let _lock = NbdAllocLock::acquire()?;
 
-            // Try to disconnect the stale connection
-            let need_sudo = crate::guestfs::mount::need_sudo();
-            let mut cmd = if need_sudo {
-                let mut sudo_cmd = Command::new("sudo");
-                sudo_cmd.arg("qemu-nbd");
-                sudo_cmd
-            } else {
-                Command::new("qemu-nbd")
-            };
+        let candidates = Self::free_nbd_devices()?;
+        let mut last_err: Option<Error> = None;
 
-            if let Err(e) = cmd.arg("--disconnect").arg(&self.device_path).output() {
-                log::warn!(
-                    "NBD disconnect failed for {}: {}",
-                    self.device_path.display(),
-                    e
-                );
+        for device in candidates {
+            self.device_path = device;
+            match self.connect_one(image_path, read_only, &format) {
+                Ok(()) => {
+                    self.image_path = image_path.to_path_buf();
+                    self.connected = true;
+                    return Ok(());
+                }
+                Err(e) => {
+                    if is_debug_enabled() {
+                        eprintln!(
+                            "[DEBUG NBD] connect to {} failed: {e}; trying next device",
+                            self.device_path.display()
+                        );
+                    }
+                    self.cleanup_failed_connect();
+                    last_err = Some(e);
+                }
             }
-
-            // Wait for disconnect to complete
-            thread::sleep(Duration::from_millis(500));
-
-            // Check again
-            if Self::is_nbd_device_in_use(&self.device_path) {
-                return Err(Error::InvalidState(format!(
-                    "NBD device {} is still in use after disconnect attempt. \
-                     Try manually: sudo qemu-nbd --disconnect {}",
-                    self.device_path.display(),
-                    self.device_path.display()
-                )));
-            }
-
-            eprintln!("Successfully disconnected stale NBD connection.");
         }
 
-        // Check if we need to use sudo (qemu-nbd --connect requires root)
+        self.device_path = PathBuf::new();
+        Err(last_err.unwrap_or_else(|| {
+            Error::NotFound("No available NBD devices could be connected".to_string())
+        }))
+    }
+
+    /// Spawn qemu-nbd against `self.device_path` and wait until the device is ready.
+    /// Caller must hold [`NbdAllocLock`] and have set `self.device_path` to a free device.
+    fn connect_one(&mut self, image_path: &Path, read_only: bool, format: &str) -> Result<()> {
+        // Under the alloc lock we only select devices that looked free. If one
+        // flipped to in-use (external qemu-nbd, not guestkit), skip — do not
+        // qemu-nbd --disconnect another owner's device.
+        if Self::is_nbd_device_in_use(&self.device_path) {
+            return Err(Error::InvalidState(format!(
+                "NBD device {} became busy before connect",
+                self.device_path.display()
+            )));
+        }
+
         let need_sudo = crate::guestfs::mount::need_sudo();
         if is_debug_enabled() {
-            eprintln!("[DEBUG NBD] need_sudo={}", need_sudo);
+            eprintln!(
+                "[DEBUG NBD] need_sudo={} device={}",
+                need_sudo,
+                self.device_path.display()
+            );
         }
 
-        // Build qemu-nbd command
         let mut cmd = if need_sudo {
             let mut sudo_cmd = Command::new("sudo");
             sudo_cmd.arg("qemu-nbd");
@@ -328,12 +431,12 @@ impl NbdDevice {
             Command::new("qemu-nbd")
         };
 
-        // Detect image format: try extension first, then fall back to qemu-img info
-        let format = Self::detect_image_format(image_path);
-
         // Use short flags: -c instead of --connect, -f instead of --format
         // This is important! Long flags cause qemu-nbd to exit immediately
-        cmd.arg("-c").arg(&self.device_path).arg("-f").arg(format);
+        cmd.arg("-c")
+            .arg(&self.device_path)
+            .arg("-f")
+            .arg(format);
 
         // CRITICAL: Use -r (read-only) flag to prevent file locking issues
         // This allows multiple qemu-nbd processes to access the same file
@@ -348,12 +451,6 @@ impl NbdDevice {
             eprintln!("[DEBUG NBD] Command: {:?}", cmd);
         }
 
-        // Don't redirect stdio - qemu-nbd needs it to stay alive
-        // cmd.stdin(Stdio::null())
-        //     .stdout(Stdio::null())
-        //     .stderr(Stdio::null());
-
-        // Spawn the process and keep it alive
         let mut child = cmd.spawn().map_err(|e| {
             Error::CommandFailed(format!(
                 "Failed to spawn qemu-nbd: {}. Is qemu-nbd installed?",
@@ -366,7 +463,6 @@ impl NbdDevice {
         }
         thread::sleep(Duration::from_millis(500));
 
-        // Check if process is still alive
         // Note: qemu-nbd may exit after successfully connecting (daemonizes),
         // so we need to check if the device is actually connected, not just if the process is running
         let process_exited = match child.try_wait() {
@@ -377,8 +473,6 @@ impl NbdDevice {
                         status
                     );
                 }
-                // Process exited - could be normal (daemonized) or an error
-                // We'll check if device is connected below
                 true
             }
             Ok(None) => {
@@ -388,6 +482,8 @@ impl NbdDevice {
                 false
             }
             Err(e) => {
+                let _ = child.kill();
+                let _ = child.wait();
                 return Err(Error::CommandFailed(format!(
                     "Failed to check qemu-nbd process status: {}",
                     e
@@ -395,16 +491,10 @@ impl NbdDevice {
             }
         };
 
-        // Store the child process handle first (will be used or dropped)
         self.qemu_nbd_process = Some(child);
 
-        // Wait for device to be ready - this verifies the connection actually worked
         if let Err(e) = self.wait_for_device() {
-            // Device not ready - connection failed, cleanup the process
-            if let Some(mut proc) = self.qemu_nbd_process.take() {
-                let _ = proc.kill();
-                let _ = proc.wait();
-            }
+            self.cleanup_failed_connect();
 
             if process_exited {
                 return Err(Error::CommandFailed(format!(
@@ -415,19 +505,35 @@ impl NbdDevice {
                     e,
                     self.device_path.display()
                 )));
-            } else {
-                return Err(Error::CommandFailed(format!(
-                    "Device did not become ready: {}. Try: sudo qemu-nbd --disconnect {}",
-                    e,
-                    self.device_path.display()
-                )));
             }
+            return Err(Error::CommandFailed(format!(
+                "Device did not become ready: {}. Try: sudo qemu-nbd --disconnect {}",
+                e,
+                self.device_path.display()
+            )));
         }
 
-        // Device is ready - connection successful
-        self.image_path = image_path.to_path_buf();
-        self.connected = true;
         Ok(())
+    }
+
+    fn cleanup_failed_connect(&mut self) {
+        if let Some(mut proc) = self.qemu_nbd_process.take() {
+            let _ = proc.kill();
+            let _ = proc.wait();
+        }
+        // Best-effort disconnect of the device we just tried (we hold the alloc lock).
+        if !self.device_path.as_os_str().is_empty() {
+            let need_sudo = crate::guestfs::mount::need_sudo();
+            let mut cmd = if need_sudo {
+                let mut sudo_cmd = Command::new("sudo");
+                sudo_cmd.arg("qemu-nbd");
+                sudo_cmd
+            } else {
+                Command::new("qemu-nbd")
+            };
+            let _ = cmd.arg("--disconnect").arg(&self.device_path).output();
+            thread::sleep(Duration::from_millis(100));
+        }
     }
 
     /// Wait for NBD device to become available
@@ -637,6 +743,8 @@ impl Drop for NbdDevice {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::sync::mpsc;
+    use std::time::{Duration, Instant};
 
     #[test]
     fn test_nbd_device_creation() {
@@ -648,11 +756,40 @@ mod tests {
         match result {
             Ok(nbd) => {
                 assert!(!nbd.is_connected());
+                // Device index is claimed only in connect()
+                assert!(nbd.device_path().as_os_str().is_empty());
             }
             Err(e) => {
                 // Expected if NBD module not loaded
                 eprintln!("NBD device creation failed (expected): {}", e);
             }
         }
+    }
+
+    #[test]
+    fn test_nbd_alloc_lock_serializes() {
+        let (ready_tx, ready_rx) = mpsc::channel();
+        let (done_tx, done_rx) = mpsc::channel();
+
+        let holder = thread::spawn(move || {
+            let lock = NbdAllocLock::acquire().expect("holder acquire");
+            ready_tx.send(()).unwrap();
+            // Hold long enough that the waiter must block
+            thread::sleep(Duration::from_millis(250));
+            drop(lock);
+            done_tx.send(()).unwrap();
+        });
+
+        ready_rx.recv().expect("holder ready");
+        let start = Instant::now();
+        let _lock = NbdAllocLock::acquire().expect("waiter acquire");
+        let waited = start.elapsed();
+        // Must have blocked until the holder released (~250ms)
+        assert!(
+            waited >= Duration::from_millis(150),
+            "expected flock to block ~250ms, waited {waited:?}"
+        );
+        let _ = done_rx.recv_timeout(Duration::from_secs(2));
+        holder.join().unwrap();
     }
 }
