@@ -1,0 +1,67 @@
+name: NBD concurrency
+
+# Regression gate for fluxvm#104: concurrent Guestfs/qemu-nbd mounts must not
+# be handed the same /dev/nbdN. Unit (flock) runs on every PR; live connect
+# stress runs on the self-hosted nbd runner (qemu-nbd fails on GitHub-hosted).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/disk/nbd.rs"
+      - "scripts/test-nbd-concurrent.sh"
+      - ".github/workflows/nbd-concurrency.yml"
+      - ".github/workflows/self-hosted-nbd-tests.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/disk/nbd.rs"
+      - "scripts/test-nbd-concurrent.sh"
+      - ".github/workflows/nbd-concurrency.yml"
+      - ".github/workflows/self-hosted-nbd-tests.yml"
+  workflow_dispatch: {}
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+permissions:
+  contents: read
+
+jobs:
+  nbd-concurrency-unit:
+    name: NBD alloc lock (unit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Install system deps
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libssl-dev libsystemd-dev pkg-config
+      - name: Flock serialize unit test
+        run: |
+          chmod +x scripts/test-nbd-concurrent.sh
+          ./scripts/test-nbd-concurrent.sh --unit
+
+  nbd-concurrency-live:
+    name: NBD concurrent connect (live)
+    # Same runner labels as self-hosted-nbd-tests.yml. Skip forks — a
+    # workflow_dispatch or same-repo PR only; never run untrusted fork code
+    # on the privileged nbd host.
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'pull_request' &&
+       github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: [self-hosted, linux, nbd]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install system deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq qemu-utils libssl-dev libsystemd-dev pkg-config
+      - name: Concurrent allocate+connect (20 @ 4)
+        run: |
+          chmod +x scripts/test-nbd-concurrent.sh
+          ./scripts/test-nbd-concurrent.sh --live

@@ -80,6 +80,11 @@ jobs:
       - name: Build
         run: cargo build --verbose
 
+      - name: NBD concurrency unit (flock serialize)
+        run: |
+          chmod +x scripts/test-nbd-concurrent.sh
+          ./scripts/test-nbd-concurrent.sh --unit
+
       - name: Run tests
         run: |
           # --test-threads=1: find_available_device() (loop_device.rs / nbd.rs)
@@ -100,9 +105,8 @@ jobs:
           # needs investigation with actual shell access to a failing
           # runner. Tests that don't reach a real mount (state/precondition
           # checks, read-only inspection) still run and pass. See
-          # self-hosted-nbd-tests.yml (workflow_dispatch, self-hosted
-          # runner) for running this same suite with none of the skips, on
-          # infrastructure where NBD actually works.
+          # self-hosted-nbd-tests.yml and nbd-concurrency.yml (self-hosted
+          # `nbd` runner) for live concurrent allocate+connect coverage.
           cargo test --verbose -- --test-threads=1 --skip test_arch_ --skip test_debian_ \
             --skip test_ubuntu_ --skip test_windows_ \
             --skip test_archive_operations --skip test_checksums \

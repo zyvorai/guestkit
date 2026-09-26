@@ -792,4 +792,86 @@ mod tests {
         let _ = done_rx.recv_timeout(Duration::from_secs(2));
         holder.join().unwrap();
     }
+
+    /// Concurrent allocate+connect must never hand two workers the same `/dev/nbdN`
+    /// (fluxvm#104). Needs a working `qemu-nbd` (self-hosted `nbd` runner); skipped
+    /// on GitHub-hosted runners where NBD attach fails.
+    #[test]
+    #[ignore = "needs working qemu-nbd (run: scripts/test-nbd-concurrent.sh)"]
+    fn test_concurrent_nbd_allocate_connect() {
+        use std::collections::HashSet;
+        use std::sync::atomic::{AtomicUsize, Ordering};
+        use std::sync::{Arc, Mutex};
+
+        let work = tempfile::tempdir().expect("tempdir");
+        let image = work.path().join("blank.raw");
+        let status = Command::new("qemu-img")
+            .args(["create", "-f", "raw"])
+            .arg(&image)
+            .arg("64M")
+            .status()
+            .expect("spawn qemu-img");
+        assert!(status.success(), "qemu-img create failed: {status}");
+
+        let concurrency = 4usize;
+        let runs = 20usize;
+        let next = Arc::new(AtomicUsize::new(0));
+        let fail = Arc::new(AtomicUsize::new(0));
+        let ok = Arc::new(AtomicUsize::new(0));
+        let held = Arc::new(Mutex::new(HashSet::<String>::new()));
+        let collisions = Arc::new(AtomicUsize::new(0));
+
+        let mut handles = Vec::new();
+        for _ in 0..concurrency {
+            let image = image.clone();
+            let next = next.clone();
+            let fail = fail.clone();
+            let ok = ok.clone();
+            let held = held.clone();
+            let collisions = collisions.clone();
+            handles.push(thread::spawn(move || {
+                loop {
+                    let i = next.fetch_add(1, Ordering::SeqCst);
+                    if i >= runs {
+                        break;
+                    }
+                    let res = (|| -> std::result::Result<(), String> {
+                        let mut nbd = NbdDevice::new().map_err(|e| e.to_string())?;
+                        nbd.connect(&image, true).map_err(|e| e.to_string())?;
+                        let path = nbd.device_path().display().to_string();
+                        {
+                            let mut h = held.lock().unwrap();
+                            if !h.insert(path.clone()) {
+                                collisions.fetch_add(1, Ordering::SeqCst);
+                                return Err(format!("COLLISION: {path} already held"));
+                            }
+                        }
+                        thread::sleep(Duration::from_millis(100));
+                        held.lock().unwrap().remove(&path);
+                        drop(nbd);
+                        Ok(())
+                    })();
+                    match res {
+                        Ok(()) => {
+                            ok.fetch_add(1, Ordering::SeqCst);
+                        }
+                        Err(e) => {
+                            eprintln!("FAIL {i}: {e}");
+                            fail.fetch_add(1, Ordering::SeqCst);
+                        }
+                    }
+                }
+            }));
+        }
+        for h in handles {
+            h.join().expect("worker panicked");
+        }
+
+        let ok_n = ok.load(Ordering::SeqCst);
+        let fail_n = fail.load(Ordering::SeqCst);
+        let col_n = collisions.load(Ordering::SeqCst);
+        assert_eq!(fail_n, 0, "{fail_n} concurrent NBD connects failed");
+        assert_eq!(col_n, 0, "{col_n} device collisions (fluxvm#104 race)");
+        assert_eq!(ok_n, runs, "expected {runs} ok, got {ok_n}");
+    }
 }
