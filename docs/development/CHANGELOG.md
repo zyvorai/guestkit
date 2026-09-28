@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Offline inject on `run_migrate_repair`** — optional `inject_json` appends hostname, network files, users, services, first-boot scripts, cloud-init user-data, Active Directory rejoin, Windows KMS reactivation, and RDP enable to the repair plan. Empty or `"null"` is a no-op. `guestkit migrate-repair` has no inject flag; h2kvm passes the JSON from Python.
 - **Live guest fix helpers** — `live_fix_commands()` returns shell lines (regenerate initramfs, update GRUB, optionally remove `open-vm-tools`). `run_live_plan(commands, dry_run=False)` runs those lines on the machine where Python is executing. It does not SSH.
+- **Docs: README is now a landing page** — the detailed sections moved into `docs/` (`quick-start`, `who-does-what`, `capabilities`, `oss-vs-enterprise`, `platform-layout`, `repository-layout`, `documentation-map`, ...); every earlier README anchor still resolves.
 
 ## [1.2.4] - 2026-09-18
 
