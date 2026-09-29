@@ -17,7 +17,9 @@ Score boot readiness before power-on, repair disks offline, and certify cutover 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-0071e3?style=flat-square&labelColor=1d1d1f)](LICENSE)
 [![GHCR](https://img.shields.io/badge/GHCR-zyvorai-0071e3?style=flat-square&labelColor=1d1d1f&logo=github)](https://github.com/orgs/zyvorai/packages)
 
-[**Quick start**](#quick-start) · [**Gallery**](docs/gallery.md) · [**Docs**](https://zyvorai.github.io/guestkit/) · [**Product**](https://zyvor.dev/guestkit?utm_source=github&utm_medium=guestkit) · [**Wiki**](https://github.com/zyvorai/guestkit/wiki) · [**FluxVM**](https://github.com/zyvorai/fluxvm) · [**h2kvm**](https://github.com/zyvorai/h2kvm) · [**Book a demo**](https://zyvor.dev/contact?utm_source=github&utm_medium=guestkit&intent=demo)
+**[Book a demo](https://zyvor.dev/schedule?utm_source=github&utm_medium=guestkit&utm_campaign=readme_hero)** · **[Start a 30-day PoC](https://zyvor.dev/poc?utm_source=github&utm_medium=guestkit&utm_campaign=readme_hero)** · [30-day Enterprise trial](docs/enterprise-trial-install.md)
+
+[**Quick start**](#quick-start) · [**Gallery**](docs/gallery.md) · [**Docs**](https://zyvorai.github.io/guestkit/) · [**Product**](https://zyvor.dev/guestkit?utm_source=github&utm_medium=guestkit&utm_campaign=readme_hero) · [**Wiki**](https://github.com/zyvorai/guestkit/wiki) · [**FluxVM**](https://github.com/zyvorai/fluxvm) · [**h2kvm**](https://github.com/zyvorai/h2kvm)
 
 </div>
 
@@ -65,7 +67,7 @@ A pure-Rust engine over qcow2, VMDK, VHDX, VHD, VDI and raw, through NBD or loop
 </td>
 <td valign="top" width="33%">
 <b>Suite hand-offs</b><br>
-Certify with GuestKit, run and manage with FluxVM, convert and deploy with h2kvm.<br>
+Export with Transiva, convert and deploy with h2kvm, assure with GuestKit, operate on Zorvia or Zeus OS.<br>
 <a href="docs/who-does-what.md">Who does what</a>
 </td>
 <td valign="top" width="33%">
@@ -140,7 +142,7 @@ Every hypervisor exit fails the same way: you discover the disk was broken **at 
 
 </div>
 
-**Certify with [GuestKit](https://github.com/zyvorai/guestkit) → run & manage with [FluxVM](https://github.com/zyvorai/fluxvm) → convert & deploy with [h2kvm](https://github.com/zyvorai/h2kvm) → operate on [Zeus OS](https://zyvor.dev/zeus-os) or the open-source [Zorvia](https://github.com/zyvorai/zorvia/blob/main/docs/leave-openshift.md).** [Who does what](docs/who-does-what.md) · [h2kvm integration](docs/h2kvm-at-a-glance.md)
+**Export with [Transiva](https://github.com/zyvorai/transiva) (Apache-2.0) → convert & deploy with [h2kvm](https://github.com/zyvorai/h2kvm) (Zyvor Production License) → assure with [GuestKit](https://github.com/zyvorai/guestkit) (Apache-2.0) → operate on [Zorvia](https://github.com/zyvorai/zorvia/blob/main/docs/leave-openshift.md) or [Zeus OS](https://zyvor.dev/zeus-os?utm_source=github&utm_medium=guestkit&utm_campaign=readme_suite).** Run and manage VMs with [FluxVM](https://github.com/zyvorai/fluxvm). [Who does what](docs/who-does-what.md) · [h2kvm integration](docs/h2kvm-at-a-glance.md)
 
 <a id="why-teams-switch"></a>
 
@@ -164,7 +166,9 @@ The [full comparison](docs/why-teams-switch.md) has four more rows.
 
 **Enterprise — buy for programs.** Same engine — **not** a locked doctor. Command Center · Portfolio · Assurance · Migration Factory · Passport Authority · OIDC / RBAC / audit · SLA · air-gap · hypervisor exit workshops.
 
-[Open source vs Enterprise](docs/oss-vs-enterprise.md) · [Full feature matrix](docs/ce-vs-enterprise.md) · [30-day Enterprise trial](docs/enterprise-trial-install.md) · [Pricing](https://zyvor.dev/pricing?utm_source=github&utm_medium=guestkit)
+[Open source vs Enterprise](docs/oss-vs-enterprise.md) · [Full feature matrix](docs/ce-vs-enterprise.md) · [30-day Enterprise trial](docs/enterprise-trial-install.md) · [Pricing](https://zyvor.dev/pricing?utm_source=github&utm_medium=guestkit&utm_campaign=readme_edition)
+
+**Trial expired or want a guided evaluation?** [Book a demo](https://zyvor.dev/schedule?utm_source=github&utm_medium=guestkit&utm_campaign=readme_edition) or [start a 30-day PoC](https://zyvor.dev/poc?utm_source=github&utm_medium=guestkit&utm_campaign=readme_edition) — no email needed. [sales@zyvor.dev](mailto:sales@zyvor.dev) remains as a fallback.
 
 <a id="documentation"></a>
 
@@ -176,7 +180,7 @@ The [full comparison](docs/why-teams-switch.md) has four more rows.
 | Docs home | [docs/README.md](docs/README.md) · [INDEX](docs/INDEX.md) |
 | DevOps runbooks | [docs/devops](docs/devops/README.md) |
 | Feature guide | [guestkit-user-feature-guide.md](docs/guestkit-user-feature-guide.md) |
-| h2kvm integration | [hyper2kvm-integration.md](docs/features/hyper2kvm-integration.md) |
+| h2kvm integration | [h2kvm integration](docs/features/hyper2kvm-integration.md) |
 | QEMU / VirtIO runtime | [qemu-runtime.md](docs/features/qemu-runtime.md) |
 | Dump virsh → GuestKit | [virsh-to-guestkit.md](docs/user-guides/virsh-to-guestkit.md) |
 | Architecture | [overview](docs/architecture/overview.md) |
@@ -209,10 +213,10 @@ See [NOTICE](NOTICE) and `docs/legal/` where applicable.
 ### Enterprise
 
 Production support, SLAs, and Zyvor Enterprise products are licensed separately.
-Contact [sales@zyvor.dev](mailto:sales@zyvor.dev) or see [zyvor.dev](https://zyvor.dev).
+[Book a demo](https://zyvor.dev/schedule?utm_source=github&utm_medium=guestkit&utm_campaign=readme_footer), [start a 30-day PoC](https://zyvor.dev/poc?utm_source=github&utm_medium=guestkit&utm_campaign=readme_footer), or see [zyvor.dev](https://zyvor.dev/?utm_source=github&utm_medium=guestkit&utm_campaign=readme_footer). Email [sales@zyvor.dev](mailto:sales@zyvor.dev) as a fallback.
 
 <div align="center">
 
-More at **[zyvor.dev/guestkit](https://zyvor.dev/guestkit?utm_source=github&utm_medium=guestkit)** · [docs](https://zyvor.dev/docs?utm_source=github&utm_medium=guestkit) · [blog](https://zyvor.dev/blog?utm_source=github&utm_medium=guestkit)
+More at **[zyvor.dev/guestkit](https://zyvor.dev/guestkit?utm_source=github&utm_medium=guestkit&utm_campaign=readme_footer)** · [docs](https://zyvor.dev/docs?utm_source=github&utm_medium=guestkit&utm_campaign=readme_footer) · [blog](https://zyvor.dev/blog?utm_source=github&utm_medium=guestkit&utm_campaign=readme_footer)
 
 </div>
