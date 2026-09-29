@@ -3,9 +3,9 @@
 **GuestKit (this repo)** is the full Apache-2.0 **offline disk engine** — free for personal, lab, and commercial production use (no license key).  
 **GuestKit Enterprise** is Zyvor’s commercial **migration control plane** — every Command Center screen below — calling the **same** `guestkit doctor` evidence. Not a forked binary. Not a feature hostage. Enterprise support, SLAs, and the control plane are licensed separately.
 
-Product: [zyvor.dev/guestkit](https://zyvor.dev/guestkit?utm_source=github&utm_medium=guestkit) · [Book a demo](https://zyvor.dev/contact?utm_source=github&utm_medium=guestkit&intent=demo) · [sales@zyvor.dev](mailto:sales@zyvor.dev)
+Product: [zyvor.dev/guestkit](https://zyvor.dev/guestkit?utm_source=github&utm_medium=guestkit&utm_campaign=readme_edition) · [Book a demo](https://zyvor.dev/schedule?utm_source=github&utm_medium=guestkit&utm_campaign=readme_edition) · [sales@zyvor.dev](mailto:sales@zyvor.dev)
 
-**30-day Enterprise trial (binary):** [v1.0.0-enterprise-trial](https://github.com/zyvorai/guestkit/releases/tag/v1.0.0-enterprise-trial) · [install guide](enterprise-trial-install.md)
+**30-day Enterprise trial (binary):** [latest trial release](https://github.com/zyvorai/guestkit/releases?q=enterprise-trial) · [install guide](enterprise-trial-install.md)
 
 ---
 
@@ -19,7 +19,7 @@ Product: [zyvor.dev/guestkit](https://zyvor.dev/guestkit?utm_source=github&utm_m
 | Who it is for | Engineers, CI, labs, small fleets | Platform / SRE / migration leads · 50–10,000+ VMs |
 | Success metric | Disk score & Passport JSON | Estate readiness % · wave completion · audit |
 | Support | GitHub Issues | **SLA** · workshops · hypervisor exit programs |
-| Platform pipeline | Pair with [hyper2kvm](https://github.com/zyvorai/h2kvm) | HyperSDK → hyper2kvm → GuestKit → **Zeus OS** → PacketWolf |
+| Platform pipeline | Pair with [h2kvm](https://github.com/zyvorai/h2kvm) | Transiva → h2kvm → GuestKit → **Zorvia** or **Zeus OS** |
 
 ### Offline engine (shared)
 
@@ -101,6 +101,6 @@ CI / golden-image gates · lab evaluation · small fleets owned by one engineer.
 
 Hypervisor exit with program governance · regulated SSO/audit · multi-site cutovers · contractual accountability.
 
-**→ [Book a demo](https://zyvor.dev/contact?utm_source=github&utm_medium=guestkit&intent=demo)** · **[Pricing](https://zyvor.dev/pricing?utm_source=github&utm_medium=guestkit)** · **[sales@zyvor.dev](mailto:sales@zyvor.dev)**
+**→ [Book a demo](https://zyvor.dev/schedule?utm_source=github&utm_medium=guestkit&utm_campaign=readme_edition)** · **[30-day PoC](https://zyvor.dev/poc?utm_source=github&utm_medium=guestkit&utm_campaign=readme_edition)** · **[Pricing](https://zyvor.dev/pricing?utm_source=github&utm_medium=guestkit&utm_campaign=readme_edition)** · **[sales@zyvor.dev](mailto:sales@zyvor.dev)**
 
 See also: [zyvor-enterprise.md](zyvor-enterprise.md) · live table on [zyvor.dev/guestkit#enterprise](https://zyvor.dev/guestkit#enterprise)
