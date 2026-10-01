@@ -58,6 +58,7 @@ cp "${ROOT}/templates/agent/guestkit-agent.service" \
    "${ROOT}/templates/agent/zyvor-guest-agent-exec.service" \
    "${STAGE}/systemd/" 2>/dev/null || true
 cp "${ROOT}/templates/agent/agent-policy.yaml" "${STAGE}/config/" 2>/dev/null || true
+cp "${ROOT}/templates/agent/60-zyvor-guest-agent.rules" "${STAGE}/systemd/"
 
 # install.sh — install binaries + unit, create the service user, enable.
 cat > "${STAGE}/install.sh" <<'SH'
@@ -78,6 +79,11 @@ install -Dm640 "${HERE}/config/agent-policy.yaml" /etc/guestkit/agent-policy.yam
 install -Dm644 "${HERE}/systemd/guestkit-agent.service" /etc/systemd/system/guestkit-agent.service
 [ -f "${HERE}/systemd/zyvor-guest-agent-exec.service" ] && \
   install -Dm644 "${HERE}/systemd/zyvor-guest-agent-exec.service" /etc/systemd/system/zyvor-guest-agent-exec.service
+# Let the unprivileged agent user open the hypervisor channel (virtio port).
+install -Dm644 "${HERE}/systemd/60-zyvor-guest-agent.rules" /etc/udev/rules.d/60-zyvor-guest-agent.rules
+udevadm control --reload 2>/dev/null || true
+udevadm trigger --subsystem-match=virtio-ports --action=change 2>/dev/null || true
+udevadm settle --timeout=5 2>/dev/null || true
 systemctl daemon-reload
 systemctl enable --now guestkit-agent.service
 echo "GuestKit agent installed. Status: systemctl status guestkit-agent"

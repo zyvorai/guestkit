@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Linux agent never connected to the hypervisor channel on stock distros.** The virtio port (`/dev/virtio-ports/org.qemu.guest_agent.0`) is `root:root 0600` but `guestkit-agent.service` runs as `zyvor-agent`, so the agent started, logged `failed to open virtio channel`, and KubeVirt reported no guest agent. The DEB, RPM and tarball now ship `60-zyvor-guest-agent.rules` (group `zyvor-agent`, mode 0660 for `org.qemu.guest_agent.0` and `com.zyvor.guestkit.0`) and reload/trigger udev on install. Verified on Ubuntu 24.04 under KubeVirt 1.9: with the rule the agent connects (`agentConnected`), without it it does not.
+
 ### Added
 - **Offline inject on `run_migrate_repair`** — optional `inject_json` appends hostname, network files, users, services, first-boot scripts, cloud-init user-data, Active Directory rejoin, Windows KMS reactivation, and RDP enable to the repair plan. Empty or `"null"` is a no-op. `guestkit migrate-repair` has no inject flag; h2kvm passes the JSON from Python.
 - **Live guest fix helpers** — `live_fix_commands()` returns shell lines (regenerate initramfs, update GRUB, optionally remove `open-vm-tools`). `run_live_plan(commands, dry_run=False)` runs those lines on the machine where Python is executing. It does not SSH.
