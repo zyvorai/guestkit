@@ -28,6 +28,7 @@ cp templates/agent/zyvor-guest-agent-exec.service "${DIST}/linux/"
 cp templates/agent/zyvor-guest-updater.service "${DIST}/linux/"
 cp templates/agent/zyvor-guest-updater.timer "${DIST}/linux/"
 cp templates/agent/agent-policy.yaml "${DIST}/linux/"
+cp templates/agent/60-zyvor-guest-agent.rules "${DIST}/linux/"
 cp templates/agent/guest-agent.toml "${DIST}/linux/"
 mkdir -p "${DIST}/linux/hooks/pre-snapshot"
 cp templates/agent/hooks/pre-snapshot/*.sh "${DIST}/linux/hooks/pre-snapshot/"
@@ -36,7 +37,7 @@ tar czf "${DIST}/linux/zyvor-vm-tools-linux-amd64.tar.gz" \
   -C "${DIST}/linux" guestkitd guestkitd-exec \
   guestkit-agent.service zyvor-guest-agent-exec.service \
   zyvor-guest-updater.service zyvor-guest-updater.timer \
-  agent-policy.yaml guest-agent.toml hooks
+  agent-policy.yaml guest-agent.toml 60-zyvor-guest-agent.rules hooks
 LINUX_TAR_SHA256="$(sha256sum "${DIST}/linux/zyvor-vm-tools-linux-amd64.tar.gz" | awk '{print $1}')"
 echo "${LINUX_TAR_SHA256}" > "${DIST}/linux/zyvor-vm-tools-linux-amd64.tar.gz.sha256"
 MANIFEST_JSON=$(printf '{"version":"%s","channel":"stable","linux_tar_sha256":"%s"}' "$VERSION" "$LINUX_TAR_SHA256")
@@ -47,13 +48,14 @@ fi
 
 echo "Building DEB..."
 rm -rf "${DEB_ROOT}"
-mkdir -p "${DEB_ROOT}/DEBIAN" "${DEB_ROOT}/usr/bin" "${DEB_ROOT}/lib/systemd/system" "${DEB_ROOT}/etc/zyvor"
+mkdir -p "${DEB_ROOT}/DEBIAN" "${DEB_ROOT}/usr/bin" "${DEB_ROOT}/lib/systemd/system" "${DEB_ROOT}/lib/udev/rules.d" "${DEB_ROOT}/etc/zyvor"
 cp "${DIST}/linux/guestkitd" "${DEB_ROOT}/usr/bin/"
 cp "${DIST}/linux/guestkitd-exec" "${DEB_ROOT}/usr/bin/"
 cp "${DIST}/linux/guestkit-agent.service" "${DEB_ROOT}/lib/systemd/system/"
 cp "${DIST}/linux/zyvor-guest-agent-exec.service" "${DEB_ROOT}/lib/systemd/system/"
 cp "${DIST}/linux/zyvor-guest-updater.service" "${DEB_ROOT}/lib/systemd/system/"
 cp "${DIST}/linux/zyvor-guest-updater.timer" "${DEB_ROOT}/lib/systemd/system/"
+cp "${DIST}/linux/60-zyvor-guest-agent.rules" "${DEB_ROOT}/lib/udev/rules.d/"
 cp "${DIST}/linux/agent-policy.yaml" "${DEB_ROOT}/etc/zyvor/"
 cp "${DIST}/linux/guest-agent.toml" "${DEB_ROOT}/etc/zyvor/"
 mkdir -p "${DEB_ROOT}/etc/zyvor/hooks/pre-snapshot"
@@ -82,6 +84,12 @@ fi
 mkdir -p /var/lib/zyvor /etc/zyvor
 chown zyvor-agent:zyvor-agent /var/lib/zyvor 2>/dev/null || true
 chmod 750 /var/lib/zyvor 2>/dev/null || true
+# The group above must exist before the rule can hand it the virtio port.
+if command -v udevadm >/dev/null 2>&1; then
+  udevadm control --reload 2>/dev/null || true
+  udevadm trigger --subsystem-match=virtio-ports --action=change 2>/dev/null || true
+  udevadm settle --timeout=5 2>/dev/null || true
+fi
 systemctl daemon-reload || true
 systemctl enable guestkit-agent.service || true
 systemctl enable zyvor-guest-agent-exec.service || true

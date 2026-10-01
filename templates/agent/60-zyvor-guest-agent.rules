@@ -1,0 +1,7 @@
+# GuestKit agent: let the unprivileged zyvor-agent user open the hypervisor
+# channel. The kernel creates /dev/vport*p* as root:root 0600, which the
+# hardened guestkit-agent.service (User=zyvor-agent) cannot open, so without
+# this rule the agent starts but never connects ("failed to open virtio channel")
+# and KubeVirt reports no guest agent.
+SUBSYSTEM=="virtio-ports", ATTR{name}=="org.qemu.guest_agent.0", GROUP="zyvor-agent", MODE="0660"
+SUBSYSTEM=="virtio-ports", ATTR{name}=="com.zyvor.guestkit.0", GROUP="zyvor-agent", MODE="0660"

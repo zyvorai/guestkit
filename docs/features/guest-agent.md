@@ -111,6 +111,8 @@ spec:
 
 Guest opens: `/dev/virtio-ports/org.qemu.guest_agent.0`
 
+**Permissions:** the kernel creates the port `root:root 0600`, but `guestkit-agent.service` runs as `zyvor-agent`. The packages ship `60-zyvor-guest-agent.rules`, a udev rule that gives that group (mode 0660) the `org.qemu.guest_agent.0` and `com.zyvor.guestkit.0` ports, and reload/trigger it on install. Without it the agent starts but logs `failed to open virtio channel` and KubeVirt reports no guest agent.
+
 **Linux install path:** cloud-init and `vmtools/install` place `zyvor-guest-agent` at `/usr/local/bin/zyvor-guest-agent`. Per-VM JSON-RPC via QGA guest-exec resolves the binary with `command -v` and falls back to `/usr/local/bin` then `/usr/bin`.
 
 **Masquerade guests without cluster DNS:** prefer IP-only cloud-init (`curl` QGA deb + agent from MinIO) instead of `packages:` apt lines that require working DNS during first boot.

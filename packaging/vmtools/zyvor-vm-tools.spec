@@ -46,6 +46,8 @@ install -Dm644 templates/agent/zyvor-guest-agent-exec.service \
   %{buildroot}%{_unitdir}/zyvor-guest-agent-exec.service
 install -Dm644 templates/agent/agent-policy.yaml \
   %{buildroot}%{_sysconfdir}/guestkit/agent-policy.yaml
+install -Dm644 templates/agent/60-zyvor-guest-agent.rules \
+  %{buildroot}%{_udevrulesdir}/60-zyvor-guest-agent.rules
 
 %pre
 getent group zyvor-agent >/dev/null || groupadd -r zyvor-agent
@@ -59,6 +61,9 @@ if [ -f %{_unitdir}/zyvor-guest-agent.service ]; then
   systemctl disable --now zyvor-guest-agent.service >/dev/null 2>&1 || :
   rm -f %{_unitdir}/zyvor-guest-agent.service
 fi
+# Hand the hypervisor channel to the (now existing) zyvor-agent group.
+udevadm control --reload >/dev/null 2>&1 || :
+udevadm trigger --subsystem-match=virtio-ports --action=change >/dev/null 2>&1 || :
 %systemd_post guestkit-agent.service
 
 %preun
@@ -75,6 +80,7 @@ fi
 %{_bindir}/zyvor-guest-agent-exec
 %{_unitdir}/guestkit-agent.service
 %{_unitdir}/zyvor-guest-agent-exec.service
+%{_udevrulesdir}/60-zyvor-guest-agent.rules
 %config(noreplace) %{_sysconfdir}/guestkit/agent-policy.yaml
 
 %changelog
