@@ -25,13 +25,11 @@ pub fn build_snapshot_readiness_report() -> SnapshotReadinessReport {
 }
 
 pub fn freeze_filesystems() -> Result<String, String> {
-    let result = if Command::new("fsfreeze").args(["-f", "/"]).status().is_ok() {
-        Ok("filesystems frozen".into())
-    } else if crate::agent::qga::freeze_fs().is_ok() {
-        Ok("filesystems frozen via QGA".into())
-    } else {
-        Err("freeze failed".into())
-    };
+    // `is_ok()` on the spawn result used to report "frozen" even when fsfreeze itself failed
+    // (for example "Operation not permitted" for the unprivileged agent).
+    let result = crate::agent::qga::freeze_fs()
+        .map(|_| "filesystems frozen".to_string())
+        .map_err(|e| format!("freeze failed: {e}"));
     if result.is_ok() {
         crate::agent::state::AgentRuntime::global()
             .fs_frozen_hint
@@ -41,13 +39,9 @@ pub fn freeze_filesystems() -> Result<String, String> {
 }
 
 pub fn thaw_filesystems() -> Result<String, String> {
-    let result = if Command::new("fsfreeze").args(["-u", "/"]).status().is_ok() {
-        Ok("filesystems thawed".into())
-    } else if crate::agent::qga::thaw_fs().is_ok() {
-        Ok("filesystems thawed via QGA".into())
-    } else {
-        Err("thaw failed".into())
-    };
+    let result = crate::agent::qga::thaw_fs()
+        .map(|_| "filesystems thawed".to_string())
+        .map_err(|e| format!("thaw failed: {e}"));
     if result.is_ok() {
         crate::agent::state::AgentRuntime::global()
             .fs_frozen_hint
