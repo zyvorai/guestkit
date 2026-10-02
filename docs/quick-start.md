@@ -3,8 +3,8 @@
 > Part of the [GuestKit README](../README.md). Back to the [documentation map](documentation-map.md).
 
 ```bash
-# v1.2.4 GitHub Release — crates.io `guestkit` is still 0.3.2
-curl -fsSL -O https://github.com/zyvorai/guestkit/releases/download/v1.2.4/guestkit-1.2.4-linux-amd64.tar.gz
+# v1.2.5 GitHub Release — crates.io `guestkit` is still 0.3.2
+curl -fsSL -O https://github.com/zyvorai/guestkit/releases/download/v1.2.5/guestkit-1.2.5-linux-amd64.tar.gz
 
 guestkit doctor vm.qcow2 --target proxmox --explain
 guestkit migrate-plan vm.vmdk --target kvm --export plan.yaml

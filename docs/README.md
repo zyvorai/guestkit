@@ -27,7 +27,7 @@ The OSS web console in its offline demo mode (the JSON that ships in `deploy/ui`
 | **Dump virsh → GuestKit** | [virsh-to-guestkit.md](user-guides/virsh-to-guestkit.md) |
 | **h2kvm integration** | [hyper2kvm-integration.md](features/hyper2kvm-integration.md) |
 | Python bindings | [python-bindings.md](user-guides/python-bindings.md) |
-| Roadmap | [roadmap.md](development/roadmap.md) — shipped through v1.2.4 |
+| Roadmap | [roadmap.md](development/roadmap.md) — shipped through v1.2.5 |
 | Full index | [INDEX.md](INDEX.md) |
 | **User journeys & acceptance criteria** | [User Stories](USER_STORIES.md) |
 | **Industry use cases & Zyvor stack** | [INDUSTRY_USE_CASES.md](INDUSTRY_USE_CASES.md) |

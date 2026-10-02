@@ -1,4 +1,4 @@
-# CLI reference (v1.2.4)
+# CLI reference (v1.2.5)
 
 `guestkit` and `guestctl` share the same command surface. The separate
 **`guestkit-qemu`** binary plans and launches QEMU from the same assurance

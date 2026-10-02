@@ -13,7 +13,7 @@ Offline VM intelligence — inspect disks without booting, score boot readiness,
 ## 1. Install
 
 ```bash
-curl -fsSL -O https://github.com/zyvorai/guestkit/releases/download/v1.2.4/guestkit-1.2.4-linux-amd64.tar.gz
+curl -fsSL -O https://github.com/zyvorai/guestkit/releases/download/v1.2.5/guestkit-1.2.5-linux-amd64.tar.gz
 # crates.io `guestkit` is still 0.3.2
 qemu-img --version
 guestkit version

@@ -36,7 +36,7 @@ h2kvm uses the same calls through `h2kvm.core.guestkit_client`. See [hyper2kvm-i
 | **`pip install zyvor-guestkit`** + `run_*` APIs | **Default** — h2kvm, CI, automation |
 | **GuestKit CLI** subprocess | Shell scripts, Passport CI gate, no Python |
 | **`guestkit_wrapper.py`** (this dir) | Legacy hyper2kvm code paths only |
-| **Direct Rust / GitHub Release v1.2.4** | Ops workstations, TUI, fleet tools |
+| **Direct Rust / GitHub Release v1.2.5** | Ops workstations, TUI, fleet tools |
 
 ### Option 1: Native Python (recommended)
 
