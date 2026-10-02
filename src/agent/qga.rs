@@ -504,14 +504,8 @@ fn guest_fsfreeze_freeze() -> Result<Value, String> {
         *FS_FROZEN.lock().map_err(|e| e.to_string())? = true;
         return Ok(json!(1));
     }
-    let status = Command::new("fsfreeze")
-        .arg("-f")
-        .arg("/")
-        .status()
-        .map_err(|e| format!("fsfreeze: {e}"))?;
-    if !status.success() {
-        return Err(format!("fsfreeze -f / failed: {status}"));
-    }
+    // The agent is unprivileged: freezing goes through the privileged helper.
+    crate::agent::executor_ipc::fsfreeze(false).map_err(|e| e.to_string())?;
     *FS_FROZEN.lock().map_err(|e| e.to_string())? = true;
     Ok(json!(1))
 }
@@ -528,14 +522,7 @@ fn guest_fsfreeze_thaw() -> Result<Value, String> {
         *FS_FROZEN.lock().map_err(|e| e.to_string())? = false;
         return Ok(json!(1));
     }
-    let status = Command::new("fsfreeze")
-        .arg("-u")
-        .arg("/")
-        .status()
-        .map_err(|e| format!("fsfreeze: {e}"))?;
-    if !status.success() {
-        return Err(format!("fsfreeze -u / failed: {status}"));
-    }
+    crate::agent::executor_ipc::fsfreeze(true).map_err(|e| e.to_string())?;
     *FS_FROZEN.lock().map_err(|e| e.to_string())? = false;
     Ok(json!(1))
 }

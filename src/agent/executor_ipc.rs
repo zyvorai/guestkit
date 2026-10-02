@@ -236,6 +236,32 @@ fn dispatch(executor: &crate::agent::executor::Executor, req: &ExecRequest) -> E
                 }
             }
         }
+        "fsfreeze" => {
+            let op = req.params.get("op").and_then(|v| v.as_str()).unwrap_or("");
+            let thaw = match op {
+                "freeze" => false,
+                "thaw" => true,
+                other => {
+                    return ExecResponse {
+                        ok: false,
+                        result: None,
+                        error: Some(format!("unsupported fsfreeze op: {other}")),
+                    }
+                }
+            };
+            match local_fsfreeze(thaw) {
+                Ok(()) => ExecResponse {
+                    ok: true,
+                    result: Some(Value::String(op.to_string())),
+                    error: None,
+                },
+                Err(e) => ExecResponse {
+                    ok: false,
+                    result: None,
+                    error: Some(e.to_string()),
+                },
+            }
+        }
         "time_sync" => match run_time_sync() {
             Ok(msg) => ExecResponse {
                 ok: true,
@@ -265,6 +291,46 @@ fn dispatch(executor: &crate::agent::executor::Executor, req: &ExecRequest) -> E
             result: None,
             error: Some(format!("unsupported executor action: {other}")),
         },
+    }
+}
+
+/// Freeze (`thaw == false`) or thaw the root filesystem with `fsfreeze(8)` in this process.
+/// Needs CAP_SYS_ADMIN, so it only works as root: the unprivileged agent must go through
+/// [`fsfreeze`], which uses the privileged helper when it is running.
+pub fn local_fsfreeze(thaw: bool) -> Result<()> {
+    let flag = if thaw { "-u" } else { "-f" };
+    let out = std::process::Command::new("fsfreeze")
+        .args([flag, "/"])
+        .output()
+        .context("run fsfreeze")?;
+    if out.status.success() {
+        return Ok(());
+    }
+    let why = String::from_utf8_lossy(&out.stderr).trim().to_string();
+    anyhow::bail!(
+        "fsfreeze {flag} / failed: {}{}",
+        out.status,
+        if why.is_empty() {
+            String::new()
+        } else {
+            format!(": {why}")
+        }
+    )
+}
+
+/// Freeze or thaw the root filesystem on behalf of the agent. The agent runs unprivileged
+/// with no capabilities (see `templates/agent/guestkit-agent.service`), so the request is sent
+/// to the privileged helper (`guestkitd-exec`); without a helper the call is made in-process,
+/// which only works when the agent itself runs as root.
+pub fn fsfreeze(thaw: bool) -> Result<()> {
+    if executor_available() {
+        call_executor(
+            "fsfreeze",
+            serde_json::json!({ "op": if thaw { "thaw" } else { "freeze" } }),
+        )
+        .map(|_| ())
+    } else {
+        local_fsfreeze(thaw)
     }
 }
 
@@ -362,4 +428,58 @@ pub fn executor_available() -> bool {
     }
     let path = std::env::var("ZYVOR_EXEC_SOCKET").unwrap_or_else(|_| EXEC_SOCKET_PATH.to_string());
     Path::new(&path).exists()
+}
+
+#[cfg(all(test, unix))]
+mod fsfreeze_tests {
+    use super::*;
+    use std::os::unix::fs::PermissionsExt;
+
+    #[test]
+    fn dispatch_refuses_unknown_fsfreeze_ops() {
+        let executor = crate::agent::executor::Executor::new();
+        for op in ["", "status", "freeze; reboot", "-f"] {
+            let resp = dispatch(
+                &executor,
+                &ExecRequest {
+                    action: "fsfreeze".into(),
+                    params: serde_json::json!({ "op": op }),
+                },
+            );
+            assert!(!resp.ok, "op {op:?} must be refused");
+            assert!(resp.error.unwrap().contains("unsupported fsfreeze op"));
+        }
+    }
+
+    /// `local_fsfreeze` runs `fsfreeze -f /` / `-u /` and reports failure with the tool's own
+    /// message, instead of claiming success because the binary could be spawned.
+    #[test]
+    fn local_fsfreeze_checks_the_exit_status_and_passes_the_right_arguments() {
+        let dir = tempfile::tempdir().unwrap();
+        let log = dir.path().join("args");
+        let bin = dir.path().join("fsfreeze");
+        std::fs::write(
+            &bin,
+            format!(
+                "#!/bin/sh\necho \"$@\" >> {}\n[ \"$FAKE_FSFREEZE_FAIL\" = 1 ] && {{ echo 'Operation not permitted' >&2; exit 1; }}\nexit 0\n",
+                log.display()
+            ),
+        )
+        .unwrap();
+        std::fs::set_permissions(&bin, std::fs::Permissions::from_mode(0o755)).unwrap();
+        let old = std::env::var("PATH").unwrap_or_default();
+        std::env::set_var("PATH", format!("{}:{old}", dir.path().display()));
+
+        std::env::remove_var("FAKE_FSFREEZE_FAIL");
+        local_fsfreeze(false).unwrap();
+        local_fsfreeze(true).unwrap();
+        assert_eq!(std::fs::read_to_string(&log).unwrap(), "-f /\n-u /\n");
+
+        std::env::set_var("FAKE_FSFREEZE_FAIL", "1");
+        let err = local_fsfreeze(false).unwrap_err().to_string();
+        assert!(err.contains("Operation not permitted"), "{err}");
+
+        std::env::remove_var("FAKE_FSFREEZE_FAIL");
+        std::env::set_var("PATH", old);
+    }
 }
