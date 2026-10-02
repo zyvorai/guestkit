@@ -70,7 +70,7 @@ guestkit inspect vm.qcow2 --cache
 
 ### Is guestkit production-ready?
 
-**Yes.** GuestKit v1.2.4 is production-ready with:
+**Yes.** GuestKit v1.2.5 is production-ready with:
 - Python assurance bindings (`run_doctor`, `run_migrate_repair`, optional `inject_json`) for h2kvm integration
 - Comprehensive test suite with CI/CD
 - Used in [h2kvm](https://github.com/zyvorai/h2kvm) for production VM migrations
@@ -97,11 +97,11 @@ Never modify a disk image while the VM is running. This will cause:
 
 ### How do I install guestkit?
 
-**Current CLI (v1.2.4)** — GitHub Release. `cargo install guestkit` still installs crates.io **0.3.2**, which is not this release.
+**Current CLI (v1.2.5)** — GitHub Release. `cargo install guestkit` still installs crates.io **0.3.2**, which is not this release.
 
 ```bash
-curl -fsSL -o guestkit-1.2.4-linux-amd64.tar.gz \
-  https://github.com/zyvorai/guestkit/releases/download/v1.2.4/guestkit-1.2.4-linux-amd64.tar.gz
+curl -fsSL -o guestkit-1.2.5-linux-amd64.tar.gz \
+  https://github.com/zyvorai/guestkit/releases/download/v1.2.5/guestkit-1.2.5-linux-amd64.tar.gz
 ```
 
 **From source:**
