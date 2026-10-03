@@ -55,6 +55,10 @@ pub struct CapabilityToggles {
     /// Tamper/integrity baseline + check.
     #[serde(default = "default_true")]
     pub integrity: bool,
+    /// Per-container eBPF network policy and LSM MAC (`guestkit.netpolicy.*`,
+    /// `guestkit.lsm.*`). Loads kernel programs, so it ships disabled.
+    #[serde(default)]
+    pub ebpf: bool,
 }
 
 impl Default for CapabilityToggles {
@@ -70,6 +74,7 @@ impl Default for CapabilityToggles {
             certificates: true,
             users: true,
             integrity: true,
+            ebpf: false,
         }
     }
 }
@@ -396,6 +401,9 @@ impl AgentPolicy {
             SetHostname | SetTimezone | SetDns if !self.actions.customization.enabled => {
                 denied("customization")
             }
+            NetpolicyApply | NetpolicyStatus | LsmApply | LsmStatus if !self.capabilities.ebpf => {
+                denied("ebpf")
+            }
             _ => Ok(()),
         }
     }
@@ -424,6 +432,7 @@ impl AgentPolicy {
             (caps.users, "users"),
             (caps.integrity, "integrity"),
             (self.actions.customization.enabled, "customization"),
+            (caps.ebpf, "ebpf"),
         ] {
             if on {
                 cats.push(name.to_string());
@@ -527,6 +536,26 @@ mod tests {
         assert!(cats.contains(&"certificates".to_string()));
         assert!(!cats.contains(&"packages_install".to_string()));
         assert!(!cats.contains(&"customization".to_string()));
+    }
+
+    #[test]
+    fn ebpf_capability_ships_disabled() {
+        let p = AgentPolicy::default();
+        for (m, wire) in [
+            (RpcMethod::NetpolicyApply, "guestkit.netpolicy.apply"),
+            (RpcMethod::NetpolicyStatus, "guestkit.netpolicy.status"),
+            (RpcMethod::LsmApply, "guestkit.lsm.apply"),
+            (RpcMethod::LsmStatus, "guestkit.lsm.status"),
+        ] {
+            assert!(p.authorize(&m, wire).is_err(), "{wire} must be off by default");
+        }
+        assert!(!p.enabled_categories().contains(&"ebpf".to_string()));
+        let p: AgentPolicy = serde_yaml::from_str("capabilities:\n  ebpf: true\n").unwrap();
+        assert!(p
+            .authorize(&RpcMethod::NetpolicyApply, "guestkit.netpolicy.apply")
+            .is_ok());
+        assert!(p.enabled_categories().contains(&"ebpf".to_string()));
+        assert!(p.capabilities.telemetry, "other toggles keep their defaults");
     }
 
     #[test]

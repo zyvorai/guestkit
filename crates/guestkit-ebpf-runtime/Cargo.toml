@@ -1,0 +1,19 @@
+[package]
+name = "guestkit-ebpf-runtime"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "Loader for the GuestKit in-guest eBPF programs (per-container netpolicy + LSM MAC)"
+
+[dependencies]
+anyhow = "1.0"
+serde = { version = "1", features = ["derive"] }
+guestkit-ebpf-common = { path = "../guestkit-ebpf-common" }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+guestkit-ebpf-common = { path = "../guestkit-ebpf-common", features = ["user"] }
+aya = { version = "0.14", default-features = false }
+libc = "0.2"
+
+[lib]
+path = "src/lib.rs"

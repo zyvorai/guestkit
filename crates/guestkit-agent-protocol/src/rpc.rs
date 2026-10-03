@@ -97,6 +97,11 @@ pub enum RpcMethod {
     MigrationValidate,
     BaselineCapture,
     BaselineDiff,
+    // Protocol 1.3: per-container eBPF policy
+    NetpolicyApply,
+    NetpolicyStatus,
+    LsmApply,
+    LsmStatus,
     Unknown(String),
 }
 
@@ -184,6 +189,10 @@ impl RpcMethod {
             METHOD_MIGRATION_VALIDATE => Self::MigrationValidate,
             METHOD_BASELINE_CAPTURE => Self::BaselineCapture,
             METHOD_BASELINE_DIFF => Self::BaselineDiff,
+            METHOD_NETPOLICY_APPLY => Self::NetpolicyApply,
+            METHOD_NETPOLICY_STATUS => Self::NetpolicyStatus,
+            METHOD_LSM_APPLY => Self::LsmApply,
+            METHOD_LSM_STATUS => Self::LsmStatus,
             other => Self::parse_alias(other),
         }
     }
@@ -244,6 +253,10 @@ impl RpcMethod {
             "migration.plan" => Self::MigrationPlan,
             "migration.validate" => Self::MigrationValidate,
             "support.collect" => Self::CollectSupportBundle,
+            "netpolicy.apply" => Self::NetpolicyApply,
+            "netpolicy.status" => Self::NetpolicyStatus,
+            "lsm.apply" => Self::LsmApply,
+            "lsm.status" => Self::LsmStatus,
             other => Self::Unknown(other.to_string()),
         }
     }
@@ -286,6 +299,8 @@ impl RpcMethod {
                 | Self::MigrationCutoverExit
                 | Self::SubscribeEvents
                 | Self::UnsubscribeEvents
+                | Self::NetpolicyApply
+                | Self::LsmApply
         )
     }
 }
@@ -440,6 +455,18 @@ mod tests {
         assert_eq!(req.ttl_ms, Some(30000));
         assert_eq!(req.nonce.as_deref(), Some("n-1"));
         assert_eq!(req.idempotency_key.as_deref(), Some("k-1"));
+    }
+
+    #[test]
+    fn ebpf_policy_methods() {
+        assert_eq!(RpcMethod::parse("guestkit.netpolicy.apply"), RpcMethod::NetpolicyApply);
+        assert_eq!(RpcMethod::parse("guestkit.netpolicy.status"), RpcMethod::NetpolicyStatus);
+        assert_eq!(RpcMethod::parse("guestkit.lsm.apply"), RpcMethod::LsmApply);
+        assert_eq!(RpcMethod::parse("lsm.status"), RpcMethod::LsmStatus);
+        assert!(RpcMethod::NetpolicyApply.is_mutating());
+        assert!(RpcMethod::LsmApply.is_mutating());
+        assert!(!RpcMethod::NetpolicyStatus.is_mutating());
+        assert!(!RpcMethod::LsmStatus.is_mutating());
     }
 
     #[test]
