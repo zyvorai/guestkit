@@ -122,6 +122,12 @@ pub const METHOD_MIGRATION_VALIDATE: &str = "guestkit.migration.validate";
 pub const METHOD_BASELINE_CAPTURE: &str = "guestkit.baseline.capture";
 pub const METHOD_BASELINE_DIFF: &str = "guestkit.baseline.diff";
 
+// --- Protocol 1.3: per-container eBPF policy (Linux guests) ---
+pub const METHOD_NETPOLICY_APPLY: &str = "guestkit.netpolicy.apply";
+pub const METHOD_NETPOLICY_STATUS: &str = "guestkit.netpolicy.status";
+pub const METHOD_LSM_APPLY: &str = "guestkit.lsm.apply";
+pub const METHOD_LSM_STATUS: &str = "guestkit.lsm.status";
+
 /// Capability flags returned during negotiation.
 #[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq, Eq)]
 pub struct AgentCapabilities {
@@ -228,6 +234,10 @@ impl AgentCapabilities {
                 METHOD_STORAGE_RESCAN.to_string(),
                 METHOD_STORAGE_TRIM.to_string(),
                 METHOD_STORAGE_EXPAND.to_string(),
+                METHOD_NETPOLICY_APPLY.to_string(),
+                METHOD_NETPOLICY_STATUS.to_string(),
+                METHOD_LSM_APPLY.to_string(),
+                METHOD_LSM_STATUS.to_string(),
             ],
             fix_apply: true,
             windows: cfg!(target_os = "windows"),

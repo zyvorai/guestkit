@@ -27,5 +27,8 @@ log = "0.4"
 serde_json = "1.0"
 tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
 
+[target.'cfg(target_os = "linux")'.dependencies]
+guestkit = { path = "../../", default-features = false, features = ["agent", "ebpf"] }
+
 [target.'cfg(windows)'.dependencies]
 windows-service = "0.7"

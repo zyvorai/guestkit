@@ -15,6 +15,7 @@ pub mod exec;
 pub mod executor;
 pub mod executor_ipc;
 pub mod file_ops;
+pub mod guest_ebpf;
 pub mod handler;
 pub mod heartbeat;
 #[cfg(not(target_os = "windows"))]

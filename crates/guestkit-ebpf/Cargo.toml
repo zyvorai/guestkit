@@ -1,0 +1,32 @@
+[package]
+name = "guestkit-ebpf"
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+publish = false
+
+# Standalone workspace: this crate only builds for bpfel-unknown-none on nightly
+# (`-Z build-std=core`), so it is excluded from the GuestKit workspace and
+# compiled by `crates/guestkit-ebpf-runtime/build.rs`.
+[workspace]
+
+[dependencies]
+guestkit-ebpf-common = { path = "../guestkit-ebpf-common" }
+aya-ebpf = { version = "0.2.1", default-features = false }
+
+[[bin]]
+name = "guestkit-ebpf"
+path = "src/main.rs"
+
+[profile.dev]
+opt-level = 3
+debug = false
+overflow-checks = false
+panic = "abort"
+
+[profile.release]
+debug = 2
+codegen-units = 1
+strip = false
+panic = "abort"
+lto = true

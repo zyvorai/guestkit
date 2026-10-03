@@ -282,6 +282,18 @@ impl RequestHandler {
             RpcMethod::ContainersInventory => {
                 JsonRpcResponse::success(req.id, crate::agent::containers::inventory())
             }
+            RpcMethod::NetpolicyApply => {
+                Self::ebpf_result(req.id, crate::agent::guest_ebpf::netpolicy_apply(&req.params))
+            }
+            RpcMethod::NetpolicyStatus => {
+                Self::ebpf_result(req.id, crate::agent::guest_ebpf::netpolicy_status(&req.params))
+            }
+            RpcMethod::LsmApply => {
+                Self::ebpf_result(req.id, crate::agent::guest_ebpf::lsm_apply(&req.params))
+            }
+            RpcMethod::LsmStatus => {
+                Self::ebpf_result(req.id, crate::agent::guest_ebpf::lsm_status(&req.params))
+            }
             RpcMethod::IntegrityBaseline => {
                 Self::json_result(req.id, crate::agent::integrity::write_baseline())
             }
@@ -637,6 +649,16 @@ impl RequestHandler {
         match f(&policy.capabilities.file_ops, params) {
             Ok(result) => JsonRpcResponse::success(id, result),
             Err(e) => JsonRpcResponse::error(id, RpcErrorCode::CapabilityDenied, e.to_string()),
+        }
+    }
+
+    fn ebpf_result(id: Option<Value>, result: Result<Value, String>) -> JsonRpcResponse {
+        match result {
+            Ok(v) => JsonRpcResponse::success(id, v),
+            Err(e) if e.starts_with("ebpf_unavailable") => {
+                JsonRpcResponse::error(id, RpcErrorCode::NotImplemented, e)
+            }
+            Err(e) => JsonRpcResponse::error(id, RpcErrorCode::InvalidParams, e),
         }
     }
 
