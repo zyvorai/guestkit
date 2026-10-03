@@ -109,7 +109,10 @@ pub fn run_tui<P: AsRef<Path>>(
     result
 }
 
-fn run_app<B: ratatui::backend::Backend>(terminal: &mut Terminal<B>, app: &mut App) -> Result<()> {
+fn run_app<B: ratatui::backend::Backend>(terminal: &mut Terminal<B>, app: &mut App) -> Result<()>
+where
+    B::Error: Send + Sync + 'static,
+{
     let tick_rate = Duration::from_millis(250);
     let mut last_tick = Instant::now();
 
